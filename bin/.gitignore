@@ -6,3 +6,4 @@
 /logback.xml
 /routes
 /views/
+/dao/
