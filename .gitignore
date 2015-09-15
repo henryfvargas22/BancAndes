@@ -22,3 +22,5 @@ project/play-fork-run.sbt
 *.sbt
 
 *.sbt
+/nbproject/private/
+*.01
