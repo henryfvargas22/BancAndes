@@ -180,7 +180,7 @@ public class ConsultaDAO
 					
 					usuarioValue.setNombre(nomUsu);
 					usuarioValue.setCedula(cedUsu);	
-				
+					//System.out.println(nomUsu+cedUsu);
 					usuarios.add(usuarioValue);
 					usuarioValue = new Usuario();
 								
@@ -203,6 +203,7 @@ public class ConsultaDAO
 				}
 				closeConnection(conexion);
 			}		
-			return new ArrayList<>();
+			return usuarios;
 	    }
+	    
 }
