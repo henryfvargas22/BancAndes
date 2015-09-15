@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import vos.Usuario;
+
 public class ConsultaDAO 
 {
 	//----------------------------------------------------
@@ -18,23 +20,23 @@ public class ConsultaDAO
 		/**
 		 * ruta donde se encuentra el archivo de conexión.
 		 */
-		private static final String ARCHIVO_CONEXION = "/conf/conexion.properties";
+		private static final String ARCHIVO_CONEXION = "conf/conexion.properties";
 		
 		/**
 		 * nombre de la tabla clientes
 		 */
-		private static final String tablaCliente = "clientes";
+		private static final String tablaUsuario = "usuario";
 		
 		
 		/**
 		 * nombre de la columna titulo_original en la tabla videos.
 		 */
-		private static final String tituloVideo = "titulo_original";
+		private static final String nombreUsuario = "nombre";
 		
 		/**
 		 * nombre de la columna anyo en la tabla videos.
 		 */
-		private static final String anyoVideo = "anyo";
+		private static final String cedulaUsuario = "cedula";
 		
 
 		//----------------------------------------------------
@@ -44,7 +46,7 @@ public class ConsultaDAO
 		/**
 		 * Consulta que devuelve isan, titulo, y año de los videos en orden alfabetico
 		 */
-		private static final String consultaVideosDefault="SELECT *, FROM "+tablaCliente;
+		private static final String consultaUsuariosDefault="SELECT * FROM "+tablaUsuario;
 		
 
 		//----------------------------------------------------
@@ -109,6 +111,7 @@ public class ConsultaDAO
 			catch(Exception e)
 			{
 				e.printStackTrace();
+				System.out.println(ARCHIVO_CONEXION);
 			}	
 		}
 
@@ -128,7 +131,7 @@ public class ConsultaDAO
 	        }
 	        catch( SQLException exception )
 	        {
-	            throw new SQLException( "ERROR: ConsultaDAO obteniendo una conexin." );
+	            throw new SQLException( "ERROR: ConsultaDAO obteniendo una conexin."+url );
 	        }
 	    }
 	    
@@ -158,34 +161,34 @@ public class ConsultaDAO
 	     * @throws Exception se lanza una excepción si ocurre un error en
 	     * la conexión o en la consulta. 
 	     */
-	    public ArrayList darVideosDefault() throws Exception
+	    public ArrayList<Usuario> darUsuariosDefault() throws Exception
 	    {
 	    	PreparedStatement prepStmt = null;
 	    	
-	    	//ArrayList<VideosValue> videos = new ArrayList<VideosValue>();
-			//VideosValue vidValue = new VideosValue();
+	    	ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+			Usuario usuarioValue = new Usuario();
 	    	
 			try {
 				establecerConexion(cadenaConexion, usuario, clave);
-				prepStmt = conexion.prepareStatement(consultaVideosDefault);
+				prepStmt = conexion.prepareStatement(consultaUsuariosDefault);
 				
 				ResultSet rs = prepStmt.executeQuery();
 				
 				while(rs.next()){
-					String titVid = rs.getString(tituloVideo);
-					int anyoVid = rs.getInt(anyoVideo);
+					String nomUsu = rs.getString(nombreUsuario);
+					int cedUsu = rs.getInt(cedulaUsuario);
 					
-//					vidValue.setTituloOriginal(titVid);
-//					vidValue.setAnyo(anyoVid);	
-//				
-//					videos.add(vidValue);
-					//vidValue = new VideosValue();
+					usuarioValue.setNombre(nomUsu);
+					usuarioValue.setCedula(cedUsu);	
+				
+					usuarios.add(usuarioValue);
+					usuarioValue = new Usuario();
 								
 				}
 			
 			} catch (SQLException e) {
 				e.printStackTrace();
-				System.out.println(consultaVideosDefault);
+				System.out.println(consultaUsuariosDefault);
 				throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 			}finally 
 			{

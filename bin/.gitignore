@@ -8,3 +8,7 @@
 /views/
 /dao/
 /models/
+/.DS_Store
+/vos/
+/conexion.properties
+/fachada/
