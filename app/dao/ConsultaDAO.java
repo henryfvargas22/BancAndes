@@ -10,11 +10,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import fachada.BancAndes;
 import vos.Usuario;
 
 public class ConsultaDAO 
 {
-	//----------------------------------------------------
+		//----------------------------------------------------
 		//Constantes
 		//----------------------------------------------------
 		/**
@@ -22,33 +23,6 @@ public class ConsultaDAO
 		 */
 		private static final String ARCHIVO_CONEXION = "conf/conexion.properties";
 		
-		/**
-		 * nombre de la tabla clientes
-		 */
-		private static final String tablaUsuario = "usuario";
-		
-		
-		/**
-		 * nombre de la columna titulo_original en la tabla videos.
-		 */
-		private static final String nombreUsuario = "nombre";
-		
-		/**
-		 * nombre de la columna anyo en la tabla videos.
-		 */
-		private static final String cedulaUsuario = "cedula";
-		
-
-		//----------------------------------------------------
-		//Consultas
-		//----------------------------------------------------
-		
-		/**
-		 * Consulta que devuelve isan, titulo, y año de los videos en orden alfabetico
-		 */
-		private static final String consultaUsuariosDefault="SELECT * FROM "+tablaUsuario;
-		
-
 		//----------------------------------------------------
 		//Atributos
 		//----------------------------------------------------
@@ -72,12 +46,19 @@ public class ConsultaDAO
 		 */
 		private String cadenaConexion;
 		
+		private static ConsultaDAO instancia;
+		
 		/**
 		 * constructor de la clase. No inicializa ningun atributo.
 		 */
-		public ConsultaDAO() 
+		public static ConsultaDAO darInstancia() 
 		{		
-			
+			if( instancia == null )
+	        {
+	            instancia = new ConsultaDAO( );
+	            instancia.inicializar();
+	        }
+	        return instancia;
 		}
 		
 		// -------------------------------------------------
@@ -89,11 +70,11 @@ public class ConsultaDAO
 		 * Los datos se obtienen a partir de un archivo properties.
 		 * @param path ruta donde se encuentra el archivo properties.
 		 */
-		public void inicializar(String path)
+		public void inicializar()
 		{
 			try
 			{
-				File arch= new File(path+ARCHIVO_CONEXION);
+				File arch= new File(ARCHIVO_CONEXION);
 				Properties prop = new Properties();
 				FileInputStream in = new FileInputStream( arch );
 
@@ -123,15 +104,16 @@ public class ConsultaDAO
 		 * @param clave clave de acceso a la base de datos
 		 * @throws SQLException si ocurre un error generando la conexión con la base de datos.
 		 */
-	    private void establecerConexion(String url, String usuario, String clave) throws SQLException
+	    public Connection establecerConexion() throws SQLException
 	    {
 	    	try
 	        {
-				conexion = DriverManager.getConnection(url,usuario,clave);
+				conexion = DriverManager.getConnection(cadenaConexion,usuario,clave);
+				return conexion;
 	        }
 	        catch( SQLException exception )
 	        {
-	            throw new SQLException( "ERROR: ConsultaDAO obteniendo una conexin."+url );
+	            throw new SQLException( "ERROR: ConsultaDAO obteniendo una conexin."+cadenaConexion );
 	        }
 	    }
 	    
@@ -147,63 +129,5 @@ public class ConsultaDAO
 			} catch (SQLException exception) {
 				throw new Exception("ERROR: ConsultaDAO: closeConnection() = cerrando una conexión.");
 			}
-	    } 
-	    
-	    // ---------------------------------------------------
-	    // Métodos asociados a los casos de uso: Consulta
-	    // ---------------------------------------------------
-	    
-	    /**
-	     * Método que se encarga de realizar la consulta en la base de datos
-	     * y retorna un ArrayList de elementos tipo VideosValue.
-	     * @return ArrayList lista que contiene elementos tipo VideosValue.
-	     * La lista contiene los videos ordenados alfabeticamente
-	     * @throws Exception se lanza una excepción si ocurre un error en
-	     * la conexión o en la consulta. 
-	     */
-	    public ArrayList<Usuario> darUsuariosDefault() throws Exception
-	    {
-	    	PreparedStatement prepStmt = null;
-	    	
-	    	ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
-			Usuario usuarioValue = new Usuario();
-	    	
-			try {
-				establecerConexion(cadenaConexion, usuario, clave);
-				prepStmt = conexion.prepareStatement(consultaUsuariosDefault);
-				
-				ResultSet rs = prepStmt.executeQuery();
-				
-				while(rs.next()){
-					String nomUsu = rs.getString(nombreUsuario);
-					int cedUsu = rs.getInt(cedulaUsuario);
-					
-					usuarioValue.setNombre(nomUsu);
-					usuarioValue.setCedula(cedUsu);	
-					//System.out.println(nomUsu+cedUsu);
-					usuarios.add(usuarioValue);
-					usuarioValue = new Usuario();
-								
-				}
-			
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println(consultaUsuariosDefault);
-				throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
-			}finally 
-			{
-				if (prepStmt != null) 
-				{
-					try {
-						prepStmt.close();
-					} catch (SQLException exception) {
-						
-						throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
-					}
-				}
-				closeConnection(conexion);
-			}		
-			return usuarios;
 	    }
-	    
 }

@@ -3,6 +3,7 @@ package fachada;
 import java.util.ArrayList;
 
 import dao.ConsultaDAO;
+import dao.DaoUsuarios;
 import vos.Usuario;
 
 
@@ -11,9 +12,8 @@ public class BancAndes
 	/**
 	 * Conexión con la clase que maneja la base de datos
 	 */
-	private ConsultaDAO dao;
+	private DaoUsuarios daoUsuarios;
 	
-
     
     // -----------------------------------------------------------------
     // Singleton
@@ -34,7 +34,6 @@ public class BancAndes
         if( instancia == null )
         {
             instancia = new BancAndes( );
-            instancia.dao.inicializar("");
         }
         return instancia;
     }
@@ -44,18 +43,9 @@ public class BancAndes
 	 */
 	private BancAndes()
 	{
-		dao = new ConsultaDAO();
+		daoUsuarios = new DaoUsuarios();
 	}
 	
-	/**
-	 * inicializa el dao, dándole la ruta en donde debe encontrar
-	 * el archivo properties.
-	 * @param ruta ruta donde se encuentra el archivo properties
-	 */
-	public void inicializarRuta(String ruta)
-	{
-		dao.inicializar(ruta);
-	}
 	
     // ---------------------------------------------------
     // Métodos asociados a los casos de uso: Consulta
@@ -69,7 +59,7 @@ public class BancAndes
 	 */
 	public ArrayList<Usuario> darUsuariosDefault() throws Exception
 	{
-	    return dao.darUsuariosDefault();
+	    return daoUsuarios.darUsuariosDefault();
 	}
 	
 }
