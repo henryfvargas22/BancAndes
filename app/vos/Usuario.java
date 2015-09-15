@@ -2,23 +2,23 @@ package vos;
 
 public class Usuario 
 {
-	private int cedula;
+	protected int cedula;
 	
-	private String nombre;
+	protected String nombre;
 	
-	private String usuario;
+	protected String usuario;
 	
-	private String contrasenia;
+	protected String contrasenia;
 	
-	private int edad;
+	protected int edad;
 	
-	private String genero;
+	protected String genero;
 	
-	private String ciudad;
+	protected String ciudad;
 	
-	private String direccion;
+	protected String direccion;
 	
-	private String tipo;
+	protected String tipo;
 
 	public int getCedula() {
 		return cedula;

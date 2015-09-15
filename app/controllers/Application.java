@@ -9,6 +9,7 @@ import play.data.Form;
 import play.mvc.*;
 
 import views.html.*;
+import vos.Cliente;
 import vos.Usuario;
 
 import static play.libs.Json.toJson;;
@@ -16,7 +17,7 @@ import static play.libs.Json.toJson;;
 public class Application extends Controller {
 
     public Result index() {
-        return ok(index.render("Andy es marica."));
+        return ok(index.render("BancAndes 1.0"));
     }
     
     public Result getUsuarios()
@@ -32,9 +33,18 @@ public class Application extends Controller {
 		}
     }
     
-    public Result llenarBases()
+    public Result getClientes()
     {
-    	return ok();
+    	try 
+    	{
+			List<Cliente> clientes=BancAndes.darInstancia().darClientesDefault();
+			return ok(toJson(clientes));
+		} 
+    	catch (Exception e) 
+    	{
+    		e.printStackTrace();
+			return internalServerError("Ups: "+e.getMessage());
+		}
     }
 
 }
