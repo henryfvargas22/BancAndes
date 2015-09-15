@@ -37,10 +37,8 @@ public class Application extends Controller {
     {
     	try 
     	{
-			//List<Cliente> clientes=BancAndes.darInstancia().darUsuariosDefault();
-			return ok(
-					//toJson(clientes)
-					);
+			List<Cliente> clientes=BancAndes.darInstancia().darClientesDefault();
+			return ok(toJson(clientes));
 		} 
     	catch (Exception e) 
     	{

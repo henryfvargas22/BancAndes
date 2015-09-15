@@ -1,9 +1,12 @@
 package fachada;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dao.ConsultaDAO;
+import dao.DaoClientes;
 import dao.DaoUsuarios;
+import vos.Cliente;
 import vos.Usuario;
 
 
@@ -13,6 +16,8 @@ public class BancAndes
 	 * Conexión con la clase que maneja la base de datos
 	 */
 	private DaoUsuarios daoUsuarios;
+	
+	private DaoClientes daoClientes;
 	
     
     // -----------------------------------------------------------------
@@ -44,6 +49,7 @@ public class BancAndes
 	private BancAndes()
 	{
 		daoUsuarios = new DaoUsuarios();
+		daoClientes= new DaoClientes();
 	}
 	
 	
@@ -60,6 +66,11 @@ public class BancAndes
 	public ArrayList<Usuario> darUsuariosDefault() throws Exception
 	{
 	    return daoUsuarios.darUsuariosDefault();
+	}
+
+	public ArrayList<Cliente> darClientesDefault() throws Exception
+	{
+		return daoClientes.darClientesDefault();
 	}
 	
 }
