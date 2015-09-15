@@ -11,21 +11,54 @@ import vos.Usuario;
 public class DaoUsuarios 
 {
 	/**
-	 * nombre de la tabla clientes
+	 * nombre de la tabla usuario
 	 */
 	private static final String tablaUsuario = "usuario";
 	
 	/**
-	 * nombre de la columna titulo_original en la tabla videos.
+	 * nombre de la columna nombre en la tabla usuario.
 	 */
 	private static final String nombreUsuario = "nombre";
 	
 	/**
-	 * nombre de la columna anyo en la tabla videos.
+	 * nombre de la columna cedula en la tabla usuario.
 	 */
 	private static final String cedulaUsuario = "cedula";
 	
+	/**
+	 * nombre de la columna usuario en la tabla usuario.
+	 */
+	private static final String usernameUsuario = "usuario";
 	
+	/**
+	 * nombre de la columna contrasenia en la tabla usuario.
+	 */
+	private static final String contraseniaUsuario = "contrasenia";
+	
+	/**
+	 * nombre de la columna edad en la tabla usuario.
+	 */
+	private static final String edadUsuario = "edad";
+	
+	/**
+	 * nombre de la columna genero en la tabla usuario.
+	 */
+	private static final String generoUsuario = "genero";
+	
+	/**
+	 * nombre de la columna ciudad en la tabla usuario.
+	 */
+	private static final String ciudadUsuario = "ciudad";
+	
+	/**
+	 * nombre de la columna direccion en la tabla usuario.
+	 */
+	private static final String direccionUsuario = "direccion";
+	
+	/**
+	 * nombre de la columna tipo en la tabla usuario.
+	 */
+	private static final String tipoUsuario = "tipo";
 
 	//----------------------------------------------------
 	//Consultas
@@ -63,12 +96,25 @@ public class DaoUsuarios
 			ResultSet rs = prepStmt.executeQuery();
 			
 			while(rs.next()){
-				String nomUsu = rs.getString(nombreUsuario);
-				int cedUsu = rs.getInt(cedulaUsuario);
+				String nombre = rs.getString(nombreUsuario);
+				int cedula = rs.getInt(cedulaUsuario);
+				String usuario= rs.getString(usernameUsuario);
+				String contrasenia = rs.getString(contraseniaUsuario);
+				int edad=rs.getInt(edadUsuario);
+				String genero=rs.getString(generoUsuario);
+				String ciudad=rs.getString(ciudadUsuario);
+				String direccion=rs.getString(direccionUsuario);
+				String tipo=rs.getString(tipoUsuario);
 				
-				usuarioValue.setNombre(nomUsu);
-				usuarioValue.setCedula(cedUsu);	
-				//System.out.println(nomUsu+cedUsu);
+				usuarioValue.setNombre(nombre);
+				usuarioValue.setCedula(cedula);
+				usuarioValue.setUsuario(usuario);
+				usuarioValue.setContrasenia(contrasenia);
+				usuarioValue.setEdad(edad);
+				usuarioValue.setGenero(genero);
+				usuarioValue.setCiudad(ciudad);
+				usuarioValue.setDireccion(direccion);
+				usuarioValue.setTipo(tipo);
 				usuarios.add(usuarioValue);
 				usuarioValue = new Usuario();
 							
