@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import vos.Usuario;
@@ -68,6 +69,8 @@ public class DaoUsuarios
 	 * Consulta que devuelve isan, titulo, y año de los videos en orden alfabetico
 	 */
 	private static final String consultaUsuariosDefault="SELECT * FROM "+tablaUsuario;
+	
+	private static final String insertarUsuario="INSERT INTO "+tablaUsuario+" VALUES";
 	
 	// ---------------------------------------------------
     // Métodos asociados a los casos de uso: Consulta
@@ -140,4 +143,32 @@ public class DaoUsuarios
 		return usuarios;
     }
     
+    public void registrarUsuario(String nombre,int cedula, String usuario, String contrasenia, int edad, String genero, String ciudad, String direccion, String tipo) throws Exception
+    {
+    	Connection conexion=null;
+		try
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			Statement st=conexion.createStatement();
+			st.executeUpdate(insertarUsuario+"("+cedula+","
+					+"'"+nombre+"',"+
+					"'"+usuario+"',"+
+					"'"+contrasenia+"',"+
+					edad+","+
+					"'"+genero+"'"+
+					"'"+ciudad+"'"+
+					"'"+direccion+"'"+
+					"'"+tipo+"')");
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			System.out.println(insertarUsuario);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}	
+    }
 }
