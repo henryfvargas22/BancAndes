@@ -136,4 +136,9 @@ public class BancAndes
 	{
 		daoPuntosDeAtencion.registrarPunto(tipo, localizacion, idOficina);
 	}
+	
+	public void insertarCuenta(int id, String tipo, int idCliente) throws Exception
+	{
+		daoCuentas.registrarCuenta(id, tipo, idCliente);
+	}
 }

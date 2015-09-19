@@ -14,6 +14,7 @@ GET		/puntos						controllers.Application.getPuntos()
 POST	/usuarios					controllers.Application.addUsuario()
 POST	/oficinas					controllers.Application.addOficina()
 POST	/puntos						controllers.Application.addPuntos()
+POST	/cuentas					controllers.Application.addCuenta()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

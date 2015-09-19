@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import vos.Cuenta;
@@ -35,6 +36,9 @@ public class DaoCuentas
 		 * Consulta que devuelve isan, titulo, y año de los videos en orden alfabetico
 		 */
 		private static final String consultaCuentasDefault="SELECT * FROM "+tablaCuenta;
+		
+		private static final String insertarCuenta="INSERT INTO "+tablaCuenta+" VALUES";
+
 		
 		// ---------------------------------------------------
 	    // Métodos asociados a los casos de uso: Consulta
@@ -95,4 +99,27 @@ public class DaoCuentas
 			}		
 			return Cuentas;
 	    }
+	    
+	    public void registrarCuenta(int id, String tipo, int idCliente) throws Exception
+		{
+			Connection conexion=null;
+			try
+			{
+				conexion=ConsultaDAO.darInstancia().establecerConexion();
+				Statement st=conexion.createStatement();
+				st.executeUpdate(insertarCuenta+"("+id+","
+						+"'"+tipo+"',"+
+						idCliente+"')");
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+				System.out.println(insertarCuenta);
+				throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+			}
+			finally 
+			{
+				ConsultaDAO.darInstancia().closeConnection(conexion);
+			}	
+		}
 }
