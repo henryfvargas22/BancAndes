@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import vos.PuntoDeAtencion;
@@ -37,6 +38,10 @@ public class DaoPuntosDeAtencion
 	 * Consulta que devuelve isan, titulo, y año de los videos en orden alfabetico
 	 */
 	private static final String consultaPunto_De_AtencionsDefault="SELECT * FROM "+tablaPuntoDeAtencion;
+	
+	private static final String maxIdPuntos="SELECT MAX(id) AS maximo FROM "+tablaPuntoDeAtencion;
+
+	private static final String insertarPunto="INSERT INTO "+tablaPuntoDeAtencion+" VALUES";
 	
 	// ---------------------------------------------------
     // Métodos asociados a los casos de uso: Consulta
@@ -98,4 +103,52 @@ public class DaoPuntosDeAtencion
 		}		
 		return Punto_De_Atencions;
     }
+    
+    private int mayorId() throws Exception
+	{
+		PreparedStatement prepStmt = null;
+		Connection conexion=null;
+		int valor=0;
+		try {
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(maxIdPuntos);
+
+			ResultSet rs = prepStmt.executeQuery();
+			valor=rs.getInt("maximo");
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			System.out.println(maxIdPuntos);
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}	
+		return valor+1;
+	}
+    
+    public void registrarPunto(String tipo, String localizacion, int idOficina) throws Exception
+	{
+		Connection conexion=null;
+		try
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			Statement st=conexion.createStatement();
+			st.executeUpdate(insertarPunto+"("+mayorId()+","
+					+"'"+tipo+"',"+
+					"'"+localizacion+"',"+
+					idOficina+"')");
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			System.out.println(insertarPunto);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}	
+	}
 }

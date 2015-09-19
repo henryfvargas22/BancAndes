@@ -117,7 +117,7 @@ public class DaoOficinas
 		int valor=0;
 		try {
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
-			prepStmt = conexion.prepareStatement(consultaOficinasDefault);
+			prepStmt = conexion.prepareStatement(maxIdOficina);
 
 			ResultSet rs = prepStmt.executeQuery();
 			valor=rs.getInt("maximo");
@@ -125,7 +125,7 @@ public class DaoOficinas
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
-			System.out.println(consultaOficinasDefault);
+			System.out.println(maxIdOficina);
 		}
 		finally 
 		{
