@@ -5,8 +5,18 @@ import java.util.List;
 
 import dao.ConsultaDAO;
 import dao.DaoClientes;
+import dao.DaoCuentas;
+import dao.DaoEmpleados;
+import dao.DaoOficinas;
+import dao.DaoPrestamos;
+import dao.DaoPuntosDeAtencion;
 import dao.DaoUsuarios;
 import vos.Cliente;
+import vos.Cuenta;
+import vos.Empleado;
+import vos.Oficina;
+import vos.Prestamo;
+import vos.PuntoDeAtencion;
 import vos.Usuario;
 
 
@@ -19,6 +29,15 @@ public class BancAndes
 	
 	private DaoClientes daoClientes;
 	
+	private DaoEmpleados daoEmpleados;
+	
+	private DaoCuentas daoCuentas;
+	
+	private DaoOficinas daoOficinas;
+	
+	private DaoPrestamos daoPrestamos;
+	
+	private DaoPuntosDeAtencion	daoPuntosDeAtencion;
     
     // -----------------------------------------------------------------
     // Singleton
@@ -50,6 +69,11 @@ public class BancAndes
 	{
 		daoUsuarios = new DaoUsuarios();
 		daoClientes= new DaoClientes();
+		daoEmpleados= new DaoEmpleados();
+		daoCuentas= new DaoCuentas();
+		daoOficinas= new DaoOficinas();
+		daoPrestamos= new DaoPrestamos();
+		daoPuntosDeAtencion= new DaoPuntosDeAtencion();
 	}
 	
 	
@@ -73,4 +97,28 @@ public class BancAndes
 		return daoClientes.darClientesDefault();
 	}
 	
+	public ArrayList<Empleado> darEmpleadosDefault() throws Exception
+	{
+		return daoEmpleados.darEmpleadosDefault();
+	}
+	
+	public ArrayList<Cuenta> darCuentasDefault() throws Exception
+	{
+		return daoCuentas.darCuentasDefault();
+	}
+	
+	public ArrayList<Oficina> darOficinasDefault() throws Exception
+	{
+		return daoOficinas.darOficinasDefault();
+	}
+	
+	public ArrayList<Prestamo> darPrestamosDefault() throws Exception
+	{
+		return daoPrestamos.darPrestamosDefault();
+	}
+	
+	public ArrayList<PuntoDeAtencion> darPuntosDeAtencionDefault() throws Exception
+	{
+		return daoPuntosDeAtencion.darPunto_De_AtencionsDefault();
+	}
 }
