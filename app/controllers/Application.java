@@ -32,6 +32,11 @@ public class Application extends Controller {
     	return ok(administrador_bancandes.render(us));
     }
     
+    public Result gerente(Usuario us)
+    {
+    	return ok(gerente_de_oficina_bancandes.render());
+    }
+    
     public Result login() 
     {
     	DynamicForm dynamicForm = Form.form().bindFromRequest();
@@ -45,6 +50,10 @@ public class Application extends Controller {
 			if(BancAndes.darInstancia().esAdmin(user,pass))
 			{
 				return admin(usuario);
+			}
+			else if(BancAndes.darInstancia().esGerente(user, pass))
+			{
+				return gerente(usuario);
 			}
 			else
 			{

@@ -120,6 +120,7 @@ public class DaoEmpleados
 				String tipo=rs.getString(tipoUsuario);
 				String usuario= rs.getString(usernameUsuario);
 				String contrasenia = rs.getString(contraseniaUsuario);
+				String rol=rs.getString(rolEmpleado);
 				
 				EmpleadoValue.setIdEmpleado(idCli);
 				EmpleadoValue.setIdUsuario(cedCli);
@@ -132,6 +133,7 @@ public class DaoEmpleados
 				EmpleadoValue.setGenero(genero);
 				EmpleadoValue.setTipo(tipo);
 				EmpleadoValue.setUsuario(usuario);
+				EmpleadoValue.setRol(rol);
 				Empleados.add(EmpleadoValue);
 				EmpleadoValue = new Empleado();
 							
