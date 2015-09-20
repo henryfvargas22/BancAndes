@@ -213,4 +213,16 @@ public class BancAndes
 	{
 		return daoUsuarios.iniciarSesion(usuario, contrasenia);
 	}
+	
+	public ArrayList<Cuenta> darCuentasCliente(int idCliente)
+	{
+		try
+		{
+			return daoCuentas.darCuentasCliente(idCliente);
+		}
+		catch(Exception e)
+		{
+			return new ArrayList<Cuenta>();
+		}
+	}
 }

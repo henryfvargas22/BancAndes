@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fachada.BancAndes;
@@ -35,6 +36,11 @@ public class Application extends Controller {
     public Result gerente(Usuario us)
     {
     	return ok(gerente_de_oficina_bancandes.render());
+    }
+    
+    public Result cerrarCuenta()
+    {
+    	return ok(cerrar_cuenta_form.render(new ArrayList<Cuenta>()));
     }
     
     public Result login() 
@@ -245,7 +251,7 @@ public class Application extends Controller {
     	}
     }
     
-    public Result closeCuenta()
+    public Result closeCuenta(ArrayList<Cuenta> c)
     {
     	try
     	{

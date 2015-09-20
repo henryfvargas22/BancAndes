@@ -5,6 +5,7 @@
 # Home page
 GET     /                           controllers.Application.index()
 POST    /                           controllers.Application.login()
+GET		/cuentas/cerrar				controllers.Application.cerrarCuenta()
 GET     /usuarios					controllers.Application.getUsuarios()
 GET     /clientes					controllers.Application.getClientes()
 GET		/empleados					controllers.Application.getEmpleados()
@@ -17,7 +18,6 @@ POST	/usuarios					controllers.Application.addUsuario()
 POST	/oficinas					controllers.Application.addOficina()
 POST	/puntos						controllers.Application.addPunto()
 POST	/cuentas					controllers.Application.addCuenta()
-POST	/cuentas/cerrar				controllers.Application.closeCuenta()
 POST	/prestamos					controllers.Application.addPrestamo()
 POST	/prestamos/cerrar			controllers.Application.closePrestamo()
 POST	/operaciones/prestamo		controllers.Application.addOperacionPrestamo()
@@ -25,3 +25,4 @@ POST	/operaciones/cuenta			controllers.Application.addOperacionCuenta()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET		/cuentas/assets/*file       controllers.Assets.versioned(path="/public", file: Asset)
