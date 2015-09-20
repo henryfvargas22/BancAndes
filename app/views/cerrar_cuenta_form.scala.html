@@ -41,6 +41,7 @@
             <label>Cliente</label>
               <input type="text" placeholder="Id del Cliente" name="cliente" class="form-control">
             <br>
+<<<<<<< HEAD
             <button type="submit" class="btn btn-success">Buscar cuentas</button>
           </div>
        </form>
@@ -54,18 +55,50 @@
                   }
               </select>                  
           </div>             
+=======
+            <input type="button" class=" form-control btn btn-primary" id="buscar" value="Buscar cuentas">
+            <script>
+              function buscarCuentas()
+              {
+                  var cliente, mensaje, tipo; 
+                  cliente= document.getElementById("cliente").value;
+                  if(cliente=="")
+                  {
+                    mensaje = "Ingrese el id del cliente";
+                    tipo = "danger";
+                    document.getElementById("alert").innerHTML = "<div class=\"alert alert-"+tipo+"\" role=\"alert\">"+mensaje+"</div>";
+                  }
+                  //LLamar a la funcion logica pasando el parametro cliente y refrescar el select de cuentas
+                  var numeroCuentas = 5;
+                  var cont = "<div class=\"form-group\">
+                                   <label>Cuentas</label>
+                                   <p>Seleccione la cuenta que desea cerrar</p>
+                                   <select class=\"form-control\" id=\"cuenta\">"
+                  for (var i = 0; i < numeroCuentas; i++) 
+                  {
+                      cont += "<option>"+"tipoCuenta "+"numeroCuenta "+i+"</option>";
+                  };                     
+                      cont += "</select>                  
+                               </div> "
+                  document.getElementById("content").innerHTML = cont;
+              }
+            </script>
+          </div>
+        </form>
+        <form>
+          <p id="content"></p>
+                     
+>>>>>>> origin/master
           <button onclick="cerrarCuenta()" type="button" class="btn btn-default">Cerrar Cuenta</button>
           <script>
               function cerrarCuenta()
               {
-                  var cliente, cuenta; 
-                  cliente= document.getElementById("cliente").value;
+                  var cuenta;                
                   cuenta = document.getElementById("cuenta").value;
                   //LLamar a la funcion logica 
                   mensaje = "Se ha cerrado correctamente la cuenta";
                   tipo = "info";
                   document.getElementById("alert").innerHTML = "<div class=\"alert alert-"+tipo+"\" role=\"alert\">"+mensaje+"</div>";
-
               }
             </script>
       </form>
