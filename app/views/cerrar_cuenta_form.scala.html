@@ -36,32 +36,22 @@
       <br>
       <h1>Cerrar Cuenta</h1>
       <hr>
-      <form>
+      <form method="post" action="@routes.Application.obtenerCuentas()">
           <div class="form-group">
             <label>Cliente</label>
-            <input id="cliente" type="text" class="form-control" placeholder="Ingrese el id del usuario">
+              <input type="text" placeholder="Id del Cliente" name="cliente" class="form-control">
             <br>
-            <input type="button" class=" form-control btn btn-primary" id="buscar" value="Buscar cuentas">
-            <script>
-              function buscarCuentas()
-              {
-                  var cliente, mensaje, tipo; 
-                  cliente= document.getElementById("cliente").value;
-                  if(cliente=="")
-                  {
-                    mensaje = "Ingrese el id del cliente";
-                    tipo = "danger";
-                    document.getElementById("alert").innerHTML = "<div class=\"alert alert-"+tipo+"\" role=\"alert\">"+mensaje+"</div>";
-                  }
-                  //LLamar a la funcion logica pasando el parametro cliente y refrescar el select de cuentas
-              }
-            </script>
+            <button type="submit" class="btn btn-success">Buscar cuentas</button>
           </div>
+       </form>
+       <form>
           <div class="form-group">
               <label>Cuentas</label>
               <p>Seleccione la cuenta que desea cerrar</p>
               <select class="form-control" id="cuenta">
-                  <option>Cuentas</option>
+              @for(c <- cuentas){
+                  <option>@c.getId()</option>
+                  }
               </select>                  
           </div>             
           <button onclick="cerrarCuenta()" type="button" class="btn btn-default">Cerrar Cuenta</button>
