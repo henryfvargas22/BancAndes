@@ -15,6 +15,7 @@ POST	/usuarios					controllers.Application.addUsuario()
 POST	/oficinas					controllers.Application.addOficina()
 POST	/puntos						controllers.Application.addPunto()
 POST	/cuentas					controllers.Application.addCuenta()
+POST	/cuentas/cerrar				controllers.Application.closeCuenta()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

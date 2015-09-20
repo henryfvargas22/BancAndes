@@ -141,4 +141,9 @@ public class BancAndes
 	{
 		daoCuentas.registrarCuenta(id, tipo, idCliente);
 	}
+	
+	public void cerrarCuenta(int id) throws Exception
+	{
+		daoCuentas.cerrarCuenta(id);
+	}
 }

@@ -40,7 +40,8 @@ public class DaoCuentas
 		private static final String consultaCuentasDefault="SELECT * FROM "+tablaCuenta;
 		
 		private static final String insertarCuenta="INSERT INTO "+tablaCuenta+" VALUES";
-
+		
+		private static final String cerrarCuenta="UPDATE "+tablaCuenta+" SET cerrada=1 WHERE id=";
 		
 		// ---------------------------------------------------
 	    // Métodos asociados a los casos de uso: Consulta
@@ -127,4 +128,25 @@ public class DaoCuentas
 				ConsultaDAO.darInstancia().closeConnection(conexion);
 			}	
 		}
+	    
+	    public void cerrarCuenta(int id) throws Exception
+	    {
+	    	Connection conexion=null;
+	    	try
+			{
+				conexion=ConsultaDAO.darInstancia().establecerConexion();
+				Statement st=conexion.createStatement();
+				st.executeUpdate(cerrarCuenta+id);
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+				System.out.println(cerrarCuenta);
+				throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+			}
+			finally 
+			{
+				ConsultaDAO.darInstancia().closeConnection(conexion);
+			}	
+	    }
 }
