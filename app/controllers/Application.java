@@ -8,7 +8,6 @@ import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.*;
 
-import views.html.*;
 import vos.Cliente;
 import vos.Cuenta;
 import vos.Empleado;
@@ -23,8 +22,7 @@ import static play.libs.Json.toJson;;
 public class Application extends Controller {
 
     public Result index() {
-        return ok(   );
-            //main.render("BancAndes en Play!", index.render("BancAndes 1.0"))
+        return ok();
     }
     
     public Result getUsuarios()

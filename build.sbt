@@ -24,4 +24,5 @@ EclipseKeys.createSrc := EclipseCreateSrc.ValueSet(EclipseCreateSrc.ManagedClass
 // Use .class files instead of generated .scala files for views and routes 
 
 
+
 fork in run := true
