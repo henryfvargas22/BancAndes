@@ -146,4 +146,14 @@ public class BancAndes
 	{
 		daoCuentas.cerrarCuenta(id);
 	}
+	
+	public void agregarPrestamo(long monto,double interes,int cuotas,int diaPago,int cuotaMensual, int idCliente) throws Exception
+	{
+		daoPrestamos.registrarPrestamo(monto, interes, cuotas, diaPago, cuotaMensual, idCliente);
+	}
+	
+	public void cerrarPrestamo(int id) throws Exception
+	{
+		daoPrestamos.cerrarPrestamo(id);
+	}
 }

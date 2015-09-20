@@ -207,4 +207,38 @@ public class Application extends Controller {
     		return internalServerError("Ups: "+e.getMessage());
     	}
     }
+    
+    public Result addPrestamo()
+    {
+    	try
+    	{
+    		DynamicForm dynamicForm = Form.form().bindFromRequest();
+    	    Logger.info("Username is: " + dynamicForm.get("username"));
+    	    Logger.info("Password is: " + dynamicForm.get("password"));
+    	    String usuario=dynamicForm.get("username");
+    	    return ok("ok, I recived POST data. That's all...");
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    		return internalServerError("Ups: "+e.getMessage());
+    	}
+    }
+    
+    public Result closePrestamo()
+    {
+    	try
+    	{
+    		DynamicForm dynamicForm = Form.form().bindFromRequest();
+    	    Logger.info("Username is: " + dynamicForm.get("username"));
+    	    Logger.info("Password is: " + dynamicForm.get("password"));
+    	    String usuario=dynamicForm.get("username");
+    	    return ok("ok, I recived POST data. That's all...");
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    		return internalServerError("Ups: "+e.getMessage());
+    	}
+    }
 }

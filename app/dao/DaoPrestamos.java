@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import vos.Prestamo;
@@ -35,6 +36,8 @@ public class DaoPrestamos
 	private static final String cuotaMensualPrestamo="cuota_mensual";
 	
 	private static final String idPrestamo_Cliente="id_cliente";
+	
+	private static final String estaCerrado="cerrado";
 
 	//----------------------------------------------------
 	//Consultas
@@ -45,6 +48,12 @@ public class DaoPrestamos
 	 */
 	private static final String consultaPrestamosDefault="SELECT * FROM "+tablaPrestamo;
 	
+	private static final String maxIdPrestamo="SELECT MAX(id) AS maximo FROM "+tablaPrestamo;
+	
+	private static final String insertarPrestamo="INSERT INTO "+tablaPrestamo+" VALUES";
+
+	private static final String cerrarPrestamo="UPDATE "+tablaPrestamo+" SET cerrado=1 WHERE id=";
+
 	// ---------------------------------------------------
     // Métodos asociados a los casos de uso: Consulta
     // ---------------------------------------------------
@@ -111,5 +120,78 @@ public class DaoPrestamos
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}		
 		return Prestamos;
+    }
+    
+    private int mayorId() throws Exception
+	{
+		PreparedStatement prepStmt = null;
+		Connection conexion=null;
+		int valor=0;
+		try {
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(maxIdPrestamo);
+
+			ResultSet rs = prepStmt.executeQuery();
+			valor=rs.getInt("maximo");
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			System.out.println(maxIdPrestamo);
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}	
+		return valor+1;
+	}
+    
+    public void registrarPrestamo(long monto,double interes,int cuotas,int diaPago,int cuotaMensual, int idCliente) throws Exception
+	{
+		Connection conexion=null;
+		try
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			Statement st=conexion.createStatement();
+			st.executeUpdate(insertarPrestamo+"("+mayorId()+","
+					+monto+","+
+					interes+","+
+					cuotas+","+
+					diaPago+","+
+					cuotaMensual+","+
+					idCliente+","+
+					0+")");
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			System.out.println(insertarPrestamo);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}	
+	}
+    
+    public void cerrarPrestamo(int id) throws Exception
+    {
+    	Connection conexion=null;
+    	try
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			Statement st=conexion.createStatement();
+			st.executeUpdate(cerrarPrestamo+id);
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			System.out.println(cerrarPrestamo);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}	
     }
 }
