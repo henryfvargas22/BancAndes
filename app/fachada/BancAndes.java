@@ -174,4 +174,9 @@ public class BancAndes
 	{
 		daoOperaciones.registrarOperacionPrestamo(fecha, idClient, monto, tipo, idPrestam);
 	}
+	
+	public Usuario iniciarSesion(String usuario, String contrasenia) throws Exception
+	{
+		return daoUsuarios.iniciarSesion(usuario, contrasenia);
+	}
 }

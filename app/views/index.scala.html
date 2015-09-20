@@ -14,10 +14,10 @@
                 padding-bottom: 20px;
             }
         </style>
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="assets/stylesheets/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/main.css">
 
-        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        <script src="assets/javascripts/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -26,12 +26,12 @@
           <a class="navbar-brand" href="#">@title</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            <form class="navbar-form navbar-right" role="form">
+            <form method="post" action="@routes.Application.login()" class="navbar-form navbar-right" role="form">
             <div class="form-group">
-              <input type="text" placeholder="Usuario" class="form-control">
+              <input type="text" placeholder="Usuario" name="username" class="form-control">
             </div>
             <div class="form-group">
-              <input type="password" placeholder="Contraseña" class="form-control">
+              <input type="password" placeholder="Contraseña" name="password" class="form-control">
             </div>
             <button type="submit" class="btn btn-success">Iniciar Sesi&oacute;n</button>
           </form>
@@ -43,7 +43,7 @@
       <div class="container">
           <div class="row">
               <div class="col-md-2">
-                  <img src="img/bank.png">
+                  <img src="assets/images/bank.png">
               </div>
               <div class="col-md-7">
                     <h1>@title</h1>
@@ -79,11 +79,11 @@
         <p>&copy; BancAndes 2015</p>
       </footer>
     </div> <!-- /container -->        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.js"><\/script>')</script>
+        <script>window.jQuery || document.write('<script src="assets/javascripts/vendor/jquery-1.11.2.js"><\/script>')</script>
 
-        <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="assets/javascripts/vendor/bootstrap.min.js"></script>
 
-        <script src="js/main.js"></script>
+        <script src="assets/javascripts/main.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>

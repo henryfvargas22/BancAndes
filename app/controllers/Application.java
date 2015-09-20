@@ -7,7 +7,7 @@ import play.*;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.*;
-
+import views.html.administrador_bancandes;
 import vos.Cliente;
 import vos.Cuenta;
 import vos.Empleado;
@@ -21,8 +21,30 @@ import static play.libs.Json.toJson;;
 
 public class Application extends Controller {
 
-    public Result index() {
+    public Result index() 
+    {
         return ok(views.html.index.render("BancAndes"));
+    }
+    
+    public Result admin(Usuario us)
+    {
+    	return ok(administrador_bancandes.render(us));
+    }
+    
+    public Result login() 
+    {
+    	DynamicForm dynamicForm = Form.form().bindFromRequest();
+        Logger.info("Username is: " + dynamicForm.get("username"));
+        Logger.info("Password is: " + dynamicForm.get("password"));
+        try
+        {
+			Usuario usuario=BancAndes.darInstancia().iniciarSesion(dynamicForm.get("username"), dynamicForm.get("password"));
+			return admin(usuario);
+        } 
+        catch (Exception e)
+        {
+			return internalServerError("Ups: "+"Contraseña incorrecta");
+		}
     }
     
     public Result getUsuarios()
