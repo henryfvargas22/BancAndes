@@ -36,11 +36,12 @@
       <br>
       <h1>Cerrar Cuenta</h1>
       <hr>
-      <form>
+      <form method="post" action="@routes.Application.obtenerCuentas()">
           <div class="form-group">
             <label>Cliente</label>
-            <input id="cliente" type="text" class="form-control" placeholder="Ingrese el id del usuario">
+              <input type="text" placeholder="Id del Cliente" name="cliente" class="form-control">
             <br>
+<<<<<<< HEAD
             <input type="button" class=" form-control btn btn-primary" id="buscar" value="Buscar cuentas" onclick="buscarCuentas()">
             <script>
               function buscarCuentas()
@@ -69,10 +70,28 @@
                   document.getElementById("content").innerHTML = cont;
               }
             </script>
+=======
+            <button type="submit" class="btn btn-success">Buscar cuentas</button>
+>>>>>>> origin/master
           </div>
+       </form>
+       <form>
+          <div class="form-group">
+              <label>Cuentas</label>
+              <p>Seleccione la cuenta que desea cerrar</p>
+              <select class="form-control" id="cuenta">
+              @for(c <- cuentas){
+                  <option>@c.getId()</option>
+                  }
+              </select>                  
+          </div>             
         </form>
         <form>
           <p id="content"></p>
+<<<<<<< HEAD
+=======
+          <button onclick="cerrarCuenta()" type="button" class="btn btn-default">Cerrar Cuenta</button>
+>>>>>>> origin/master
           <script>
               function cerrarCuenta()
               {

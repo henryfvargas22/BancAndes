@@ -38,9 +38,18 @@ public class Application extends Controller {
     	return ok(gerente_de_oficina_bancandes.render());
     }
     
-    public Result cerrarCuenta()
+    public Result formCerrarCuenta()
     {
     	return ok(cerrar_cuenta_form.render(new ArrayList<Cuenta>()));
+    }
+    
+    public Result obtenerCuentas()
+    {
+    	DynamicForm dynamicForm = Form.form().bindFromRequest();
+        Logger.info("Username is: " + dynamicForm.get("cliente"));
+        String user=dynamicForm.get("cliente");
+        ArrayList<Cuenta> cuentas=BancAndes.darInstancia().darCuentasCliente(Integer.parseInt(user));
+        return ok(cerrar_cuenta_form.render(cuentas));
     }
     
     public Result login() 
@@ -251,15 +260,15 @@ public class Application extends Controller {
     	}
     }
     
-    public Result closeCuenta(ArrayList<Cuenta> c)
+    public Result closeCuenta()
     {
     	try
     	{
     		DynamicForm dynamicForm = Form.form().bindFromRequest();
-    	    Logger.info("Username is: " + dynamicForm.get("username"));
-    	    Logger.info("Password is: " + dynamicForm.get("password"));
-    	    String usuario=dynamicForm.get("username");
-    	    return ok("ok, I recived POST data. That's all...");
+    	    Logger.info("Cuenta is: " + dynamicForm.get("cuenta"));
+    	    String cuenta=dynamicForm.get("cuenta");
+    		BancAndes.darInstancia().cerrarCuenta(Integer.parseInt(cuenta));
+    		return gerente(null);
     	}
     	catch(Exception e)
     	{
