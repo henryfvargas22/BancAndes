@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -42,6 +43,8 @@ public class DaoOperaciones
 	 * Consulta que devuelve isan, titulo, y año de los videos en orden alfabetico
 	 */
 	private static final String consultaOperacionesDefault="SELECT * FROM "+tablaOperacion;
+	
+	private static final String ingresarOperacion="INSERT INTO "+tablaOperacion+" VALUES";
 	
 	// ---------------------------------------------------
     // Métodos asociados a los casos de uso: Consulta
@@ -113,5 +116,57 @@ public class DaoOperaciones
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}		
 		return Operacions;
+    }
+    
+    public void registrarOperacionPrestamo(Date fecha,int idClient,long monto,String tipo, int idPrestam) throws Exception
+    {
+    	Connection conexion=null;
+		try
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			Statement st=conexion.createStatement();
+			st.executeUpdate(ingresarOperacion+"("+fecha.toString()+","
+					+"NULL"+","+
+					"'"+tipo+"',"+
+					monto+","+
+					idPrestam+","+
+					idClient+")");
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			System.out.println(ingresarOperacion);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}
+    }
+    
+    public void registrarOperacionCuenta(Date fecha,int idClient,long monto,String tipo, int idCuent) throws Exception
+    {
+    	Connection conexion=null;
+		try
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			Statement st=conexion.createStatement();
+			st.executeUpdate(ingresarOperacion+"("+fecha.toString()+","
+					+idCuent+","+
+					"'"+tipo+"',"+
+					monto+","+
+					"NULL"+","+
+					idClient+")");
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			System.out.println(ingresarOperacion);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}
     }
 }

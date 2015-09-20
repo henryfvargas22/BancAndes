@@ -1,9 +1,7 @@
 package fachada;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import dao.ConsultaDAO;
+import java.util.Date;
 import dao.DaoClientes;
 import dao.DaoCuentas;
 import dao.DaoEmpleados;
@@ -165,5 +163,15 @@ public class BancAndes
 	public ArrayList<Operacion> darOperacionesDefault() throws Exception
 	{
 		return daoOperaciones.darOperacionesDefault();
+	}
+	
+	public void insertarOperacionCuenta(Date fecha,int idClient,long monto,String tipo, int idCuent) throws Exception
+	{
+		daoOperaciones.registrarOperacionCuenta(fecha, idClient, monto, tipo, idCuent);
+	}
+	
+	public void insertarOperacionPrestamo(Date fecha,int idClient,long monto,String tipo, int idPrestam) throws Exception
+	{
+		daoOperaciones.registrarOperacionPrestamo(fecha, idClient, monto, tipo, idPrestam);
 	}
 }
