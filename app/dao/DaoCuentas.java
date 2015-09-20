@@ -131,7 +131,7 @@ public class DaoCuentas
 		}	
 	}
 
-	public void cerrarCuenta(int id) throws Exception
+	public void cerrarCuenta(long id) throws Exception
 	{
 		Connection conexion=null;
 		try

@@ -23,6 +23,7 @@ import static play.libs.Json.toJson;;
 
 public class Application extends Controller {
 
+	private Usuario usuarioActual;
     public Result index() 
     {
         return ok(index.render("Bienvenido"));
@@ -62,6 +63,7 @@ public class Application extends Controller {
         try
         {
 			Usuario usuario=BancAndes.darInstancia().iniciarSesion(dynamicForm.get("username"), dynamicForm.get("password"));
+			usuarioActual=usuario;
 			if(BancAndes.darInstancia().esAdmin(user,pass))
 			{
 				return admin(usuario);
@@ -267,8 +269,8 @@ public class Application extends Controller {
     		DynamicForm dynamicForm = Form.form().bindFromRequest();
     	    Logger.info("Cuenta is: " + dynamicForm.get("cuenta"));
     	    String cuenta=dynamicForm.get("cuenta");
-    		BancAndes.darInstancia().cerrarCuenta(Integer.parseInt(cuenta));
-    		return gerente(null);
+    		BancAndes.darInstancia().cerrarCuenta(Long.parseLong(cuenta));
+    		return gerente(usuarioActual);
     	}
     	catch(Exception e)
     	{

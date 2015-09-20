@@ -75,20 +75,24 @@
 >>>>>>> origin/master
           </div>
        </form>
-       <form>
+       <form method="post" action="@routes.Application.closeCuenta()">
           <div class="form-group">
               <label>Cuentas</label>
               <p>Seleccione la cuenta que desea cerrar</p>
-              <select class="form-control" id="cuenta">
+              <select class="form-control" name="cuenta">
               @for(c <- cuentas){
                   <option>@c.getId()</option>
                   }
               </select>                  
           </div>             
-        </form>
-        <form>
           <p id="content"></p>
 <<<<<<< HEAD
+<<<<<<< Updated upstream
+=======
+          <button type="submit" class="btn btn-default">Cerrar cuenta</button>
+=======
+<<<<<<< HEAD
+>>>>>>> Stashed changes
 =======
           <button onclick="cerrarCuenta()" type="button" class="btn btn-default">Cerrar Cuenta</button>
 >>>>>>> origin/master
@@ -103,6 +107,7 @@
                   document.getElementById("alert").innerHTML = "<div class=\"alert alert-"+tipo+"\" role=\"alert\">"+mensaje+"</div>";
               }
             </script>
+>>>>>>> origin/master
       </form>
       <hr>
       <footer>
