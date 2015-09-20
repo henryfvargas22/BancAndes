@@ -2,13 +2,12 @@
 /IntegrationTest$1.class
 /IntegrationTest.class
 /application.conf
+/conexion.properties
 /controllers/
+/dao/
+/fachada/
 /logback.xml
+/nbproject/
 /routes
 /views/
-/dao/
-/models/
-/.DS_Store
 /vos/
-/conexion.properties
-/fachada/
