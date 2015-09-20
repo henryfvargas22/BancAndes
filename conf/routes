@@ -5,6 +5,7 @@
 # Home page
 GET     /                           controllers.Application.index()
 POST    /                           controllers.Application.login()
+GET		/gerente					controllers.Application.gerente()
 GET		/cuentas/cerrar				controllers.Application.formCerrarCuenta()
 POST	/cuentas/cerrar				controllers.Application.obtenerCuentas()
 POST	/cuentas/cerrar/			controllers.Application.closeCuenta()

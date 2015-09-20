@@ -34,7 +34,7 @@ public class Application extends Controller {
     	return ok(administrador_bancandes.render(us));
     }
     
-    public Result gerente(Usuario us)
+    public Result gerente()
     {
     	return ok(gerente_de_oficina_bancandes.render());
     }
@@ -70,7 +70,7 @@ public class Application extends Controller {
 			}
 			else if(BancAndes.darInstancia().esGerente(user, pass))
 			{
-				return gerente(usuario);
+				return gerente();
 			}
 			else
 			{
@@ -270,7 +270,7 @@ public class Application extends Controller {
     	    Logger.info("Cuenta is: " + dynamicForm.get("cuenta"));
     	    String cuenta=dynamicForm.get("cuenta");
     		BancAndes.darInstancia().cerrarCuenta(Long.parseLong(cuenta));
-    		return gerente(usuarioActual);
+    		return redirect("/gerente");
     	}
     	catch(Exception e)
     	{
