@@ -5,6 +5,7 @@ public class Cuenta
 	private long id;
 	private int id_Cliente;
 	private String tipo;
+	private boolean estaCerrada;
 	
 	public long getId() {
 		return id;
@@ -23,6 +24,12 @@ public class Cuenta
 	}
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+	public boolean isEstaCerrada() {
+		return estaCerrada;
+	}
+	public void setEstaCerrada(boolean estaCerrada) {
+		this.estaCerrada = estaCerrada;
 	}
 	
 	

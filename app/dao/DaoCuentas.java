@@ -28,6 +28,8 @@ public class DaoCuentas
 	
 	private static final String tipoCuenta= "tipo";
 	
+	private static final String estaCerrada="cerrada";
+	
 	//----------------------------------------------------
 		//Consultas
 		//----------------------------------------------------
@@ -71,10 +73,12 @@ public class DaoCuentas
 					long id = rs.getLong(idCuenta);
 					int id_Cliente = rs.getInt(idCuenta_Cliente);
 					String tipo = rs.getString(tipoCuenta);
+					boolean cerrada= rs.getBoolean(estaCerrada);
 					
 					CuentaValue.setId(id);
 					CuentaValue.setId_Cliente(id_Cliente);
 					CuentaValue.setTipo(tipo);
+					CuentaValue.setEstaCerrada(cerrada);
 					Cuentas.add(CuentaValue);
 					CuentaValue = new Cuenta();
 								
@@ -109,7 +113,8 @@ public class DaoCuentas
 				Statement st=conexion.createStatement();
 				st.executeUpdate(insertarCuenta+"("+id+","
 						+"'"+tipo+"',"+
-						idCliente+"')");
+						idCliente+","+
+						0+"')");
 			}
 			catch(SQLException e)
 			{
