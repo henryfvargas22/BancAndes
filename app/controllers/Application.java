@@ -16,6 +16,7 @@ import vos.Operacion;
 import vos.Prestamo;
 import vos.PuntoDeAtencion;
 import vos.Usuario;
+import views.html.*;
 
 import static play.libs.Json.toJson;;
 
@@ -23,7 +24,7 @@ public class Application extends Controller {
 
     public Result index() 
     {
-        return ok(views.html.index.render("BancAndes"));
+        return ok(index.render("BancAndes","Bienvenido"));
     }
     
     public Result admin(Usuario us)
@@ -47,7 +48,7 @@ public class Application extends Controller {
 			}
 			else
 			{
-				return index();
+				return ok(index.render("BancAndes","Ingreso no permitido"));
 			}
         } 
         catch (Exception e)
