@@ -24,7 +24,7 @@ public class Application extends Controller {
 
     public Result index() 
     {
-        return ok(index.render("BancAndes","Bienvenido"));
+        return ok(index.render("Bienvenido"));
     }
     
     public Result admin(Usuario us)
@@ -48,7 +48,7 @@ public class Application extends Controller {
 			}
 			else
 			{
-				return ok(index.render("BancAndes","Ingreso no permitido"));
+				return ok(index.render("Ingreso no permitido"));
 			}
         } 
         catch (Exception e)
