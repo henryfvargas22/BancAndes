@@ -194,74 +194,6 @@ public class Application extends Controller {
 		}
     }
     
-    public Result addUsuario()
-    {
-    	try
-    	{
-    		DynamicForm dynamicForm = Form.form().bindFromRequest();
-    	    Logger.info("Username is: " + dynamicForm.get("username"));
-    	    Logger.info("Password is: " + dynamicForm.get("password"));
-    	    String usuario=dynamicForm.get("username");
-    	    return ok("ok, I recived POST data. That's all...");
-    	}
-    	catch(Exception e)
-    	{
-    		e.printStackTrace();
-    		return internalServerError("Ups: "+e.getMessage());
-    	}
-    }
-    
-    public Result addOficina()
-    {
-    	try
-    	{
-    		DynamicForm dynamicForm = Form.form().bindFromRequest();
-    	    Logger.info("Username is: " + dynamicForm.get("username"));
-    	    Logger.info("Password is: " + dynamicForm.get("password"));
-    	    String usuario=dynamicForm.get("username");
-    	    return ok("ok, I recived POST data. That's all...");
-    	}
-    	catch(Exception e)
-    	{
-    		e.printStackTrace();
-    		return internalServerError("Ups: "+e.getMessage());
-    	}
-    }
-    
-    public Result addPunto()
-    {
-    	try
-    	{
-    		DynamicForm dynamicForm = Form.form().bindFromRequest();
-    	    Logger.info("Username is: " + dynamicForm.get("username"));
-    	    Logger.info("Password is: " + dynamicForm.get("password"));
-    	    String usuario=dynamicForm.get("username");
-    	    return ok("ok, I recived POST data. That's all...");
-    	}
-    	catch(Exception e)
-    	{
-    		e.printStackTrace();
-    		return internalServerError("Ups: "+e.getMessage());
-    	}
-    }
-    
-    public Result addCuenta()
-    {
-    	try
-    	{
-    		DynamicForm dynamicForm = Form.form().bindFromRequest();
-    	    Logger.info("Username is: " + dynamicForm.get("username"));
-    	    Logger.info("Password is: " + dynamicForm.get("password"));
-    	    String usuario=dynamicForm.get("username");
-    	    return ok("ok, I recived POST data. That's all...");
-    	}
-    	catch(Exception e)
-    	{
-    		e.printStackTrace();
-    		return internalServerError("Ups: "+e.getMessage());
-    	}
-    }
-    
     public Result closeCuenta()
     {
     	try
@@ -279,58 +211,7 @@ public class Application extends Controller {
     	}
     }
     
-    public Result addPrestamo()
-    {
-    	try
-    	{
-    		DynamicForm dynamicForm = Form.form().bindFromRequest();
-    	    Logger.info("Username is: " + dynamicForm.get("username"));
-    	    Logger.info("Password is: " + dynamicForm.get("password"));
-    	    String usuario=dynamicForm.get("username");
-    	    return ok("ok, I recived POST data. That's all...");
-    	}
-    	catch(Exception e)
-    	{
-    		e.printStackTrace();
-    		return internalServerError("Ups: "+e.getMessage());
-    	}
-    }
-    
     public Result closePrestamo()
-    {
-    	try
-    	{
-    		DynamicForm dynamicForm = Form.form().bindFromRequest();
-    	    Logger.info("Username is: " + dynamicForm.get("username"));
-    	    Logger.info("Password is: " + dynamicForm.get("password"));
-    	    String usuario=dynamicForm.get("username");
-    	    return ok("ok, I recived POST data. That's all...");
-    	}
-    	catch(Exception e)
-    	{
-    		e.printStackTrace();
-    		return internalServerError("Ups: "+e.getMessage());
-    	}
-    }
-    
-    public Result addOperacionCuenta()
-    {
-    	try
-    	{
-    		DynamicForm dynamicForm = Form.form().bindFromRequest();
-    	    Logger.info("Username is: " + dynamicForm.get("username"));
-    	    Logger.info("Password is: " + dynamicForm.get("password"));
-    	    String usuario=dynamicForm.get("username");
-    	    return ok("ok, I recived POST data. That's all...");
-    	}
-    	catch(Exception e)
-    	{
-    		e.printStackTrace();
-    		return internalServerError("Ups: "+e.getMessage());
-    	}
-    }
-    
-    public Result addOperacionPrestamo()
     {
     	try
     	{

@@ -9,6 +9,7 @@ GET		/gerente					controllers.Application.gerente()
 GET		/cuentas/cerrar				controllers.Application.formCerrarCuenta()
 POST	/cuentas/cerrar				controllers.Application.obtenerCuentas()
 POST	/cuentas/cerrar/			controllers.Application.closeCuenta()
+GET		/usuario/crear				controllers.Appli
 GET     /usuarios					controllers.Application.getUsuarios()
 GET     /clientes					controllers.Application.getClientes()
 GET		/empleados					controllers.Application.getEmpleados()
