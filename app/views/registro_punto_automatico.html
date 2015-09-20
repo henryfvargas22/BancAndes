@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="views.css/bootstrap.min.css">
         <style>
             body {
                 padding-top: 50px;
@@ -41,6 +41,23 @@
               <input type="text" class="form-control" id="direccion" placeholder="Ingrese la direccion del cajero">
           </div>
           <button type="submit" class="btn btn-default">Registrar Punto</button>
+          <script>
+                var direccion, mensaje, tipo;
+                direccion = document.getElementsById("direccion");
+                if(direccion=="")
+                {
+                  mensaje = "Ingrese una direccion";
+                  tipo = "danger";
+                }
+                else
+                {
+                  //Llamar funcion logica
+                  mensaje = "Se ha agregado el cajero automatico correctamente";
+                  tipo = "info";
+                }
+                document.getElementById("alert").innerHTML = "<div class=\"alert alert-"+tipo+"\" role=\"alert\">"+mensaje+"</div>";
+
+          </script>
       </form>
       
 
