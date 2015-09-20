@@ -1,3 +1,4 @@
+@(cuentas: List[vos.Cuenta])
 <html>
     <head>
         <meta charset="utf-8">
@@ -7,17 +8,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/bootstrap.min.css">
         <style>
             body {
                 padding-top: 50px;
                 padding-bottom: 20px;
             }
         </style>
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="assets/stylesheets/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/main.css">
 
-        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        <script src="assets/javascripts/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -38,14 +39,14 @@
       <form>
           <div class="form-group">
             <label>Cliente</label>
-            <input type="text" class="form-control" placeholder="Ingrese el id del usuario">
+            <input id="cliente" type="text" class="form-control" placeholder="Ingrese el id del usuario">
             <br>
-            <input onclick="buscarPrestamos()" type="button" class=" form-control btn btn-primary" id="buscar" value="Buscar prestamos">
+            <input type="button" class=" form-control btn btn-primary" id="buscar" value="Buscar prestamos" onclick="buscarPrestamos()">
             <script>
               function buscarPrestamos()
               {
                   var cliente, mensaje, tipo; 
-                  cliente = document.getElementById("cliente").value;
+                  cliente= document.getElementById("cliente").value;
                   if(cliente=="")
                   {
                     mensaje = "Ingrese el id del cliente";
@@ -53,28 +54,34 @@
                     document.getElementById("alert").innerHTML = "<div class=\"alert alert-"+tipo+"\" role=\"alert\">"+mensaje+"</div>";
                   }
                   //LLamar a la funcion logica pasando el parametro cliente y refrescar el select de prestamos
+                  var numeroPrestamos = 5;
+                  var cont = "<div class=\"form-group\">
+                                   <label>Prestamos</label>
+                                   <p>Seleccione el prestamo que desea cerrar</p>
+                                   <select class=\"form-control\" id=\"prestamo\">"
+                  for (var i = 0; i < numeroPrestamos; i++) 
+                  {
+                      cont += "<option>"+"tipoPrestamo "+"monto "+i+"</option>";
+                  };                     
+                      cont += "</select>                  
+                               </div> "
+                  cont += "<button onclick=\"cerrarPrestamo()\" type=\"button\" class=\"btn btn-default\">Cerrar Cuenta</button>";
+                  document.getElementById("content").innerHTML = cont;
               }
             </script>
           </div>
-          <div class="form-group">
-              <label>Prestamos</label>
-              <p>Seleccione el prestamo que desea cerrar</p>
-              <select class="form-control" id="prestamos">
-                  <option>Prestamos</option>
-              </select>                  
-          </div>             
-          <button type="button" onclick="cerrarPrestamo()" class="btn btn-default">Cerrar Prestamo</button>
+        </form>
+        <form>
+          <p id="content"></p>
           <script>
               function cerrarPrestamo()
               {
-                  var cliente, prestamo, mensaje, tipo; 
-                  cliente= document.getElementById("cliente").value;
-                  prestamo = document.getElementById("cuenta").value;
+                  var prestamo;                
+                  prestamo = document.getElementById("prestamo").value;
                   //LLamar a la funcion logica 
                   mensaje = "Se ha cerrado correctamente la cuenta";
                   tipo = "info";
                   document.getElementById("alert").innerHTML = "<div class=\"alert alert-"+tipo+"\" role=\"alert\">"+mensaje+"</div>";
-
               }
             </script>
       </form>
@@ -87,11 +94,11 @@
       </footer>
     </div>
         </div><!-- /container -->        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.js"><\/script>')</script>
+        <script>window.jQuery || document.write('<script src="assets/javascripts/vendor/jquery-1.11.2.js"><\/script>')</script>
 
-        <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="assets/javascripts/vendor/bootstrap.min.js"></script>
 
-        <script src="js/main.js"></script>
+        <script src="assets/javascripts/main.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>

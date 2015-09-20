@@ -41,7 +41,7 @@
             <label>Cliente</label>
             <input id="cliente" type="text" class="form-control" placeholder="Ingrese el id del usuario">
             <br>
-            <input type="button" class=" form-control btn btn-primary" id="buscar" value="Buscar cuentas">
+            <input type="button" class=" form-control btn btn-primary" id="buscar" value="Buscar cuentas" onclick="buscarCuentas()">
             <script>
               function buscarCuentas()
               {
@@ -65,6 +65,7 @@
                   };                     
                       cont += "</select>                  
                                </div> "
+                  cont += "<button onclick=\"cerrarCuenta()\" type=\"button\" class=\"btn btn-default\">Cerrar Cuenta</button>";
                   document.getElementById("content").innerHTML = cont;
               }
             </script>
@@ -72,8 +73,6 @@
         </form>
         <form>
           <p id="content"></p>
-                     
-          <button onclick="cerrarCuenta()" type="button" class="btn btn-default">Cerrar Cuenta</button>
           <script>
               function cerrarCuenta()
               {
