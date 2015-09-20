@@ -22,7 +22,7 @@ import static play.libs.Json.toJson;;
 public class Application extends Controller {
 
     public Result index() {
-        return ok();
+        return ok(views.html.index.render("BancAndes"));
     }
     
     public Result getUsuarios()
