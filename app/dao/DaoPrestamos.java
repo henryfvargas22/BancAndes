@@ -89,6 +89,7 @@ public class DaoPrestamos
 				int cuotas = rs.getInt(cuotasPrestamo);
 				int diaPago=rs.getInt(diaPagoPrestamo);
 				double cuotaMensual=rs.getDouble(cuotaMensualPrestamo);
+				boolean estaCerra=rs.getBoolean(estaCerrado);
 				
 				PrestamoValue.setId(id);
 				PrestamoValue.setIdCliente(idCliente);
@@ -97,6 +98,7 @@ public class DaoPrestamos
 				PrestamoValue.setDiaPago(diaPago);
 				PrestamoValue.setMonto(monto);
 				PrestamoValue.setInteres(interes);
+				PrestamoValue.setCerrado(estaCerra);
 				Prestamos.add(PrestamoValue);
 				PrestamoValue = new Prestamo();
 							

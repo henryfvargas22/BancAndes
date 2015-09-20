@@ -8,6 +8,7 @@ import dao.DaoClientes;
 import dao.DaoCuentas;
 import dao.DaoEmpleados;
 import dao.DaoOficinas;
+import dao.DaoOperaciones;
 import dao.DaoPrestamos;
 import dao.DaoPuntosDeAtencion;
 import dao.DaoUsuarios;
@@ -15,6 +16,7 @@ import vos.Cliente;
 import vos.Cuenta;
 import vos.Empleado;
 import vos.Oficina;
+import vos.Operacion;
 import vos.Prestamo;
 import vos.PuntoDeAtencion;
 import vos.Usuario;
@@ -38,6 +40,8 @@ public class BancAndes
 	private DaoPrestamos daoPrestamos;
 	
 	private DaoPuntosDeAtencion	daoPuntosDeAtencion;
+	
+	private DaoOperaciones daoOperaciones;
     
     // -----------------------------------------------------------------
     // Singleton
@@ -74,6 +78,7 @@ public class BancAndes
 		daoOficinas= new DaoOficinas();
 		daoPrestamos= new DaoPrestamos();
 		daoPuntosDeAtencion= new DaoPuntosDeAtencion();
+		daoOperaciones= new DaoOperaciones();
 	}
 	
 	
@@ -155,5 +160,10 @@ public class BancAndes
 	public void cerrarPrestamo(int id) throws Exception
 	{
 		daoPrestamos.cerrarPrestamo(id);
+	}
+	
+	public ArrayList<Operacion> darOperacionesDefault() throws Exception
+	{
+		return daoOperaciones.darOperacionesDefault();
 	}
 }

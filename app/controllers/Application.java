@@ -14,6 +14,7 @@ import vos.Cliente;
 import vos.Cuenta;
 import vos.Empleado;
 import vos.Oficina;
+import vos.Operacion;
 import vos.Prestamo;
 import vos.PuntoDeAtencion;
 import vos.Usuario;
@@ -115,6 +116,20 @@ public class Application extends Controller {
     	{
 			List<PuntoDeAtencion> puntos=BancAndes.darInstancia().darPuntosDeAtencionDefault();
 			return ok(toJson(puntos));
+		} 
+    	catch (Exception e) 
+    	{
+    		e.printStackTrace();
+			return internalServerError("Ups: "+e.getMessage());
+		}
+    }
+    
+    public Result getOperaciones()
+    {
+    	try 
+    	{
+			List<Operacion> operaciones=BancAndes.darInstancia().darOperacionesDefault();
+			return ok(toJson(operaciones));
 		} 
     	catch (Exception e) 
     	{

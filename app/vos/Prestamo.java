@@ -9,6 +9,7 @@ public class Prestamo
 	private int diaPago;
 	private double cuotaMensual;
 	private int idCliente;
+	private boolean cerrado;
 	
 	public int getId() {
 		return id;
@@ -51,5 +52,11 @@ public class Prestamo
 	}
 	public void setIdCliente(int idCliente) {
 		this.idCliente = idCliente;
+	}
+	public boolean isCerrado() {
+		return cerrado;
+	}
+	public void setCerrado(boolean cerrado) {
+		this.cerrado = cerrado;
 	}
 }
