@@ -26,44 +26,44 @@ public class BancAndes
 	 * Conexión con la clase que maneja la base de datos
 	 */
 	private DaoUsuarios daoUsuarios;
-	
+
 	private DaoClientes daoClientes;
-	
+
 	private DaoEmpleados daoEmpleados;
-	
+
 	private DaoCuentas daoCuentas;
-	
+
 	private DaoOficinas daoOficinas;
-	
+
 	private DaoPrestamos daoPrestamos;
-	
+
 	private DaoPuntosDeAtencion	daoPuntosDeAtencion;
-	
+
 	private DaoOperaciones daoOperaciones;
-    
-    // -----------------------------------------------------------------
-    // Singleton
-    // -----------------------------------------------------------------
+
+	// -----------------------------------------------------------------
+	// Singleton
+	// -----------------------------------------------------------------
 
 
-    /**
-     * Instancia única de la clase
-     */
-    private static BancAndes instancia;
-    
-    /**
-     * Devuelve la instancia única de la clase
-     * @return Instancia única de la clase
-     */
-    public static BancAndes darInstancia( )
-    {
-        if( instancia == null )
-        {
-            instancia = new BancAndes( );
-        }
-        return instancia;
-    }
-	
+	/**
+	 * Instancia única de la clase
+	 */
+	private static BancAndes instancia;
+
+	/**
+	 * Devuelve la instancia única de la clase
+	 * @return Instancia única de la clase
+	 */
+	public static BancAndes darInstancia( )
+	{
+		if( instancia == null )
+		{
+			instancia = new BancAndes( );
+		}
+		return instancia;
+	}
+
 	/**
 	 * contructor de la clase. Inicializa el atributo dao.
 	 */
@@ -78,12 +78,12 @@ public class BancAndes
 		daoPuntosDeAtencion= new DaoPuntosDeAtencion();
 		daoOperaciones= new DaoOperaciones();
 	}
-	
-	
-    // ---------------------------------------------------
-    // Métodos asociados a los casos de uso: Consulta
-    // ---------------------------------------------------
-    
+
+
+	// ---------------------------------------------------
+	// Métodos asociados a los casos de uso: Consulta
+	// ---------------------------------------------------
+
 	/**
 	 * método que retorna los videos en orden alfabético.
 	 * invoca al DAO para obtener los resultados.
@@ -92,89 +92,106 @@ public class BancAndes
 	 */
 	public ArrayList<Usuario> darUsuariosDefault() throws Exception
 	{
-	    return daoUsuarios.darUsuariosDefault();
+		return daoUsuarios.darUsuariosDefault();
 	}
 
 	public ArrayList<Cliente> darClientesDefault() throws Exception
 	{
 		return daoClientes.darClientesDefault();
 	}
-	
+
 	public ArrayList<Empleado> darEmpleadosDefault() throws Exception
 	{
 		return daoEmpleados.darEmpleadosDefault();
 	}
-	
+
 	public ArrayList<Cuenta> darCuentasDefault() throws Exception
 	{
 		return daoCuentas.darCuentasDefault();
 	}
-	
+
 	public ArrayList<Oficina> darOficinasDefault() throws Exception
 	{
 		return daoOficinas.darOficinasDefault();
 	}
-	
+
 	public ArrayList<Prestamo> darPrestamosDefault() throws Exception
 	{
 		return daoPrestamos.darPrestamosDefault();
 	}
-	
+
 	public ArrayList<PuntoDeAtencion> darPuntosDeAtencionDefault() throws Exception
 	{
 		return daoPuntosDeAtencion.darPunto_De_AtencionsDefault();
 	}
-	
+
 	public void insertarUsuario(String nombre,int cedula, String usuario, String contrasenia, int edad, String genero, String ciudad, String direccion, String tipo) throws Exception
 	{
 		daoUsuarios.registrarUsuario(nombre, cedula, usuario, contrasenia, edad, genero, ciudad, direccion, tipo);
 	}
-	
+
 	public void insertarOficina(String nombre, String direccion, String telefono, int idGerente) throws Exception
 	{
 		daoOficinas.registrarOficina(nombre, direccion, telefono, idGerente);
 	}
-	
+
 	public void insertarPunto(String tipo, String localizacion, int idOficina) throws Exception
 	{
 		daoPuntosDeAtencion.registrarPunto(tipo, localizacion, idOficina);
 	}
-	
+
 	public void insertarCuenta(int id, String tipo, int idCliente) throws Exception
 	{
 		daoCuentas.registrarCuenta(id, tipo, idCliente);
 	}
-	
+
 	public void cerrarCuenta(int id) throws Exception
 	{
 		daoCuentas.cerrarCuenta(id);
 	}
-	
+
 	public void agregarPrestamo(long monto,double interes,int cuotas,int diaPago,int cuotaMensual, int idCliente) throws Exception
 	{
 		daoPrestamos.registrarPrestamo(monto, interes, cuotas, diaPago, cuotaMensual, idCliente);
 	}
-	
+
 	public void cerrarPrestamo(int id) throws Exception
 	{
 		daoPrestamos.cerrarPrestamo(id);
 	}
-	
+
 	public ArrayList<Operacion> darOperacionesDefault() throws Exception
 	{
 		return daoOperaciones.darOperacionesDefault();
 	}
-	
+
 	public void insertarOperacionCuenta(Date fecha,int idClient,long monto,String tipo, int idCuent) throws Exception
 	{
 		daoOperaciones.registrarOperacionCuenta(fecha, idClient, monto, tipo, idCuent);
 	}
-	
+
 	public void insertarOperacionPrestamo(Date fecha,int idClient,long monto,String tipo, int idPrestam) throws Exception
 	{
 		daoOperaciones.registrarOperacionPrestamo(fecha, idClient, monto, tipo, idPrestam);
 	}
-	
+
+	public boolean esAdmin(String usuario,String contrasenia)
+	{
+		try
+		{
+			Empleado es=daoEmpleados.iniciarSesion(usuario, contrasenia);
+			if(es!=null)
+			{
+				return (es.getRol().equals("admin")?true:false);
+			}
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+		return false;
+	}
+
 	public Usuario iniciarSesion(String usuario, String contrasenia) throws Exception
 	{
 		return daoUsuarios.iniciarSesion(usuario, contrasenia);

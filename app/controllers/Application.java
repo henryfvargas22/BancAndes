@@ -36,10 +36,19 @@ public class Application extends Controller {
     	DynamicForm dynamicForm = Form.form().bindFromRequest();
         Logger.info("Username is: " + dynamicForm.get("username"));
         Logger.info("Password is: " + dynamicForm.get("password"));
+        String user=dynamicForm.get("username");
+        String pass=dynamicForm.get("password");
         try
         {
 			Usuario usuario=BancAndes.darInstancia().iniciarSesion(dynamicForm.get("username"), dynamicForm.get("password"));
-			return admin(usuario);
+			if(BancAndes.darInstancia().esAdmin(user,pass))
+			{
+				return admin(usuario);
+			}
+			else
+			{
+				return index();
+			}
         } 
         catch (Exception e)
         {

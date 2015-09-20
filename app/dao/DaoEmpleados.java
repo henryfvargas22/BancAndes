@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import vos.Empleado;
+import vos.Usuario;
 
 public class DaoEmpleados 
 {
@@ -25,7 +26,52 @@ public class DaoEmpleados
 	 */
 	private static final String idEmpleado_Usuario = "id_usuario";
 	
+	/**
+	 * nombre de la columna nombre en la tabla usuario.
+	 */
+	private static final String nombreUsuario = "nombre";
+
+	/**
+	 * nombre de la columna cedula en la tabla usuario.
+	 */
+	private static final String cedulaUsuario = "cedula";
+
+	/**
+	 * nombre de la columna usuario en la tabla usuario.
+	 */
+	private static final String usernameUsuario = "usuario";
+
+	/**
+	 * nombre de la columna contrasenia en la tabla usuario.
+	 */
+	private static final String contraseniaUsuario = "contrasenia";
+
+	/**
+	 * nombre de la columna edad en la tabla usuario.
+	 */
+	private static final String edadUsuario = "edad";
+
+	/**
+	 * nombre de la columna genero en la tabla usuario.
+	 */
+	private static final String generoUsuario = "genero";
+
+	/**
+	 * nombre de la columna ciudad en la tabla usuario.
+	 */
+	private static final String ciudadUsuario = "ciudad";
+
+	/**
+	 * nombre de la columna direccion en la tabla usuario.
+	 */
+	private static final String direccionUsuario = "direccion";
+
+	/**
+	 * nombre de la columna tipo en la tabla usuario.
+	 */
+	private static final String tipoUsuario = "tipo";
 	
+	private static final String rolEmpleado= "rol";
 
 	//----------------------------------------------------
 	//Consultas
@@ -34,7 +80,7 @@ public class DaoEmpleados
 	/**
 	 * Consulta que devuelve isan, titulo, y año de los videos en orden alfabetico
 	 */
-	private static final String consultaEmpleadosDefault="SELECT * FROM "+tablaEmpleado;
+	private static final String consultaEmpleadosDefault="SELECT * FROM "+tablaEmpleado+" e1 join usuario u1 on e1.ID_USUARIO=u1.CEDULA";
 	
 	// ---------------------------------------------------
     // Métodos asociados a los casos de uso: Consulta
@@ -66,9 +112,26 @@ public class DaoEmpleados
 			{
 				int idCli = rs.getInt(idEmpleado);
 				int cedCli = rs.getInt(idEmpleado_Usuario);
+				String nombre = rs.getString(nombreUsuario);
+				int edad=rs.getInt(edadUsuario);
+				String genero=rs.getString(generoUsuario);
+				String ciudad=rs.getString(ciudadUsuario);
+				String direccion=rs.getString(direccionUsuario);
+				String tipo=rs.getString(tipoUsuario);
+				String usuario= rs.getString(usernameUsuario);
+				String contrasenia = rs.getString(contraseniaUsuario);
 				
 				EmpleadoValue.setIdEmpleado(idCli);
 				EmpleadoValue.setIdUsuario(cedCli);
+				EmpleadoValue.setCedula(cedCli);
+				EmpleadoValue.setCiudad(ciudad);
+				EmpleadoValue.setContrasenia(contrasenia);
+				EmpleadoValue.setDireccion(direccion);
+				EmpleadoValue.setEdad(edad);
+				EmpleadoValue.setNombre(nombre);
+				EmpleadoValue.setGenero(genero);
+				EmpleadoValue.setTipo(tipo);
+				EmpleadoValue.setUsuario(usuario);
 				Empleados.add(EmpleadoValue);
 				EmpleadoValue = new Empleado();
 							
@@ -93,4 +156,67 @@ public class DaoEmpleados
 		}		
 		return Empleados;
     }
+    
+    public Empleado iniciarSesion(String usuario, String contrasenia) throws Exception
+	{
+		PreparedStatement prepStmt = null;
+		Empleado usuarioValue = new Empleado();
+		Connection conexion=null;
+
+		try {
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(consultaEmpleadosDefault+" WHERE "+usernameUsuario+"='"+usuario+
+					"' AND "+contraseniaUsuario+"='"+contrasenia+"'");
+
+			ResultSet rs = prepStmt.executeQuery();
+
+			while(rs.next())
+			{
+				int idCli = rs.getInt(idEmpleado);
+				String nombre = rs.getString(nombreUsuario);
+				int cedula = rs.getInt(cedulaUsuario);
+				int edad=rs.getInt(edadUsuario);
+				String genero=rs.getString(generoUsuario);
+				String ciudad=rs.getString(ciudadUsuario);
+				String direccion=rs.getString(direccionUsuario);
+				String tipo=rs.getString(tipoUsuario);
+				String rol=rs.getString(rolEmpleado);
+
+				usuarioValue.setNombre(nombre);
+				usuarioValue.setCedula(cedula);
+				usuarioValue.setUsuario(usuario);
+				usuarioValue.setContrasenia(contrasenia);
+				usuarioValue.setEdad(edad);
+				usuarioValue.setGenero(genero);
+				usuarioValue.setCiudad(ciudad);
+				usuarioValue.setDireccion(direccion);
+				usuarioValue.setTipo(tipo);
+				usuarioValue.setIdEmpleado(idCli);
+				usuarioValue.setIdUsuario(cedula);
+				usuarioValue.setRol(rol);
+				return usuarioValue;
+			}
+
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			System.out.println(consultaEmpleadosDefault);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}
+		finally 
+		{
+			if (prepStmt != null) 
+			{
+				try {
+					prepStmt.close();
+				} catch (SQLException exception) {
+
+					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
+				}
+			}
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}
+		return null;
+	}
 }
