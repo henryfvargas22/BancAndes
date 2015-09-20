@@ -1,5 +1,18 @@
+/ApplicationTest.class
+/IntegrationTest$1.class
+/IntegrationTest.class
+/application.conf
+/conexion.properties
 /controllers/
-/views/
 /dao/
 /fachada/
+/logback.xml
+/nbproject/
+/routes
+/views/
+<<<<<<< Updated upstream
+/dao/
+/fachada/
+=======
+>>>>>>> Stashed changes
 /vos/
