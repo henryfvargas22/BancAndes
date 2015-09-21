@@ -31,41 +31,41 @@
         <div class="col-md-8">           
             <h1>Nuevo Cliente</h1>
             <hr>
-            <form action="">
+            <form method="post" action="@routes.Application.createUsuario()" >
             <div class="form-group" id="divTipoEmpleado">
                 <label>Tipo de cliente</label>
-                <select class="form-control" id="tipoCliente">
+                <select class="form-control" name="tipoCliente">
                     <option>natural</option>
                     <option>legal</option>
                 </select>
              </div>         
           <div class="form-group" id="divNombre">
             <label>Nombre</label>
-            <input type="text" class="form-control" id="nombre" placeholder="Ingrese el nombre">
+            <input type="text" class="form-control" name="nombre" placeholder="Ingrese el nombre">
           </div>
           <div class="form-group" id="divClave">
               <label>Contraseña</label>
-              <input type="password" class="form-control" id="clave" placeholder="Ingrese la contraseña">
+              <input type="password" class="form-control" name="clave" placeholder="Ingrese la contraseña">
           </div>         
           <div class="form-group" id="divDocumento">
             <label>Documento de identificaci&oacute;n</label>
             <p>Tipo</p>
-            <select class="form-control" id="tipoDocumento">
+            <select class="form-control" name="tipoDocumento">
                 <option>C&eacute;dula</option>
                 <option>Tarjeta de identidad</option>
                 <option>Pasaporte</option>
             </select>
             <br>
             <p>N&uacute;mero</p>
-            <input type="text" class="form-control" id="numeroDocumento" placeholder="Ingrese el n&uacute;mero de identificaci&oacute;n">
+            <input type="text" class="form-control" name="numeroDocumento" placeholder="Ingrese el n&uacute;mero de identificaci&oacute;n">
           </div>  
           <div class="form-group" id="divCorreo">
             <label>Correo</label>
-            <input type="email" class="form-control" id="correo" placeholder="Ingrese el correo electronico">
+            <input type="email" class="form-control" name="correo" placeholder="Ingrese el correo electronico">
           </div>
           <div class="form-group">
                 <label>Nacionalidad</label>              
-                <select id="nacionalidad" class="form-control">
+                <select name="nacionalidad" class="form-control">
                     <option value="AF">Afganistán</option>
                     <option value="AL">Albania</option>
                     <option value="DE">Alemania</option>
@@ -304,7 +304,7 @@
           </div>         
           <div class="form-group">
               <label>Departamento</label>
-              <select id="departamento" class="form-control">
+              <select name="departamento" class="form-control">
                 <option value="Amazonas" selected>Amazonas</option>
                 <option value="Antioquia">Antioquia</option>
                 <option value="Arauca">Arauca</option>
@@ -342,83 +342,26 @@
           </div>          
           <div class="form-group" id="divCiudad">
               <label>Ciudad</label>
-              <input type="text" class="form-control" id="ciudad" placeholder="Ingrese la ciudad">             
+              <input type="text" class="form-control" name="ciudad" placeholder="Ingrese la ciudad">             
           </div>
           
           <div class="form-group" id="divDireccion">
               <label>Direcci&oacute;n</label>
-              <input type="text" class="form-control" id="direccion" placeholder="Ingrese la direcci&oacute;n">             
+              <input type="text" class="form-control" name="direccion" placeholder="Ingrese la direcci&oacute;n">             
           </div>
           
-          <div class="form-group" id="divTelefono">
-              <label>Telefono</label>
-              <input type="tel" class="form-control" id="telefono" placeholder="Ingrese el n&uacute;mero de telefono">             
+          <div class="form-group" id="divEdad">
+              <label>Edad</label>
+              <input type="text" class="form-control" name="edad" placeholder="Ingrese su edad">             
           </div>          
-          <div class="form-group" id="divCodigo">
-              <label>C&oacute;digo postal</label>
-              <input type="text" class="form-control" id="codigoPostal" placeholder="Ingrese el c&oacute;digo postal">             
-          </div>         
-          <button type="button" class="btn btn-default" onclick="validar()">Registrar Cliente</button>
-          <script>
-            function validar()
-            {
-                var tipocliente, nombre , clave, tipoDocumento, numeroDocumento, correo, nacionalidad, departamento, ciudad, direccion, telefono, codigoPostal, mensaje, tipo;
-                tipocliente = document.getElementById("tipocliente").value;  
-                nombre = document.getElementById("nombre").value;
-                clave = document.getElementById("clave").value;
-                tipoDocumento = document.getElementById("tipoDocumento").value;
-                numeroDocumento = document.getElementById("numeroDocumento").value;               
-                correo = document.getElementById("correo").value;
-                nacionalidad = document.getElementById("nacionalidad").value;
-                departamento = document.getElementById("departamento").value;
-                ciudad = document.getElementById("ciudad").value;
-                direccion = document.getElementById("direccion").value;
-                telefono = document.getElementById("telefono").value;
-                
-                codigoPostal = document.getElementById("codigoPostal").value;
-                
-                if(nombre=="" || clave=="" || numeroDocumento=="" || correo=="" || ciudad=="" || direccion=="" || telefono==""|| codigoPostal=="")
-                {
-                  mensaje = "Llene todos los campos";
-                  tipo = "danger";
-                }            
-                if(nombre=="")
-                {
-                    divNombre.class = "form-group has-error";
-                }
-                if(clave=="")
-                {
-                    divClave.class = "form-group has-error";
-                }
-                if(numeroDocumento=="")
-                {
-                    divDocumento.class = "form-group has-error";                   
-                }
-                if(correo=="")
-                {
-                    divCorreo.class = "form-group has-error";
-                }
-                if(ciudad=="")
-                {
-                    divCiudad.class = "form-group has-error";
-                }
-                if(direccion=="")
-                {
-                    divDireccion.class = "form-group has-error";
-                }
-                if(telefono=="")
-                {
-                    divTelefono.class = "form-group has-error";
-                }
-                if(nombre!="" && clave!="" && numeroDocumento!="" && correo!="" && ciudad!="" && direccion!="" && telefono!="" && codigoPostal!="")
-                {
-                  //Llamar a la funcion logica
-                  mensaje = "Se ha agregado correctamente el empleado "+nombre+" al sistema";
-                  tipo = "info";
-                }
-                document.getElementById("alert").innerHTML = "<div class=\"alert alert-"+tipo+"\" role=\"alert\">"+mensaje+"</div>";                
-            }
-        </script>
+          <div class="form-group" id="divGenero">
+                <label>Genero</label>
+                <select class="form-control" name="generoCliente">
+                    <option>male</option>
+                    <option>female</option>
+                </select>
+             </div>           
+          <button type="submit" class="btn btn-default">Registrar Cliente</button>
       </form>
       <hr>
       <footer>

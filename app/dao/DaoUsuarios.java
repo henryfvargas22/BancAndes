@@ -156,9 +156,9 @@ public class DaoUsuarios
 					"'"+usuario+"',"+
 					"'"+contrasenia+"',"+
 					edad+","+
-					"'"+genero+"'"+
-					"'"+ciudad+"'"+
-					"'"+direccion+"'"+
+					"'"+genero+"',"+
+					"'"+ciudad+"',"+
+					"'"+direccion+"',"+
 					"'"+tipo+"')");
 		}
 		catch(SQLException e)
