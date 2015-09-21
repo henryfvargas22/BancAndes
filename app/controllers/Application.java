@@ -44,6 +44,11 @@ public class Application extends Controller {
     	return ok(cerrar_cuenta_form.render(new ArrayList<Cuenta>()));
     }
     
+    public Result formCrearUsuario()
+    {
+    	return ok(registro_usuarios_form.render());
+    }
+    
     public Result obtenerCuentas()
     {
     	DynamicForm dynamicForm = Form.form().bindFromRequest();
