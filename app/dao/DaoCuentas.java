@@ -161,7 +161,7 @@ public class DaoCuentas
 		Connection conexion=null;
 		try {
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
-			prepStmt = conexion.prepareStatement(consultaCuentasCliente+idCliente);
+			prepStmt = conexion.prepareStatement(consultaCuentasCliente+idCliente+" ORDER BY id");
 
 			ResultSet rs = prepStmt.executeQuery();
 

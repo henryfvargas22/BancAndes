@@ -226,4 +226,16 @@ public class BancAndes
 			return new ArrayList<Cuenta>();
 		}
 	}
+	
+	public ArrayList<Prestamo> darPrestamosCliente(int idCliente)
+	{
+		try
+		{
+			return daoPrestamos.darPrestamosCliente(idCliente);
+		}
+		catch(Exception e)
+		{
+			return new ArrayList<Prestamo>();
+		}
+	}
 }

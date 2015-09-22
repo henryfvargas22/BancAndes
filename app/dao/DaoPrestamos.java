@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import vos.Cuenta;
 import vos.Prestamo;
 
 
@@ -53,6 +54,8 @@ public class DaoPrestamos
 	private static final String insertarPrestamo="INSERT INTO "+tablaPrestamo+" VALUES";
 
 	private static final String cerrarPrestamo="UPDATE "+tablaPrestamo+" SET cerrado=1 WHERE id=";
+	
+	private static final String consultaPrestamosCliente="SELECT * FROM "+tablaPrestamo+" WHERE id_Cliente=";
 
 	// ---------------------------------------------------
     // Métodos asociados a los casos de uso: Consulta
@@ -196,4 +199,48 @@ public class DaoPrestamos
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}	
     }
+    
+    public ArrayList<Prestamo> darPrestamosCliente(int idCliente) throws Exception
+	{
+		PreparedStatement prepStmt = null;
+
+		ArrayList<Prestamo> Cuentas = new ArrayList<Prestamo>();
+		Prestamo CuentaValue = new Prestamo();
+		Connection conexion=null;
+		try {
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(consultaPrestamosCliente+idCliente+" ORDER BY ID");
+
+			ResultSet rs = prepStmt.executeQuery();
+
+			while(rs.next())
+			{
+				int id = rs.getInt(idPrestamo);
+				long monto=rs.getLong(montoPrestamo);
+
+				CuentaValue.setId(id);
+				CuentaValue.setIdCliente(idCliente);
+				CuentaValue.setMonto(monto);
+				Cuentas.add(CuentaValue);
+				CuentaValue = new Prestamo();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(consultaPrestamosCliente+idCliente);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}finally 
+		{
+			if (prepStmt != null) 
+			{
+				try {
+					prepStmt.close();
+				} catch (SQLException exception) {
+
+					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
+				}
+			}
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}		
+		return Cuentas;
+	}
 }

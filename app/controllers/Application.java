@@ -46,6 +46,20 @@ public class Application extends Controller {
 	{
 		return ok(cerrar_cuenta_form.render(new ArrayList<Cuenta>()));
 	}
+	
+	public Result formCerrarPrestamo()
+	{
+		return ok(cerrar_prestamo_form.render(null));
+	}
+	
+	public Result obtenerPrestamos()
+	{
+		DynamicForm dynamicForm = Form.form().bindFromRequest();
+		Logger.info("Username is: " + dynamicForm.get("cliente"));
+		String user=dynamicForm.get("cliente");
+		ArrayList<Prestamo> prestamos=BancAndes.darInstancia().darPrestamosCliente(Integer.parseInt(user));
+		return ok(cerrar_prestamo_form.render(prestamos));
+	}
 
 	public Result formCrearUsuario()
 	{
@@ -299,10 +313,11 @@ public class Application extends Controller {
 		try
 		{
 			DynamicForm dynamicForm = Form.form().bindFromRequest();
-			Logger.info("Username is: " + dynamicForm.get("username"));
-			Logger.info("Password is: " + dynamicForm.get("password"));
-			String usuario=dynamicForm.get("username");
-			return ok("ok, I recived POST data. That's all...");
+			Logger.info("Prestamos is: " + dynamicForm.get("prestamo"));
+			String prestamo=dynamicForm.get("prestamo");
+			BancAndes.darInstancia().cerrarPrestamo(Integer.parseInt(prestamo));
+			mensaje="Se cerró el prestamo con id: "+prestamo;
+			return redirect("/gerente");
 		}
 		catch(Exception e)
 		{
