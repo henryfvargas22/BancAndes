@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import vos.Cliente;
@@ -35,7 +36,11 @@ public class DaoClientes
 	/**
 	 * Consulta que devuelve isan, titulo, y año de los videos en orden alfabetico
 	 */
-	private static final String consultaClientesDefault="SELECT * FROM "+tablaCliente;
+	private static final String consultaClientesDefault="SELECT * FROM "+tablaCliente+ " ORDER BY "+idCliente_Usuario;
+	
+	private static final String maxIdCliente="SELECT MAX(id) AS maximo FROM "+tablaCliente;
+	
+	private static final String insertarCliente="INSERT INTO "+tablaCliente+" VALUES";
 	
 	// ---------------------------------------------------
     // Métodos asociados a los casos de uso: Consulta
@@ -94,4 +99,50 @@ public class DaoClientes
 		}		
 		return clientes;
     }
+    
+    private int mayorId() throws Exception
+	{
+		PreparedStatement prepStmt = null;
+		Connection conexion=null;
+		int valor=0;
+		try {
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(maxIdCliente);
+
+			ResultSet rs = prepStmt.executeQuery();
+			valor=rs.getInt("maximo");
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			System.out.println(maxIdCliente);
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}	
+		return valor+1;
+	}
+    
+    public void registrarCliente(int cedula) throws Exception
+	{
+		Connection conexion=null;
+		try
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			Statement st=conexion.createStatement();
+			st.executeUpdate(insertarCliente+"("+mayorId()+","
+					+cedula+")");
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			System.out.println(insertarCliente);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}	
+	}
 }

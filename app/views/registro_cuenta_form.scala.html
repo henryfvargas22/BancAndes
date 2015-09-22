@@ -1,3 +1,4 @@
+@(clientes: List[vos.Cliente])
 <html>
     <head>
         <meta charset="utf-8">
@@ -7,17 +8,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/bootstrap.min.css">
         <style>
             body {
                 padding-top: 50px;
                 padding-bottom: 20px;
             }
         </style>
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="assets/stylesheets/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/main.css">
 
-        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        <script src="assets/javascripts/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -35,39 +36,30 @@
       <br>
       <h1>Nueva Cuenta</h1>
       <hr>
-      <form>
+      <form method="post" action="@routes.Application.createCuenta()">
           
           <div class="form-group">
             <label>Tipo de cuenta</label>
-            <select class="form-control" id="tipoCuenta">
-                <option value="ahorro">Ahorro</option>
-                <option value="corriente">Corriente</option>
-                <option value="afc">AFC</option>
-                <option value="cdt">CDT</option>
+            <select class="form-control" name="tipoCuenta">
+                <option value="savings">Ahorro</option>
+                <option value="current">Corriente</option>
             </select>
           </div>
           
           <div class="form-group">
             <label>Cliente</label>
-            <select class="form-control" id="cliente">
-                <option value="ahorro">Clientes</option>
+            <select class="form-control" name="cliente">
+            	@for(c <- clientes){
+                <option>@c.getIdUsuario()</option>
+                }
             </select>
           </div>
+          
+          <div class="form-group">
+          <input type="text" placeholder="Numero de la cuenta" name="idCuenta" class="form-control"> 
+          </div>
 
-          <button type="button" class="btn btn-default" onclick="validar()">Crear Cuenta</button>
-          <script>
-            function validar()
-            {
-                var tipo,cliente, text;
-                
-                tipoCuenta = document.getElementById("tipoCuenta").value;
-                cliente = document.getElementById("cliente").value;
-                //Llamar a la funcion logica
-                  mensaje = "Se ha agregado correctamente el punto de atención";
-                  tipo = "info";
-                  document.getElementById("alert").innerHTML = "<div class=\"alert alert-"+tipo+"\" role=\"alert\">"+mensaje+"</div>";
-            }
-        </script>
+          <button type="submit" class="btn btn-default" >Crear Cuenta</button>
       </form>
       
 
@@ -78,11 +70,11 @@
       </footer>
     </div>
         </div><!-- /container -->        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.js"><\/script>')</script>
+        <script>window.jQuery || document.write('<script src="assets/javascripts/vendor/jquery-1.11.2.js"><\/script>')</script>
 
-        <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="assets/javascripts/vendor/bootstrap.min.js"></script>
 
-        <script src="js/main.js"></script>
+        <script src="assets/javascripts/main.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>

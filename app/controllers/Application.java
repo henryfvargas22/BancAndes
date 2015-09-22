@@ -98,6 +98,43 @@ public class Application extends Controller {
 		return ok(cerrar_cuenta_form.render(cuentas));
 	}
 
+	public Result formCrearCuenta()
+	{
+		ArrayList<Cliente> clientes;
+		try
+		{
+			clientes=BancAndes.darInstancia().darClientesDefault(); 
+		}
+		catch(Exception e)
+		{
+			clientes=new ArrayList<Cliente>();
+		}
+		return ok(registro_cuenta_form.render(clientes));
+	}
+
+	public Result createCuenta()
+	{
+		try
+		{
+			DynamicForm dynamicForm=Form.form().bindFromRequest();
+			Logger.info("tipoCuenta "+dynamicForm.get("tipoCuenta"));
+			Logger.info("cliente "+dynamicForm.get("cliente"));
+			Logger.info("idCuenta "+dynamicForm.get("idCuenta"));
+			String tipo=dynamicForm.get("tipoCuenta");
+			String cliente=dynamicForm.get("cliente");
+			String idCuenta=dynamicForm.get("idCuenta");
+			BancAndes.darInstancia().insertarCuenta(Integer.parseInt(idCuenta), tipo, Integer.parseInt(cliente));
+			mensaje="Se agregó correctamente la cuenta";
+			return redirect("/gerente");
+		}
+		catch(Exception e)
+		{
+			mensaje="No se pudo agregar la cuenta";
+			e.printStackTrace();
+			return redirect("/gerente");
+		}
+	}
+
 	public Result login() 
 	{
 		DynamicForm dynamicForm = Form.form().bindFromRequest();

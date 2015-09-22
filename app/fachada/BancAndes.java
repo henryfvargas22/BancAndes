@@ -128,6 +128,7 @@ public class BancAndes
 	public void insertarUsuario(String nombre,int cedula, String usuario, String contrasenia, int edad, String genero, String ciudad, String direccion, String tipo) throws Exception
 	{
 		daoUsuarios.registrarUsuario(nombre, cedula, usuario, contrasenia, edad, genero, ciudad, direccion, tipo);
+		daoClientes.registrarCliente(cedula);
 	}
 
 	public void insertarOficina(String nombre, String direccion, String telefono, int idGerente) throws Exception
