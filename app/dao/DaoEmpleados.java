@@ -15,17 +15,17 @@ public class DaoEmpleados
 	 * nombre de la tabla Empleados
 	 */
 	private static final String tablaEmpleado = "empleado";
-	
+
 	/**
 	 * nombre de la columna titulo_original en la tabla videos.
 	 */
 	private static final String idEmpleado = "id";
-	
+
 	/**
 	 * nombre de la columna anyo en la tabla videos.
 	 */
 	private static final String idEmpleado_Usuario = "id_usuario";
-	
+
 	/**
 	 * nombre de la columna nombre en la tabla usuario.
 	 */
@@ -70,47 +70,49 @@ public class DaoEmpleados
 	 * nombre de la columna tipo en la tabla usuario.
 	 */
 	private static final String tipoUsuario = "tipo";
-	
+
 	private static final String rolEmpleado= "rol";
+
+	private static final String idOficina="id_oficina";
 
 	//----------------------------------------------------
 	//Consultas
 	//----------------------------------------------------
-	
+
 	/**
 	 * Consulta que devuelve isan, titulo, y año de los videos en orden alfabetico
 	 */
 	private static final String consultaEmpleadosDefault="SELECT * FROM "+tablaEmpleado+" e1 join usuario u1 on e1.ID_USUARIO=u1.CEDULA";
-	
+
 	private static final String maxIdEmpleado="SELECT MAX(id) AS maximo FROM "+tablaEmpleado;
-	
+
 	private static final String insertarEmpleado="INSERT INTO "+tablaEmpleado+" VALUES";
 	// ---------------------------------------------------
-    // Métodos asociados a los casos de uso: Consulta
-    // ---------------------------------------------------
-    
-    /**
-     * Método que se encarga de realizar la consulta en la base de datos
-     * y retorna un ArrayList de elementos tipo VideosValue.
-     * @return ArrayList lista que contiene elementos tipo VideosValue.
-     * La lista contiene los videos ordenados alfabeticamente
-     * @throws Exception se lanza una excepción si ocurre un error en
-     * la conexión o en la consulta. 
-     */
-    public ArrayList<Empleado> darEmpleadosDefault() throws Exception
-    {
-    	PreparedStatement prepStmt = null;
-    	
-    	ArrayList<Empleado> Empleados = new ArrayList<Empleado>();
+	// Métodos asociados a los casos de uso: Consulta
+	// ---------------------------------------------------
+
+	/**
+	 * Método que se encarga de realizar la consulta en la base de datos
+	 * y retorna un ArrayList de elementos tipo VideosValue.
+	 * @return ArrayList lista que contiene elementos tipo VideosValue.
+	 * La lista contiene los videos ordenados alfabeticamente
+	 * @throws Exception se lanza una excepción si ocurre un error en
+	 * la conexión o en la consulta. 
+	 */
+	public ArrayList<Empleado> darEmpleadosDefault() throws Exception
+	{
+		PreparedStatement prepStmt = null;
+
+		ArrayList<Empleado> Empleados = new ArrayList<Empleado>();
 		Empleado EmpleadoValue = new Empleado();
-    	Connection conexion=null;
-		
+		Connection conexion=null;
+
 		try {
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			prepStmt = conexion.prepareStatement(consultaEmpleadosDefault);
-			
+
 			ResultSet rs = prepStmt.executeQuery();
-			
+
 			while(rs.next())
 			{
 				int idCli = rs.getInt(idEmpleado);
@@ -124,7 +126,8 @@ public class DaoEmpleados
 				String usuario= rs.getString(usernameUsuario);
 				String contrasenia = rs.getString(contraseniaUsuario);
 				String rol=rs.getString(rolEmpleado);
-				
+				int idOfic=rs.getInt(idOficina);
+
 				EmpleadoValue.setIdEmpleado(idCli);
 				EmpleadoValue.setIdUsuario(cedCli);
 				EmpleadoValue.setCedula(cedCli);
@@ -137,11 +140,12 @@ public class DaoEmpleados
 				EmpleadoValue.setTipo(tipo);
 				EmpleadoValue.setUsuario(usuario);
 				EmpleadoValue.setRol(rol);
+				EmpleadoValue.setIdOficina(idOfic);
 				Empleados.add(EmpleadoValue);
 				EmpleadoValue = new Empleado();
-							
+
 			}
-		
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaEmpleadosDefault);
@@ -153,16 +157,16 @@ public class DaoEmpleados
 				try {
 					prepStmt.close();
 				} catch (SQLException exception) {
-					
+
 					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
 				}
 			}
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}		
 		return Empleados;
-    }
-    
-    public Empleado iniciarSesion(String usuario, String contrasenia) throws Exception
+	}
+
+	public Empleado iniciarSesion(String usuario, String contrasenia) throws Exception
 	{
 		PreparedStatement prepStmt = null;
 		Empleado usuarioValue = new Empleado();
@@ -186,6 +190,7 @@ public class DaoEmpleados
 				String direccion=rs.getString(direccionUsuario);
 				String tipo=rs.getString(tipoUsuario);
 				String rol=rs.getString(rolEmpleado);
+				int idOfi=rs.getInt(idOficina);
 
 				usuarioValue.setNombre(nombre);
 				usuarioValue.setCedula(cedula);
@@ -199,6 +204,7 @@ public class DaoEmpleados
 				usuarioValue.setIdEmpleado(idCli);
 				usuarioValue.setIdUsuario(cedula);
 				usuarioValue.setRol(rol);
+				usuarioValue.setIdOficina(idOfi);
 				return usuarioValue;
 			}
 
@@ -224,8 +230,8 @@ public class DaoEmpleados
 		}
 		return null;
 	}
-    
-    private int mayorId() throws Exception
+
+	private int mayorId() throws Exception
 	{
 		PreparedStatement prepStmt = null;
 		Connection conexion=null;
@@ -236,7 +242,7 @@ public class DaoEmpleados
 
 			ResultSet rs = prepStmt.executeQuery();
 			while(rs.next())
-			valor=rs.getInt("maximo");
+				valor=rs.getInt("maximo");
 		}
 		catch (SQLException e) 
 		{
@@ -249,21 +255,21 @@ public class DaoEmpleados
 		}	
 		return valor+1;
 	}
-    
-    public ArrayList<Empleado> darGerentes() throws Exception
-    {
-    	PreparedStatement prepStmt = null;
-    	
-    	ArrayList<Empleado> Empleados = new ArrayList<Empleado>();
+
+	public ArrayList<Empleado> darGerentes() throws Exception
+	{
+		PreparedStatement prepStmt = null;
+
+		ArrayList<Empleado> Empleados = new ArrayList<Empleado>();
 		Empleado EmpleadoValue = new Empleado();
-    	Connection conexion=null;
-		
+		Connection conexion=null;
+
 		try {
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			prepStmt = conexion.prepareStatement(consultaEmpleadosDefault+" WHERE e1.rol='gerente'");
-			
+
 			ResultSet rs = prepStmt.executeQuery();
-			
+
 			while(rs.next())
 			{
 				int idCli = rs.getInt(idEmpleado);
@@ -277,7 +283,8 @@ public class DaoEmpleados
 				String usuario= rs.getString(usernameUsuario);
 				String contrasenia = rs.getString(contraseniaUsuario);
 				String rol=rs.getString(rolEmpleado);
-				
+				int idOfi=rs.getInt(idOficina);
+
 				EmpleadoValue.setIdEmpleado(idCli);
 				EmpleadoValue.setIdUsuario(cedCli);
 				EmpleadoValue.setCedula(cedCli);
@@ -290,11 +297,12 @@ public class DaoEmpleados
 				EmpleadoValue.setTipo(tipo);
 				EmpleadoValue.setUsuario(usuario);
 				EmpleadoValue.setRol(rol);
+				EmpleadoValue.setIdOficina(idOfi);
 				Empleados.add(EmpleadoValue);
 				EmpleadoValue = new Empleado();
-							
+
 			}
-		
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaEmpleadosDefault);
@@ -306,25 +314,30 @@ public class DaoEmpleados
 				try {
 					prepStmt.close();
 				} catch (SQLException exception) {
-					
+
 					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
 				}
 			}
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}		
 		return Empleados;
-    } 
-    
-    public void registrarEmpleado(int cedula, String rol) throws Exception
+	} 
+
+	public void registrarEmpleado(int cedula, String rol, int idOficin) throws Exception
 	{
 		Connection conexion=null;
 		try
 		{
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			Statement st=conexion.createStatement();
-			st.executeUpdate(insertarEmpleado+"("+mayorId()+","
-					+cedula+
-					",'"+rol+"')");
+			if(rol.equals("admin"))
+			{
+				st.executeUpdate(insertarEmpleado+"("+mayorId()+","+cedula+",'"+rol+"',NULL)");
+			}
+			else
+			{
+				st.executeUpdate(insertarEmpleado+"("+mayorId()+","+cedula+",'"+rol+"',"+idOficin+ ")");
+			}
 		}
 		catch(SQLException e)
 		{

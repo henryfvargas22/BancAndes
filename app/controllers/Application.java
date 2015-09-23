@@ -66,7 +66,7 @@ public class Application extends Controller {
 
 	public Result formCrearCliente()
 	{
-		return ok(registro_usuarios_form.render(true));
+		return ok(registro_usuarios_form.render(true,null));
 	}
 
 	public Result createCliente()
@@ -95,7 +95,7 @@ public class Application extends Controller {
 			String usuario=dynamicForm.get("correo");
 			int ced=Integer.parseInt(cedula);
 			int ed=Integer.parseInt(edad);
-			BancAndes.darInstancia().insertarUsuario(nombre, ced, usuario, clave, ed, genero, ciudad, direccion, tipo,null,false);
+			BancAndes.darInstancia().insertarUsuario(nombre, ced, usuario, clave, ed, genero, ciudad, direccion, tipo,null,false,-1);
 			mensaje="Se agregó correctamente el usuario: "+nombre;
 			return redirect("/gerente");
 		}
@@ -185,7 +185,15 @@ public class Application extends Controller {
 
 	public Result formCrearEmpleado()
 	{
-		return ok(registro_usuarios_form.render(false));
+		List<Oficina> oficinas;
+		try 
+		{
+			oficinas=BancAndes.darInstancia().darOficinasDefault();
+		} catch (Exception e) 
+		{
+			oficinas=new ArrayList<Oficina>();
+		}
+		return ok(registro_usuarios_form.render(false,oficinas));
 	}
 
 	public Result formCrearOficina()
@@ -242,6 +250,7 @@ public class Application extends Controller {
 			Logger.info("genero "+dynamicForm.get("generoCliente"));
 			Logger.info("usuario "+dynamicForm.get("correo"));
 			Logger.info("rol "+dynamicForm.get("tipoEmpleado"));
+			Logger.info("rol "+dynamicForm.get("idOficina"));
 
 			String tipo=dynamicForm.get("tipoCliente");
 			String nombre=dynamicForm.get("nombre");
@@ -253,9 +262,11 @@ public class Application extends Controller {
 			String genero=dynamicForm.get("generoCliente");
 			String usuario=dynamicForm.get("correo");
 			String rol=dynamicForm.get("tipoEmpleado");
+			String idOficina=dynamicForm.get("idOficina");
 			int ced=Integer.parseInt(cedula);
 			int ed=Integer.parseInt(edad);
-			BancAndes.darInstancia().insertarUsuario(nombre, ced, usuario, clave, ed, genero, ciudad, direccion, tipo,rol,true);
+			int idOfi=Integer.parseInt(idOficina);
+			BancAndes.darInstancia().insertarUsuario(nombre, ced, usuario, clave, ed, genero, ciudad, direccion, tipo,rol,true,idOfi);
 			mensaje="Se agregó correctamente el usuario: "+nombre;
 			return redirect("/admin");
 		}

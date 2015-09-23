@@ -126,7 +126,7 @@ public class BancAndes
 		return daoPuntosDeAtencion.darPunto_De_AtencionsDefault();
 	}
 
-	public void insertarUsuario(String nombre,int cedula, String usuario, String contrasenia, int edad, String genero, String ciudad, String direccion, String tipo,String rol, boolean esEmpleado) throws Exception
+	public void insertarUsuario(String nombre,int cedula, String usuario, String contrasenia, int edad, String genero, String ciudad, String direccion, String tipo,String rol, boolean esEmpleado, int idOficina) throws Exception
 	{
 		try
 		{
@@ -144,7 +144,7 @@ public class BancAndes
 		{
 			try
 			{
-				daoEmpleados.registrarEmpleado(cedula,rol);
+				daoEmpleados.registrarEmpleado(cedula,rol,idOficina);
 			}
 			catch(Exception e)
 			{
@@ -271,7 +271,7 @@ public class BancAndes
 			return new ArrayList<Prestamo>();
 		}
 	}
-	
+
 	public ArrayList<Empleado> darGerentes() throws Exception
 	{
 		return daoEmpleados.darGerentes();
