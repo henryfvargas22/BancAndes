@@ -163,9 +163,9 @@ public class DaoUsuarios
 		}
 		catch(SQLException e)
 		{
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.out.println(insertarUsuario);
-			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+			throw e;
 		}
 		finally 
 		{

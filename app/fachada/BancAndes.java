@@ -126,33 +126,11 @@ public class BancAndes
 		return daoPuntosDeAtencion.darPunto_De_AtencionsDefault();
 	}
 
-	public void insertarUsuario(String nombre,int cedula, String usuario, String contrasenia, int edad, String genero, String ciudad, String direccion, String tipo, String cargo) throws Exception
+	public void insertarUsuario(String nombre,int cedula, String usuario, String contrasenia, int edad, String genero, String ciudad, String direccion, String tipo,String rol, String cargo) throws Exception
 	{
 		try
 		{
 			daoUsuarios.registrarUsuario(nombre, cedula, usuario, contrasenia, edad, genero, ciudad, direccion, tipo);
-			if(cargo.equals("empleado"))
-			{
-				try
-				{
-					daoEmpleados.registrarEmpleado(cedula);
-				}
-				catch(Exception e)
-				{
-					throw new Exception("No se pudo agregar el empleado, ya es usuario");
-				}
-			}
-			else
-			{
-				try
-				{
-					daoClientes.registrarCliente(cedula);
-				}
-				catch(Exception e)
-				{
-					throw new Exception("No se pudo agregar el cliente, ya es usuario");
-				}
-			}
 		}
 		catch(SQLException e)
 		{
@@ -161,6 +139,28 @@ public class BancAndes
 		catch(Exception a)
 		{
 			throw a;
+		}
+		if(cargo.equals("empleado"))
+		{
+			try
+			{
+				daoEmpleados.registrarEmpleado(cedula,rol);
+			}
+			catch(Exception e)
+			{
+				throw new Exception("No se pudo agregar el empleado, ya es usuario");
+			}
+		}
+		else
+		{
+			try
+			{
+				daoClientes.registrarCliente(cedula);
+			}
+			catch(Exception e)
+			{
+				throw new Exception("No se pudo agregar el cliente, ya es usuario");
+			}
 		}
 	}
 

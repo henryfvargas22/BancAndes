@@ -235,6 +235,7 @@ public class DaoEmpleados
 			prepStmt = conexion.prepareStatement(maxIdEmpleado);
 
 			ResultSet rs = prepStmt.executeQuery();
+			while(rs.next())
 			valor=rs.getInt("maximo");
 		}
 		catch (SQLException e) 
@@ -249,7 +250,7 @@ public class DaoEmpleados
 		return valor+1;
 	}
     
-    public void registrarEmpleado(int cedula) throws Exception
+    public void registrarEmpleado(int cedula, String rol) throws Exception
 	{
 		Connection conexion=null;
 		try
@@ -257,7 +258,8 @@ public class DaoEmpleados
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			Statement st=conexion.createStatement();
 			st.executeUpdate(insertarEmpleado+"("+mayorId()+","
-					+cedula+")");
+					+cedula+
+					",'"+rol+"')");
 		}
 		catch(SQLException e)
 		{

@@ -95,7 +95,7 @@ public class Application extends Controller {
 			String usuario=dynamicForm.get("correo");
 			int ced=Integer.parseInt(cedula);
 			int ed=Integer.parseInt(edad);
-			BancAndes.darInstancia().insertarUsuario(nombre, ced, usuario, clave, ed, genero, ciudad, direccion, tipo,"cliente");
+			BancAndes.darInstancia().insertarUsuario(nombre, ced, usuario, clave, ed, genero, ciudad, direccion, tipo,null,"cliente");
 			mensaje="Se agregó correctamente el usuario";
 			return redirect("/gerente");
 		}
@@ -202,6 +202,7 @@ public class Application extends Controller {
 			Logger.info("edad "+dynamicForm.get("edad"));
 			Logger.info("genero "+dynamicForm.get("generoCliente"));
 			Logger.info("usuario "+dynamicForm.get("correo"));
+			Logger.info("rol "+dynamicForm.get("tipoEmpleado"));
 
 			String tipo=dynamicForm.get("tipoCliente");
 			String nombre=dynamicForm.get("nombre");
@@ -212,9 +213,10 @@ public class Application extends Controller {
 			String edad=dynamicForm.get("edad");
 			String genero=dynamicForm.get("generoCliente");
 			String usuario=dynamicForm.get("correo");
+			String rol=dynamicForm.get("tipoEmpleado");
 			int ced=Integer.parseInt(cedula);
 			int ed=Integer.parseInt(edad);
-			BancAndes.darInstancia().insertarUsuario(nombre, ced, usuario, clave, ed, genero, ciudad, direccion, tipo,"empleado");
+			BancAndes.darInstancia().insertarUsuario(nombre, ced, usuario, clave, ed, genero, ciudad, direccion, tipo,rol,"empleado");
 			mensaje="Se agregó correctamente el usuario";
 			return redirect("/admin");
 		}
