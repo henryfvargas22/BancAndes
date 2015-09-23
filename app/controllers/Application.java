@@ -217,13 +217,13 @@ public class Application extends Controller {
 			int idGerente=Integer.parseInt(dynamicForm.get("gerente"));
 			BancAndes.darInstancia().insertarOficina(nombre, direccion, telefono, idGerente);
 			mensaje="Se agregó correctamente la oficina";
-			return redirect("/gerente");
+			return redirect("/admin");
 		}
 		catch(Exception e)
 		{
 			mensaje="No se pudo agregar la oficina";
 			e.printStackTrace();
-			return redirect("/gerente");
+			return redirect("/admin");
 		}
 	}
 

@@ -120,6 +120,7 @@ public class DaoOficinas
 			prepStmt = conexion.prepareStatement(maxIdOficina);
 
 			ResultSet rs = prepStmt.executeQuery();
+			while(rs.next())
 			valor=rs.getInt("maximo");
 		}
 		catch (SQLException e) 
@@ -145,7 +146,7 @@ public class DaoOficinas
 					+"'"+nombre+"',"+
 					"'"+direccion+"',"+
 					"'"+telefono+"',"+
-					idGerente+"')");
+					idGerente+")");
 		}
 		catch(SQLException e)
 		{
