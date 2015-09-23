@@ -66,7 +66,7 @@ public class Application extends Controller {
 
 	public Result formCrearCliente()
 	{
-		return ok(registro_usuarios_form.render(true));
+		return ok(registro_usuarios_form.render(true,null));
 	}
 
 	public Result createCliente()
@@ -185,7 +185,15 @@ public class Application extends Controller {
 	
 	public Result formCrearEmpleado()
 	{
-		return ok(registro_usuarios_form.render(false));
+		List<Oficina> oficinas;
+		try 
+		{
+			oficinas=BancAndes.darInstancia().darOficinasDefault();
+		} catch (Exception e) 
+		{
+			oficinas=new ArrayList<Oficina>();
+		}
+		return ok(registro_usuarios_form.render(false,oficinas));
 	}
 
 	public Result createEmpleado()

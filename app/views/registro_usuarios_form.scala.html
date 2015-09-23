@@ -1,4 +1,4 @@
-@(esCliente: Boolean)
+@(esCliente: Boolean, oficinas: List[vos.Oficina])
 <html>
     <head>
         <meta charset="utf-8">
@@ -45,17 +45,25 @@
             <div class="form-group" id="divTipoEmpleado">
                 <label>Tipo de empleado</label>
                 <select class="form-control" name="tipoEmpleado">
-                    <option>cajero</option>
-                    <option>gerente</option>
-                    <option value="admin">administrador</option>
+                    <option value="cajero">Cajero</option>
+                    <option value="gerente">Gerente</option>
+                    <option value="admin">Administrador</option>
                 </select>
              </div>
+             <div class="form-group" id="divIdOficina">
+                <label>Oficina del empleado</label>
+                <select class="form-control" name="idOficina">
+             @for(o <-oficinas){
+             	<option value="@o.getId()">@o.getNombre() - @o.getDireccion()</option>
              } 
+             </select>
+             </div>
+             }
             <div class="form-group" id="divTipoUsuario">
                 <label>Tipo de cliente</label>
                 <select class="form-control" name="tipoCliente">
-                    <option>natural</option>
-                    <option>legal</option>
+                    <option value="natural">Natural</option>
+                    <option value="legal">Jurídica</option>
                 </select>
              </div>         
           <div class="form-group" id="divNombre">
@@ -376,8 +384,8 @@
           <div class="form-group" id="divGenero">
                 <label>Genero</label>
                 <select class="form-control" name="generoCliente">
-                    <option>male</option>
-                    <option>female</option>
+                    <option value="male">Masculino</option>
+                    <option value="female">Femenino</option>
                 </select>
              </div>
            @if(esCliente){           
