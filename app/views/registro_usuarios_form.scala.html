@@ -1,4 +1,4 @@
-@(esCliente: Boolean, oficinas: List[vos.Oficina])
+@(esCliente: Boolean)
 <html>
     <head>
         <meta charset="utf-8">
@@ -49,14 +49,6 @@
                     <option value="gerente">Gerente</option>
                     <option value="admin">Administrador</option>
                 </select>
-             </div>
-             <div class="form-group" id="divIdOficina">
-                <label>Oficina del empleado</label>
-                <select class="form-control" name="idOficina">
-             @for(o <-oficinas){
-             	<option value="@o.getId()">@o.getNombre() - @o.getDireccion()</option>
-             } 
-             </select>
              </div>
              }
             <div class="form-group" id="divTipoUsuario">

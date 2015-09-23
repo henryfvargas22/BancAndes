@@ -271,4 +271,9 @@ public class BancAndes
 			return new ArrayList<Prestamo>();
 		}
 	}
+	
+	public ArrayList<Empleado> darGerentes() throws Exception
+	{
+		return daoEmpleados.darGerentes();
+	}
 }

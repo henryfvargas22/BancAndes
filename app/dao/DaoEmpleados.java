@@ -250,6 +250,71 @@ public class DaoEmpleados
 		return valor+1;
 	}
     
+    public ArrayList<Empleado> darGerentes() throws Exception
+    {
+    	PreparedStatement prepStmt = null;
+    	
+    	ArrayList<Empleado> Empleados = new ArrayList<Empleado>();
+		Empleado EmpleadoValue = new Empleado();
+    	Connection conexion=null;
+		
+		try {
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(consultaEmpleadosDefault+" WHERE e1.rol='gerente'");
+			
+			ResultSet rs = prepStmt.executeQuery();
+			
+			while(rs.next())
+			{
+				int idCli = rs.getInt(idEmpleado);
+				int cedCli = rs.getInt(idEmpleado_Usuario);
+				String nombre = rs.getString(nombreUsuario);
+				int edad=rs.getInt(edadUsuario);
+				String genero=rs.getString(generoUsuario);
+				String ciudad=rs.getString(ciudadUsuario);
+				String direccion=rs.getString(direccionUsuario);
+				String tipo=rs.getString(tipoUsuario);
+				String usuario= rs.getString(usernameUsuario);
+				String contrasenia = rs.getString(contraseniaUsuario);
+				String rol=rs.getString(rolEmpleado);
+				
+				EmpleadoValue.setIdEmpleado(idCli);
+				EmpleadoValue.setIdUsuario(cedCli);
+				EmpleadoValue.setCedula(cedCli);
+				EmpleadoValue.setCiudad(ciudad);
+				EmpleadoValue.setContrasenia(contrasenia);
+				EmpleadoValue.setDireccion(direccion);
+				EmpleadoValue.setEdad(edad);
+				EmpleadoValue.setNombre(nombre);
+				EmpleadoValue.setGenero(genero);
+				EmpleadoValue.setTipo(tipo);
+				EmpleadoValue.setUsuario(usuario);
+				EmpleadoValue.setRol(rol);
+				Empleados.add(EmpleadoValue);
+				EmpleadoValue = new Empleado();
+							
+			}
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(consultaEmpleadosDefault);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}finally 
+		{
+			if (prepStmt != null) 
+			{
+				try {
+					prepStmt.close();
+				} catch (SQLException exception) {
+					
+					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
+				}
+			}
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}		
+		return Empleados;
+    } 
+    
     public void registrarEmpleado(int cedula, String rol) throws Exception
 	{
 		Connection conexion=null;

@@ -36,7 +36,7 @@ public class Application extends Controller {
 		mensaje=null;
 		return ok(gerente_de_oficina_bancandes.render(msg));
 	}
-	
+
 	public Result admin()
 	{
 		redirect("/admin");
@@ -49,12 +49,12 @@ public class Application extends Controller {
 	{
 		return ok(cerrar_cuenta_form.render(new ArrayList<Cuenta>()));
 	}
-	
+
 	public Result formCerrarPrestamo()
 	{
 		return ok(cerrar_prestamo_form.render(null));
 	}
-	
+
 	public Result obtenerPrestamos()
 	{
 		DynamicForm dynamicForm = Form.form().bindFromRequest();
@@ -66,7 +66,7 @@ public class Application extends Controller {
 
 	public Result formCrearCliente()
 	{
-		return ok(registro_usuarios_form.render(true,null));
+		return ok(registro_usuarios_form.render(true));
 	}
 
 	public Result createCliente()
@@ -106,7 +106,7 @@ public class Application extends Controller {
 			return redirect("/gerente");
 		}
 	}
-	
+
 	public Result obtenerCuentas()
 	{
 		DynamicForm dynamicForm = Form.form().bindFromRequest();
@@ -182,18 +182,49 @@ public class Application extends Controller {
 			return internalServerError("Ups: "+"Contraseña incorrecta");
 		}
 	}
-	
+
 	public Result formCrearEmpleado()
 	{
-		List<Oficina> oficinas;
-		try 
+		return ok(registro_usuarios_form.render(false));
+	}
+
+	public Result formCrearOficina()
+	{
+		List<Empleado> empleados;
+		try
 		{
-			oficinas=BancAndes.darInstancia().darOficinasDefault();
-		} catch (Exception e) 
-		{
-			oficinas=new ArrayList<Oficina>();
+			empleados=BancAndes.darInstancia().darGerentes();
 		}
-		return ok(registro_usuarios_form.render(false,oficinas));
+		catch(Exception e)
+		{
+			empleados=new ArrayList<Empleado>();
+		}
+		return ok(registro_oficina_form.render(empleados));
+	}
+
+	public Result createOficina()
+	{
+		try
+		{
+			DynamicForm dynamicForm=Form.form().bindFromRequest();
+			Logger.info("name "+dynamicForm.get("nombre"));
+			Logger.info("direccion "+dynamicForm.get("direccion"));
+			Logger.info("telefono "+dynamicForm.get("telefono"));
+			Logger.info("gerente "+dynamicForm.get("gerente"));
+			String nombre=dynamicForm.get("nombre");
+			String direccion=dynamicForm.get("direccion");
+			String telefono=dynamicForm.get("telefono");
+			int idGerente=Integer.parseInt(dynamicForm.get("gerente"));
+			BancAndes.darInstancia().insertarOficina(nombre, direccion, telefono, idGerente);
+			mensaje="Se agregó correctamente la oficina";
+			return redirect("/gerente");
+		}
+		catch(Exception e)
+		{
+			mensaje="No se pudo agregar la oficina";
+			e.printStackTrace();
+			return redirect("/gerente");
+		}
 	}
 
 	public Result createEmpleado()
