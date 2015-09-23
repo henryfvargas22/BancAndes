@@ -96,7 +96,7 @@ public class Application extends Controller {
 			int ced=Integer.parseInt(cedula);
 			int ed=Integer.parseInt(edad);
 			BancAndes.darInstancia().insertarUsuario(nombre, ced, usuario, clave, ed, genero, ciudad, direccion, tipo,null,false);
-			mensaje="Se agregó correctamente el usuario";
+			mensaje="Se agregó correctamente el usuario: "+nombre;
 			return redirect("/gerente");
 		}
 		catch(Exception e)
@@ -142,7 +142,7 @@ public class Application extends Controller {
 			String cliente=dynamicForm.get("cliente");
 			String idCuenta=dynamicForm.get("idCuenta");
 			BancAndes.darInstancia().insertarCuenta(Integer.parseInt(idCuenta), tipo, Integer.parseInt(cliente));
-			mensaje="Se agregó correctamente la cuenta";
+			mensaje="Se agregó correctamente la cuenta: "+idCuenta;
 			return redirect("/gerente");
 		}
 		catch(Exception e)
@@ -216,7 +216,7 @@ public class Application extends Controller {
 			String telefono=dynamicForm.get("telefono");
 			int idGerente=Integer.parseInt(dynamicForm.get("gerente"));
 			BancAndes.darInstancia().insertarOficina(nombre, direccion, telefono, idGerente);
-			mensaje="Se agregó correctamente la oficina";
+			mensaje="Se agregó correctamente la oficina: "+nombre;
 			return redirect("/admin");
 		}
 		catch(Exception e)
@@ -256,7 +256,7 @@ public class Application extends Controller {
 			int ced=Integer.parseInt(cedula);
 			int ed=Integer.parseInt(edad);
 			BancAndes.darInstancia().insertarUsuario(nombre, ced, usuario, clave, ed, genero, ciudad, direccion, tipo,rol,true);
-			mensaje="Se agregó correctamente el usuario";
+			mensaje="Se agregó correctamente el usuario: "+nombre;
 			return redirect("/admin");
 		}
 		catch(Exception e)
