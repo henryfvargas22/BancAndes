@@ -126,7 +126,7 @@ public class BancAndes
 		return daoPuntosDeAtencion.darPunto_De_AtencionsDefault();
 	}
 
-	public void insertarUsuario(String nombre,int cedula, String usuario, String contrasenia, int edad, String genero, String ciudad, String direccion, String tipo,String rol, String cargo) throws Exception
+	public void insertarUsuario(String nombre,int cedula, String usuario, String contrasenia, int edad, String genero, String ciudad, String direccion, String tipo,String rol, boolean esEmpleado) throws Exception
 	{
 		try
 		{
@@ -140,7 +140,7 @@ public class BancAndes
 		{
 			throw a;
 		}
-		if(cargo.equals("empleado"))
+		if(esEmpleado)
 		{
 			try
 			{
