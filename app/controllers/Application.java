@@ -29,17 +29,20 @@ public class Application extends Controller {
 		return ok(index.render("Bienvenido"));
 	}
 
-	public Result admin(Usuario us)
-	{
-		return ok(administrador_bancandes.render(us));
-	}
-
 	public Result gerente()
 	{
 		redirect("/gerente");
 		String msg=mensaje;
 		mensaje=null;
 		return ok(gerente_de_oficina_bancandes.render(msg));
+	}
+	
+	public Result admin()
+	{
+		redirect("/admin");
+		String msg=mensaje;
+		mensaje=null;
+		return ok(administrador_bancandes.render(msg));
 	}
 
 	public Result formCerrarCuenta()
@@ -61,12 +64,12 @@ public class Application extends Controller {
 		return ok(cerrar_prestamo_form.render(prestamos));
 	}
 
-	public Result formCrearUsuario()
+	public Result formCrearCliente()
 	{
-		return ok(registro_usuarios_form.render());
+		return ok(registro_usuarios_form.render(true));
 	}
 
-	public Result createUsuario()
+	public Result createCliente()
 	{
 		try
 		{
@@ -92,7 +95,7 @@ public class Application extends Controller {
 			String usuario=dynamicForm.get("correo");
 			int ced=Integer.parseInt(cedula);
 			int ed=Integer.parseInt(edad);
-			BancAndes.darInstancia().insertarUsuario(nombre, ced, usuario, clave, ed, genero, ciudad, direccion, tipo);
+			BancAndes.darInstancia().insertarUsuario(nombre, ced, usuario, clave, ed, genero, ciudad, direccion, tipo,"cliente");
 			mensaje="Se agregó correctamente el usuario";
 			return redirect("/gerente");
 		}
@@ -103,6 +106,7 @@ public class Application extends Controller {
 			return redirect("/gerente");
 		}
 	}
+	
 	public Result obtenerCuentas()
 	{
 		DynamicForm dynamicForm = Form.form().bindFromRequest();
@@ -162,7 +166,7 @@ public class Application extends Controller {
 			mensaje="Bienvenido(a) "+usuario.getNombre();
 			if(BancAndes.darInstancia().esAdmin(user,pass))
 			{
-				return admin(usuario);
+				return admin();
 			}
 			else if(BancAndes.darInstancia().esGerente(user, pass))
 			{
@@ -176,6 +180,49 @@ public class Application extends Controller {
 		catch (Exception e)
 		{
 			return internalServerError("Ups: "+"Contraseña incorrecta");
+		}
+	}
+	
+	public Result formCrearEmpleado()
+	{
+		return ok(registro_usuarios_form.render(false));
+	}
+
+	public Result createEmpleado()
+	{
+		try
+		{
+			DynamicForm dynamicForm=Form.form().bindFromRequest();
+			Logger.info("tipo "+dynamicForm.get("tipoCliente"));
+			Logger.info("name "+dynamicForm.get("nombre"));
+			Logger.info("clave "+dynamicForm.get("clave"));
+			Logger.info("cedula "+dynamicForm.get("numeroDocumento"));
+			Logger.info("ciudad "+dynamicForm.get("ciudad"));
+			Logger.info("direccion "+dynamicForm.get("direccion"));
+			Logger.info("edad "+dynamicForm.get("edad"));
+			Logger.info("genero "+dynamicForm.get("generoCliente"));
+			Logger.info("usuario "+dynamicForm.get("correo"));
+
+			String tipo=dynamicForm.get("tipoCliente");
+			String nombre=dynamicForm.get("nombre");
+			String clave=dynamicForm.get("clave");
+			String cedula=dynamicForm.get("numeroDocumento");
+			String ciudad=dynamicForm.get("ciudad");
+			String direccion=dynamicForm.get("direccion");
+			String edad=dynamicForm.get("edad");
+			String genero=dynamicForm.get("generoCliente");
+			String usuario=dynamicForm.get("correo");
+			int ced=Integer.parseInt(cedula);
+			int ed=Integer.parseInt(edad);
+			BancAndes.darInstancia().insertarUsuario(nombre, ced, usuario, clave, ed, genero, ciudad, direccion, tipo,"empleado");
+			mensaje="Se agregó correctamente el usuario";
+			return redirect("/admin");
+		}
+		catch(Exception e)
+		{
+			mensaje="No se pudo agregar el usuario";
+			e.printStackTrace();
+			return redirect("/admin");
 		}
 	}
 

@@ -1,4 +1,4 @@
-@(usuario: vos.Usuario)
+@(message: String)
 <html>
     <head>
         <meta charset="utf-8">
@@ -57,7 +57,7 @@
           <h3>Empleados</h3>
           <p>Registro de nuevos empleados en el sistema.</p>
           <br>
-          <p><a class="btn btn-default" href="registro_empleado_form.html" role="button">Registrar</a></p>
+          <p><a class="btn btn-default" href="@routes.Application.formCrearEmpleado()" role="button">Registrar</a></p>
         </div>
         <div class="col-md-4">
           <h3>Oficinas</h3>

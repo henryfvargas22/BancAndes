@@ -1,3 +1,4 @@
+@(esCliente: Boolean)
 <html>
     <head>
         <meta charset="utf-8">
@@ -28,11 +29,29 @@
     <div class="container">
         <br>
         <p id="alert"></p>       
-        <div class="col-md-8">           
+        <div class="col-md-8"> 
+        	@if(esCliente){          
             <h1>Nuevo Cliente</h1>
+            }else{
+            <h1>Nuevo Empleado</h1>
+            }
             <hr>
-            <form method="post" action="@routes.Application.createUsuario()" >
+            @if(esCliente){
+            <form method="post" action="@routes.Application.createCliente()" >
+            }else{
+            <form method="post" action="@routes.Application.createEmpleado()" >
+            }
+            @if(!esCliente){
             <div class="form-group" id="divTipoEmpleado">
+                <label>Tipo de empleado</label>
+                <select class="form-control" id="tipoEmpleado">
+                    <option>cajero</option>
+                    <option>gerente</option>
+                    <option>administrador</option>
+                </select>
+             </div>
+             } 
+            <div class="form-group" id="divTipoUsuario">
                 <label>Tipo de cliente</label>
                 <select class="form-control" name="tipoCliente">
                     <option>natural</option>
@@ -360,8 +379,12 @@
                     <option>male</option>
                     <option>female</option>
                 </select>
-             </div>           
+             </div>
+           @if(esCliente){           
           <button type="submit" class="btn btn-default">Registrar Cliente</button>
+          }else{
+          <button type="submit" class="btn btn-default">Registrar Empleado</button>
+          }
       </form>
       <hr>
       <footer>

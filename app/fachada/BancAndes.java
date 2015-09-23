@@ -1,5 +1,6 @@
 package fachada;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import dao.DaoClientes;
@@ -125,10 +126,42 @@ public class BancAndes
 		return daoPuntosDeAtencion.darPunto_De_AtencionsDefault();
 	}
 
-	public void insertarUsuario(String nombre,int cedula, String usuario, String contrasenia, int edad, String genero, String ciudad, String direccion, String tipo) throws Exception
+	public void insertarUsuario(String nombre,int cedula, String usuario, String contrasenia, int edad, String genero, String ciudad, String direccion, String tipo, String cargo) throws Exception
 	{
-		daoUsuarios.registrarUsuario(nombre, cedula, usuario, contrasenia, edad, genero, ciudad, direccion, tipo);
-		daoClientes.registrarCliente(cedula);
+		try
+		{
+			daoUsuarios.registrarUsuario(nombre, cedula, usuario, contrasenia, edad, genero, ciudad, direccion, tipo);
+			if(cargo.equals("empleado"))
+			{
+				try
+				{
+					daoEmpleados.registrarEmpleado(cedula);
+				}
+				catch(Exception e)
+				{
+					throw new Exception("No se pudo agregar el empleado, ya es usuario");
+				}
+			}
+			else
+			{
+				try
+				{
+					daoClientes.registrarCliente(cedula);
+				}
+				catch(Exception e)
+				{
+					throw new Exception("No se pudo agregar el cliente, ya es usuario");
+				}
+			}
+		}
+		catch(SQLException e)
+		{
+			//Ya estaba agregado
+		}
+		catch(Exception a)
+		{
+			throw a;
+		}
 	}
 
 	public void insertarOficina(String nombre, String direccion, String telefono, int idGerente) throws Exception
@@ -192,7 +225,7 @@ public class BancAndes
 		}
 		return false;
 	}
-	
+
 	public boolean esGerente(String usuario, String contrasenia)
 	{
 		try
@@ -214,7 +247,7 @@ public class BancAndes
 	{
 		return daoUsuarios.iniciarSesion(usuario, contrasenia);
 	}
-	
+
 	public ArrayList<Cuenta> darCuentasCliente(int idCliente)
 	{
 		try
@@ -226,7 +259,7 @@ public class BancAndes
 			return new ArrayList<Cuenta>();
 		}
 	}
-	
+
 	public ArrayList<Prestamo> darPrestamosCliente(int idCliente)
 	{
 		try
