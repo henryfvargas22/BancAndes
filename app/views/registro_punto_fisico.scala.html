@@ -1,4 +1,4 @@
-@(oficinas: List[vos.Oficina], empleados: List[vos.Empleado])
+@(oficinas: List[vos.Oficina])
 <html>
     <head>
         <meta charset="utf-8">
@@ -37,7 +37,7 @@
       <br>
       <h1>Nuevo Punto de Atenci&oacute;n</h1>
       <hr>
-      <form method="post" action="@routes.Application.obtenerEmpleados()">
+		<form method="post" action="@routes.Application.createPuntoFisico()">
           <div class="form-group">
               <label>Oficina</label>
               <select class="form-control" name="oficina">
@@ -46,17 +46,12 @@
                   }
               </select>
           </div>
-          <button type="submit" class=" form-control btn btn-primary" id="buscar">Buscar Empleados</button>
-      </form>
-      <form action="">
-          <br>
-          <br>
           <div class="form-group">
-              <label>Cajero a cargo</label>
-              <select class="form-control" name="empleado">
-                  @for(e <- empleados){
-                  <option value="@e.getIdEmpleado()">@e.getNombre() - Usuario: @e.getUsuario()</option>
-                  }
+              <label>Tipo de Punto</label>
+              <select class="form-control" name="tipo">
+                  <option value="office">Oficina</option>
+                  <option value="online">En Linea</option>
+                  <option value="atm">Cajero Automático</option>
               </select>
           </div>
           <button type="submit" class="btn btn-default">Registrar Punto</button>

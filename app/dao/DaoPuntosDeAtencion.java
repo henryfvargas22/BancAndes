@@ -139,7 +139,7 @@ public class DaoPuntosDeAtencion
 			st.executeUpdate(insertarPunto+"("+mayorId()+","
 					+"'"+tipo+"',"+
 					"'"+localizacion+"',"+
-					idOficina+"')");
+					idOficina+")");
 		}
 		catch(SQLException e)
 		{

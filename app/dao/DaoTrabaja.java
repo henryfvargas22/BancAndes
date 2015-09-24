@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import vos.Empleado;
 import vos.Trabaja;
 
 public class DaoTrabaja 

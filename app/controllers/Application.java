@@ -1,5 +1,6 @@
 package controllers;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -252,10 +253,15 @@ public class Application extends Controller {
 			DynamicForm dynamicForm = Form.form().bindFromRequest();
 			Logger.info("oficina is: " + dynamicForm.get("oficina"));
 			Oficina actual=BancAndes.darInstancia().darOficinaPorId(Integer.parseInt(dynamicForm.get("oficina")));
-			Logger.info("idEmpleado is: " + dynamicForm.get("empleado"));
-			int idEmpleado=Integer.parseInt("empleado");
-			BancAndes.darInstancia().insertarPunto("office", actual.getDireccion(), actual.getId(), idEmpleado);
+			Logger.info("tipo is: " + dynamicForm.get("tipo"));
+			String tipo=dynamicForm.get("tipo");
+			BancAndes.darInstancia().insertarPunto(tipo, actual.getDireccion(), actual.getId());
 			mensaje="Se creó el punto de atención";
+			return redirect("/admin");
+		}
+		catch(SQLException a)
+		{
+			mensaje="Ya existe el punto que desea añadir";
 			return redirect("/admin");
 		}
 		catch(Exception e)
@@ -319,18 +325,7 @@ public class Application extends Controller {
 		{
 			oficinas=new ArrayList<Oficina>();
 		}
-		return ok(registro_punto_fisico.render(oficinas, new ArrayList<Empleado>()));
-	}
-	
-	public Result obtenerEmpleados()
-	{
-		DynamicForm dynamicForm = Form.form().bindFromRequest();
-		Logger.info("oficina is: " + dynamicForm.get("oficina"));
-		Oficina actual=BancAndes.darInstancia().darOficinaPorId(Integer.parseInt(dynamicForm.get("oficina")));
-		List<Oficina> oficinas=new ArrayList<Oficina>();
-		oficinas.add(actual);
-		List<Empleado> empleados=BancAndes.darInstancia().darEmpleadosPorOficina(actual.getId());
-		return ok(registro_punto_fisico.render(oficinas, empleados));
+		return ok(registro_punto_fisico.render(oficinas));
 	}
 
 	public Result getUsuarios()
