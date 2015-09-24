@@ -1,4 +1,4 @@
-@(usuario: vos.Usuario)
+@(message: String,cuentas: List[vos.Cuenta],prestamos: List[vos.Prestamo])
 <html>
     <head>
         <meta charset="utf-8">
@@ -24,10 +24,10 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">         
-          <a class="navbar-brand" href="#">BancAndes</a>
+          <a class="navbar-brand">BancAndes</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form">            
+          <form class="navbar-form navbar-right" role="form" action="@routes.Application.index()">            
             <button type="submit" class="btn btn-success">Cerrar Sesi&oacute;n</button>
           </form>
         </div>
@@ -42,7 +42,11 @@
               </div>
               <div class="col-md-7">
                     <h2>Cliente</h2>
-                    <p>Bienvenido</p>
+                     @if(message==null){
+                    <p>Bienvenido(a)</p>
+                    }else{
+                    <p>@message</p>
+                    }
                     <a href="cambiar_clave_form.html" class="btn btn-default">Cambiar Clave</a>
               </div>
           </div>
@@ -59,13 +63,14 @@
               <th>Saldo</th>
               </tr>
           </thead>
-          <tbody>
+          <tbody>    
+              @for(c <-cuentas){
               <tr>
-                <td>-tipo-</td>
-                <td>-numero-</td> 
-                <td>-saldo-</td>
+                <td>@c.getTipo()</td>
+                <td>@c.getId()</td> 
+                <td>$</td>
               </tr>
-
+                }
           </tbody>                               
         </table>
         <br>
@@ -73,24 +78,23 @@
       <table class="table table-hover" id="tablaCuentas">
         <thead>
             <tr>
-              <th>Tipo</th>
               <th>Monto</th>
               <th>Tasa</th>
               <th>No. cuotas</th>
-              <th>D&iiacte;a de pago</th>
+              <th>Día de pago</th>
               <th>Valor cuota</th>              
               </tr>
           </thead>
           <tbody>
+              @for(p <-prestamos){
               <tr>
-                <td>-tipo-</td>
-                <td>-monto-</td> 
-                <td>-tasa-</td>
-                <th>-cuotas-</th>
-                <th>-dia-</th>
-                <th>-valor-</th>
+                <td>$@p.getMonto()</td> 
+                <td>@p.getInteres()</td>
+                <th>@p.getCuotas()</th>
+                <th>@p.getDiaPago()</th>
+                <th>@p.getCuotaMensual()</th>
               </tr>
-
+                }
           </tbody>                               
         </table>
       <hr>

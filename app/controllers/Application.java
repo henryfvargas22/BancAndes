@@ -25,6 +25,7 @@ import static play.libs.Json.toJson;;
 public class Application extends Controller {
 
 	private String mensaje;
+	private Usuario usuarioActual;
 	public Result index() 
 	{
 		if(mensaje==null)
@@ -35,6 +36,7 @@ public class Application extends Controller {
 		{
 			String msg=mensaje;
 			mensaje=null;
+			usuarioActual=null;
 			return ok(index.render(msg));
 		}
 	}
@@ -174,6 +176,7 @@ public class Application extends Controller {
 		{
 			Usuario usuario=BancAndes.darInstancia().iniciarSesion(dynamicForm.get("username"), dynamicForm.get("password"));
 			mensaje="Bienvenido(a) "+usuario.getNombre();
+			usuarioActual=usuario;
 			if(BancAndes.darInstancia().esAdmin(user,pass))
 			{
 				return admin();
@@ -181,6 +184,10 @@ public class Application extends Controller {
 			else if(BancAndes.darInstancia().esGerente(user, pass))
 			{
 				return gerente();
+			}
+			else if(BancAndes.darInstancia().esCliente(user, pass))
+			{
+				return cliente();
 			}
 			else
 			{
@@ -190,8 +197,29 @@ public class Application extends Controller {
 		catch (Exception e)
 		{
 			mensaje="Contraseña incorrecta";
+			usuarioActual=null;
 			return index();
 		}
+	}
+
+	public Result cliente() 
+	{
+		List<Cuenta> cuentas;
+		List<Prestamo> prestamos;
+		try
+		{
+			cuentas=BancAndes.darInstancia().darCuentasCliente(usuarioActual.getCedula());
+			prestamos=BancAndes.darInstancia().darPrestamosCliente(usuarioActual.getCedula());
+		}
+		catch(Exception e)
+		{
+			cuentas=new ArrayList<Cuenta>();
+			prestamos=new ArrayList<Prestamo>();
+		}
+		redirect("/cliente");
+		String msg=mensaje;
+		mensaje=null;
+		return(ok(cliente.render(msg, cuentas, prestamos)));
 	}
 
 	public Result formCrearEmpleado()

@@ -27,7 +27,45 @@ public class DaoClientes
 	 */
 	private static final String idCliente_Usuario = "id_usuario";
 	
-	
+	/**
+	 * nombre de la columna nombre en la tabla usuario.
+	 */
+	private static final String nombreUsuario = "nombre";
+
+	/**
+	 * nombre de la columna usuario en la tabla usuario.
+	 */
+	private static final String usernameUsuario = "usuario";
+
+	/**
+	 * nombre de la columna contrasenia en la tabla usuario.
+	 */
+	private static final String contraseniaUsuario = "contrasenia";
+
+	/**
+	 * nombre de la columna edad en la tabla usuario.
+	 */
+	private static final String edadUsuario = "edad";
+
+	/**
+	 * nombre de la columna genero en la tabla usuario.
+	 */
+	private static final String generoUsuario = "genero";
+
+	/**
+	 * nombre de la columna ciudad en la tabla usuario.
+	 */
+	private static final String ciudadUsuario = "ciudad";
+
+	/**
+	 * nombre de la columna direccion en la tabla usuario.
+	 */
+	private static final String direccionUsuario = "direccion";
+
+	/**
+	 * nombre de la columna tipo en la tabla usuario.
+	 */
+	private static final String tipoUsuario = "tipo";
 
 	//----------------------------------------------------
 	//Consultas
@@ -41,6 +79,8 @@ public class DaoClientes
 	private static final String maxIdCliente="SELECT MAX(id) AS maximo FROM "+tablaCliente;
 	
 	private static final String insertarCliente="INSERT INTO "+tablaCliente+" VALUES";
+	
+	private static final String consultaClienteUsuario="SELECT * FROM "+tablaCliente+" JOIN usuario ON cliente.id_usuario=usuario.cedula ";
 	
 	// ---------------------------------------------------
     // Métodos asociados a los casos de uso: Consulta
@@ -64,7 +104,7 @@ public class DaoClientes
 		
 		try {
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
-			prepStmt = conexion.prepareStatement(consultaClientesDefault);
+			prepStmt = conexion.prepareStatement(consultaClienteUsuario);
 			
 			ResultSet rs = prepStmt.executeQuery();
 			
@@ -72,9 +112,26 @@ public class DaoClientes
 			{
 				int idCli = rs.getInt(idCliente);
 				int cedCli = rs.getInt(idCliente_Usuario);
+				String nombre = rs.getString(nombreUsuario);
+				int edad=rs.getInt(edadUsuario);
+				String genero=rs.getString(generoUsuario);
+				String ciudad=rs.getString(ciudadUsuario);
+				String direccion=rs.getString(direccionUsuario);
+				String tipo=rs.getString(tipoUsuario);
+				String usuario= rs.getString(usernameUsuario);
+				String contrasenia = rs.getString(contraseniaUsuario);
 				
 				clienteValue.setIdCliente(idCli);
 				clienteValue.setIdUsuario(cedCli);
+				clienteValue.setCedula(cedCli);
+				clienteValue.setContrasenia(contrasenia);
+				clienteValue.setCiudad(ciudad);
+				clienteValue.setDireccion(direccion);
+				clienteValue.setEdad(edad);
+				clienteValue.setGenero(genero);
+				clienteValue.setNombre(nombre);
+				clienteValue.setTipo(tipo);
+				clienteValue.setUsuario(usuario);
 				clientes.add(clienteValue);
 				clienteValue = new Cliente();
 							
@@ -98,6 +155,49 @@ public class DaoClientes
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}		
 		return clientes;
+    }
+    
+    public Cliente iniciarSesion(String usuario, String contrasenia) throws Exception
+    {
+    	PreparedStatement prepStmt = null;
+    	
+		Cliente clienteValue = new Cliente();
+    	Connection conexion=null;
+		
+		try {
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(consultaClienteUsuario+"WHERE usuario='"+usuario+"' AND "+
+			"contrasenia='"+contrasenia+"'");
+			
+			ResultSet rs = prepStmt.executeQuery();
+			
+			while(rs.next())
+			{
+				clienteValue.setUsuario(usuario);
+				clienteValue.setContrasenia(contrasenia);
+				clienteValue = new Cliente();
+				
+				return clienteValue;
+			}
+		
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(consultaClienteUsuario);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}finally 
+		{
+			if (prepStmt != null) 
+			{
+				try {
+					prepStmt.close();
+				} catch (SQLException exception) {
+					
+					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
+				}
+			}
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}		
+		return null;
     }
     
     private int mayorId() throws Exception

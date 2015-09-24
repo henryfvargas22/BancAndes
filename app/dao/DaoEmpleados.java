@@ -32,11 +32,6 @@ public class DaoEmpleados
 	private static final String nombreUsuario = "nombre";
 
 	/**
-	 * nombre de la columna cedula en la tabla usuario.
-	 */
-	private static final String cedulaUsuario = "cedula";
-
-	/**
 	 * nombre de la columna usuario en la tabla usuario.
 	 */
 	private static final String usernameUsuario = "usuario";
@@ -181,9 +176,50 @@ public class DaoEmpleados
 
 			while(rs.next())
 			{
-				int idCli = rs.getInt(idEmpleado);
+				usuarioValue.setUsuario(usuario);
+				usuarioValue.setContrasenia(contrasenia);
+				return usuarioValue;
+			}
+
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			System.out.println(consultaEmpleadosDefault);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}
+		finally 
+		{
+			if (prepStmt != null) 
+			{
+				try {
+					prepStmt.close();
+				} catch (SQLException exception) {
+
+					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
+				}
+			}
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}
+		return null;
+	}
+	
+	public Empleado darEmpleadoId(int idUsuario) throws Exception
+	{
+		PreparedStatement prepStmt = null;
+		Empleado usuarioValue = new Empleado();
+		Connection conexion=null;
+
+		try {
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(consultaEmpleadosDefault+" WHERE "+idEmpleado_Usuario+"="+idUsuario);
+
+			ResultSet rs = prepStmt.executeQuery();
+
+			while(rs.next())
+			{
+				int idEm=rs.getInt(idEmpleado);
 				String nombre = rs.getString(nombreUsuario);
-				int cedula = rs.getInt(cedulaUsuario);
 				int edad=rs.getInt(edadUsuario);
 				String genero=rs.getString(generoUsuario);
 				String ciudad=rs.getString(ciudadUsuario);
@@ -191,9 +227,11 @@ public class DaoEmpleados
 				String tipo=rs.getString(tipoUsuario);
 				String rol=rs.getString(rolEmpleado);
 				int idOfi=rs.getInt(idOficina);
+				String usuario=rs.getString(usernameUsuario);
+				String contrasenia=rs.getString(contraseniaUsuario);
 
 				usuarioValue.setNombre(nombre);
-				usuarioValue.setCedula(cedula);
+				usuarioValue.setCedula(idUsuario);
 				usuarioValue.setUsuario(usuario);
 				usuarioValue.setContrasenia(contrasenia);
 				usuarioValue.setEdad(edad);
@@ -201,8 +239,8 @@ public class DaoEmpleados
 				usuarioValue.setCiudad(ciudad);
 				usuarioValue.setDireccion(direccion);
 				usuarioValue.setTipo(tipo);
-				usuarioValue.setIdEmpleado(idCli);
-				usuarioValue.setIdUsuario(cedula);
+				usuarioValue.setIdEmpleado(idEm);
+				usuarioValue.setIdUsuario(idUsuario);
 				usuarioValue.setRol(rol);
 				usuarioValue.setIdOficina(idOfi);
 				return usuarioValue;

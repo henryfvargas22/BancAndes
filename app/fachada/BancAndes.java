@@ -149,7 +149,7 @@ public class BancAndes
 			try
 			{
 				daoEmpleados.registrarEmpleado(cedula,rol,idOficina);
-				Empleado nuevo=daoEmpleados.iniciarSesion(usuario, contrasenia);
+				Empleado nuevo=daoEmpleados.darEmpleadoId(cedula);
 				int idEmple=nuevo.getIdEmpleado();
 				if(!rol.equals("admin"))
 				{
@@ -251,6 +251,26 @@ public class BancAndes
 			return false;
 		}
 		return false;
+	}
+	
+	public boolean esCliente(String usuario, String contrasenia)
+	{
+		try
+		{
+			Cliente es=daoClientes.iniciarSesion(usuario, contrasenia);
+			if(es!=null)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
 	}
 
 	public Usuario iniciarSesion(String usuario, String contrasenia) throws Exception
