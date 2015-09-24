@@ -126,7 +126,7 @@ public class DaoOperaciones
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			Statement st=conexion.createStatement();
 			st.executeUpdate(ingresarOperacion+"("+fecha.toString()+","
-					+"NULL"+","+
+					+-1+","+
 					"'"+tipo+"',"+
 					monto+","+
 					idPrestam+","+
@@ -155,7 +155,7 @@ public class DaoOperaciones
 					+idCuent+","+
 					"'"+tipo+"',"+
 					monto+","+
-					"NULL"+","+
+					-1+","+
 					idClient+")");
 		}
 		catch(SQLException e)

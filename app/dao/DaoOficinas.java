@@ -45,6 +45,8 @@ public class DaoOficinas
 	private static final String maxIdOficina="SELECT MAX(id) AS maximo FROM "+tablaOficina;
 
 	private static final String insertarOficina="INSERT INTO "+tablaOficina+" VALUES";
+	
+	private static final String consultarOficinaId="SELECT * FROM "+tablaOficina+" WHERE id=";
 
 	// ---------------------------------------------------
 	// Métodos asociados a los casos de uso: Consulta
@@ -160,5 +162,43 @@ public class DaoOficinas
 		}	
 	}
 	
-	
+	public Oficina darOficinaPorId(int idOficina) throws Exception
+	{
+		PreparedStatement prepStmt = null;
+		Connection conexion=null;
+		try
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(consultarOficinaId+idOficina);
+
+			ResultSet rs = prepStmt.executeQuery();
+			while(rs.next())
+			{
+				int idGerente = rs.getInt(idOficina_Gerente);
+				String nombre=rs.getString(nombreOficina);
+				String direccion=rs.getString(direccionOficina);
+				String telefono = rs.getString(telefonoOficina);
+				
+				Oficina OficinaValue = new Oficina();
+				OficinaValue.setId(idOficina);
+				OficinaValue.setId_gerente(idGerente);
+				OficinaValue.setDireccion(direccion);
+				OficinaValue.setNombre(nombre);
+				OficinaValue.setTelefono(telefono);
+				
+				return OficinaValue;
+			}
+			return null;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(consultarOficinaId+idOficina);
+			return null;
+		}
+		finally
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}
+	}
 }

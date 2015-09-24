@@ -114,6 +114,7 @@ public class DaoPuntosDeAtencion
 			prepStmt = conexion.prepareStatement(maxIdPuntos);
 
 			ResultSet rs = prepStmt.executeQuery();
+			while(rs.next())
 			valor=rs.getInt("maximo");
 		}
 		catch (SQLException e) 

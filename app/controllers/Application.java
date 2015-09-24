@@ -26,7 +26,16 @@ public class Application extends Controller {
 	private String mensaje;
 	public Result index() 
 	{
-		return ok(index.render("Bienvenido"));
+		if(mensaje==null)
+		{
+			return ok(index.render("Bienvenido"));			
+		}
+		else
+		{
+			String msg=mensaje;
+			mensaje=null;
+			return ok(index.render(msg));
+		}
 	}
 
 	public Result gerente()
@@ -179,7 +188,8 @@ public class Application extends Controller {
 		} 
 		catch (Exception e)
 		{
-			return internalServerError("Ups: "+"Contraseña incorrecta");
+			mensaje="Contraseña incorrecta";
+			return index();
 		}
 	}
 
@@ -234,6 +244,26 @@ public class Application extends Controller {
 			return redirect("/admin");
 		}
 	}
+	
+	public Result createPuntoFisico()
+	{
+		try
+		{
+			DynamicForm dynamicForm = Form.form().bindFromRequest();
+			Logger.info("oficina is: " + dynamicForm.get("oficina"));
+			Oficina actual=BancAndes.darInstancia().darOficinaPorId(Integer.parseInt(dynamicForm.get("oficina")));
+			Logger.info("idEmpleado is: " + dynamicForm.get("empleado"));
+			int idEmpleado=Integer.parseInt("empleado");
+			BancAndes.darInstancia().insertarPunto("office", actual.getDireccion(), actual.getId(), idEmpleado);
+			mensaje="Se creó el punto de atención";
+			return redirect("/admin");
+		}
+		catch(Exception e)
+		{
+			mensaje="No se pudo crear el punto, revise los datos";
+			return redirect("/admin");
+		}
+	}
 
 	public Result createEmpleado()
 	{
@@ -250,7 +280,7 @@ public class Application extends Controller {
 			Logger.info("genero "+dynamicForm.get("generoCliente"));
 			Logger.info("usuario "+dynamicForm.get("correo"));
 			Logger.info("rol "+dynamicForm.get("tipoEmpleado"));
-			Logger.info("rol "+dynamicForm.get("idOficina"));
+			Logger.info("oficina "+dynamicForm.get("idOficina"));
 
 			String tipo=dynamicForm.get("tipoCliente");
 			String nombre=dynamicForm.get("nombre");
@@ -276,6 +306,31 @@ public class Application extends Controller {
 			e.printStackTrace();
 			return redirect("/admin");
 		}
+	}
+	
+	public Result formCrearPuntoFisico()
+	{
+		List<Oficina> oficinas;
+		try
+		{
+			oficinas=BancAndes.darInstancia().darOficinasDefault();
+		}
+		catch(Exception e)
+		{
+			oficinas=new ArrayList<Oficina>();
+		}
+		return ok(registro_punto_fisico.render(oficinas, new ArrayList<Empleado>()));
+	}
+	
+	public Result obtenerEmpleados()
+	{
+		DynamicForm dynamicForm = Form.form().bindFromRequest();
+		Logger.info("oficina is: " + dynamicForm.get("oficina"));
+		Oficina actual=BancAndes.darInstancia().darOficinaPorId(Integer.parseInt(dynamicForm.get("oficina")));
+		List<Oficina> oficinas=new ArrayList<Oficina>();
+		oficinas.add(actual);
+		List<Empleado> empleados=BancAndes.darInstancia().darEmpleadosPorOficina(actual.getId());
+		return ok(registro_punto_fisico.render(oficinas, empleados));
 	}
 
 	public Result getUsuarios()
@@ -402,8 +457,9 @@ public class Application extends Controller {
 		}
 		catch(Exception e)
 		{
+			mensaje="No se pudo cerrar la cuenta";
 			e.printStackTrace();
-			return internalServerError("Ups: "+e.getMessage());
+			return redirect("/gerente");
 		}
 	}
 
@@ -420,8 +476,9 @@ public class Application extends Controller {
 		}
 		catch(Exception e)
 		{
+			mensaje="No se pudo cerrar el prestamo";
 			e.printStackTrace();
-			return internalServerError("Ups: "+e.getMessage());
+			return redirect("/gerente");
 		}
 	}
 }

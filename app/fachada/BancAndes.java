@@ -10,6 +10,7 @@ import dao.DaoOficinas;
 import dao.DaoOperaciones;
 import dao.DaoPrestamos;
 import dao.DaoPuntosDeAtencion;
+import dao.DaoTrabaja;
 import dao.DaoUsuarios;
 import vos.Cliente;
 import vos.Cuenta;
@@ -41,6 +42,8 @@ public class BancAndes
 	private DaoPuntosDeAtencion	daoPuntosDeAtencion;
 
 	private DaoOperaciones daoOperaciones;
+	
+	private DaoTrabaja daoTrabaja;
 
 	// -----------------------------------------------------------------
 	// Singleton
@@ -78,6 +81,7 @@ public class BancAndes
 		daoPrestamos= new DaoPrestamos();
 		daoPuntosDeAtencion= new DaoPuntosDeAtencion();
 		daoOperaciones= new DaoOperaciones();
+		daoTrabaja=new DaoTrabaja();
 	}
 
 
@@ -145,6 +149,12 @@ public class BancAndes
 			try
 			{
 				daoEmpleados.registrarEmpleado(cedula,rol,idOficina);
+				Empleado nuevo=daoEmpleados.iniciarSesion(usuario, contrasenia);
+				int idEmple=nuevo.getIdEmpleado();
+				if(!rol.equals("admin"))
+				{
+					daoTrabaja.registrarTrabaja(idEmple, idOficina);
+				}
 			}
 			catch(Exception e)
 			{
@@ -169,9 +179,10 @@ public class BancAndes
 		daoOficinas.registrarOficina(nombre, direccion, telefono, idGerente);
 	}
 
-	public void insertarPunto(String tipo, String localizacion, int idOficina) throws Exception
+	public void insertarPunto(String tipo, String localizacion, int idOficina, int idEmpleado) throws Exception
 	{
 		daoPuntosDeAtencion.registrarPunto(tipo, localizacion, idOficina);
+		daoTrabaja.registrarTrabaja(idEmpleado, idOficina);
 	}
 
 	public void insertarCuenta(int id, String tipo, int idCliente) throws Exception
@@ -275,5 +286,44 @@ public class BancAndes
 	public ArrayList<Empleado> darGerentes() throws Exception
 	{
 		return daoEmpleados.darGerentes();
+	}
+	
+	public Oficina darOficinaPorId(int idOficina)
+	{
+		try
+		{
+			return daoOficinas.darOficinaPorId(idOficina);
+		}
+		catch(Exception e)
+		{
+			return null;
+		}
+	}
+	
+	public ArrayList<Empleado> darEmpleadosPorOficina(int idOficina)
+	{
+		ArrayList<Empleado> resp=new ArrayList<Empleado>();
+		try
+		{
+			ArrayList<Integer> empleados=daoTrabaja.darIdEmpleadosOficina(idOficina);
+			ArrayList<Empleado> empleadosDefault=darEmpleadosDefault();
+			for(int i=0;i<empleadosDefault.size();i++)
+			{
+				for(int j=0;j<empleados.size();j++)
+				{
+					Empleado temp=empleadosDefault.get(i);
+					int idTemp=empleados.get(j);
+					if(temp.getIdEmpleado()==idTemp)
+					{
+						resp.add(temp);
+					}
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return resp;
 	}
 }

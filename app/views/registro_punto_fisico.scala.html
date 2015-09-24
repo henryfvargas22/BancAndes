@@ -1,3 +1,4 @@
+@(oficinas: List[vos.Oficina], empleados: List[vos.Empleado])
 <html>
     <head>
         <meta charset="utf-8">
@@ -7,17 +8,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
 
-        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/bootstrap.min.css">
         <style>
             body {
                 padding-top: 50px;
                 padding-bottom: 20px;
             }
         </style>
-        <link rel="stylesheet" href="css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="assets/stylesheets/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="assets/stylesheets/main.css">
 
-        <script src="js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        <script src="assets/javascripts/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
     </head>
     <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -36,45 +37,29 @@
       <br>
       <h1>Nuevo Punto de Atenci&oacute;n</h1>
       <hr>
-      <form>
+      <form method="post" action="@routes.Application.obtenerEmpleados()">
           <div class="form-group">
               <label>Oficina</label>
-              <select class="form-control" id="oficina">
-                  <option>Oficinas</option>
+              <select class="form-control" name="oficina">
+              @for(o <- oficinas){
+                  <option value="@o.getId()">@o.getNombre() - Ubicado en: @o.getDireccion()</option>
+                  }
               </select>
           </div>
-          <input onclick="buscarEmpleados()" type="button" class=" form-control btn btn-primary" id="buscar" value="Buscar empleados">
-          <script>
-              function buscarEmpleados()
-              {
-                  var oficina; 
-                  oficina= document.getElementById("oficina").value;
-                  //LLamar a la funcion logica pasando el parametro oficina y refrescar el select de empleados                 
-              }
-          </script>
+          <button type="submit" class=" form-control btn btn-primary" id="buscar">Buscar Empleados</button>
+      </form>
+      <form action="">
           <br>
           <br>
           <div class="form-group">
               <label>Cajero a cargo</label>
-              <select class="form-control" id="empleado">
-                  <option>Empleados</option>
+              <select class="form-control" name="empleado">
+                  @for(e <- empleados){
+                  <option value="@e.getIdEmpleado()">@e.getNombre() - Usuario: @e.getUsuario()</option>
+                  }
               </select>
           </div>
-          
-          <button type="submit" onclick="registrar()" class="btn btn-default">Registrar Punto</button>
-          <script>
-              function registrar()
-              {
-                  var oficina, empleado, mensaje, tipo;
-                  oficina= document.getElementById("oficina").value;
-                  empleado= document.getElementById("empleado").value;
-                  //Llamar a la funcion logica
-                  mensaje = "Se ha agregado correctamente el punto de atención";
-                  tipo = "info";
-                  document.getElementById("alert").innerHTML = "<div class=\"alert alert-"+tipo+"\" role=\"alert\">"+mensaje+"</div>";
-              }
-             
-          </script>
+          <button type="submit" class="btn btn-default">Registrar Punto</button>
       </form>
       
 
@@ -85,11 +70,11 @@
       </footer>
     </div>
         </div><!-- /container -->        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
-        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.11.2.js"><\/script>')</script>
+        <script>window.jQuery || document.write('<script src="assets/javascripts/vendor/jquery-1.11.2.js"><\/script>')</script>
 
-        <script src="js/vendor/bootstrap.min.js"></script>
+        <script src="assets/javascripts/vendor/bootstrap.min.js"></script>
 
-        <script src="js/main.js"></script>
+        <script src="assets/javascripts/main.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <script>
