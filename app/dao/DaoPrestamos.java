@@ -216,10 +216,18 @@ public class DaoPrestamos
 			{
 				int id = rs.getInt(idPrestamo);
 				long monto=rs.getLong(montoPrestamo);
+				double tasa=rs.getDouble(interesPrestamo);
+				int cuotas=rs.getInt(cuotasPrestamo);
+				int diaPago=rs.getInt(diaPagoPrestamo);
+				double cuota=rs.getDouble(cuotaMensualPrestamo);
 
 				CuentaValue.setId(id);
 				CuentaValue.setIdCliente(idCliente);
 				CuentaValue.setMonto(monto);
+				CuentaValue.setInteres(tasa);
+				CuentaValue.setCuotas(cuotas);
+				CuentaValue.setDiaPago(diaPago);
+				CuentaValue.setCuotaMensual(cuota);
 				Cuentas.add(CuentaValue);
 				CuentaValue = new Prestamo();
 			}

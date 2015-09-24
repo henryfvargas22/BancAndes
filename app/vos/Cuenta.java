@@ -6,6 +6,7 @@ public class Cuenta
 	private int id_Cliente;
 	private String tipo;
 	private boolean estaCerrada;
+	private double monto;
 	
 	public long getId() {
 		return id;
@@ -30,6 +31,12 @@ public class Cuenta
 	}
 	public void setEstaCerrada(boolean estaCerrada) {
 		this.estaCerrada = estaCerrada;
+	}
+	public double getMonto() {
+		return monto;
+	}
+	public void setMonto(double monto) {
+		this.monto = monto;
 	}
 	
 	

@@ -210,6 +210,7 @@ public class DaoClientes
 			prepStmt = conexion.prepareStatement(maxIdCliente);
 
 			ResultSet rs = prepStmt.executeQuery();
+			while(rs.next())
 			valor=rs.getInt("maximo");
 		}
 		catch (SQLException e) 

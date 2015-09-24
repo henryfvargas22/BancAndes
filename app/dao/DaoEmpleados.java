@@ -176,8 +176,10 @@ public class DaoEmpleados
 
 			while(rs.next())
 			{
+				String rol=rs.getString(rolEmpleado);
 				usuarioValue.setUsuario(usuario);
 				usuarioValue.setContrasenia(contrasenia);
+				usuarioValue.setRol(rol);
 				return usuarioValue;
 			}
 
