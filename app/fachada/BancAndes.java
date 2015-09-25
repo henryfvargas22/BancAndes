@@ -272,6 +272,23 @@ public class BancAndes
 			return false;
 		}
 	}
+	
+	public boolean esCajero(String usuario, String contrasenia)
+	{
+		try
+		{
+			Empleado es=daoEmpleados.iniciarSesion(usuario, contrasenia);
+			if(es!=null)
+			{
+				return (es.getRol().equals("cajero")?true:false);
+			}
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+		return false;
+	}
 
 	public Usuario iniciarSesion(String usuario, String contrasenia) throws Exception
 	{

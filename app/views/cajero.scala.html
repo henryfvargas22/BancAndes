@@ -1,4 +1,4 @@
-@(usuario: vos.Usuario)
+@(message: String,tipo: String)
 <html>
     <head>
         <meta charset="utf-8">
@@ -27,7 +27,7 @@
           <a class="navbar-brand" href="#">BancAndes</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form">            
+          <form class="navbar-form navbar-right" role="form" action="@routes.Application.index()">            
             <button type="submit" class="btn btn-success">Cerrar Sesi&oacute;n</button>
           </form>
         </div>
@@ -44,7 +44,11 @@
               </div>
               <div class="col-md-7">
                     <h2>Cajero</h2>
-                    <p>Bienvenido</p>                    
+                     @if(message==null){
+                    <p>Bienvenido(a)</p>
+                    }else{
+                    <p>@message</p>
+                    }                    
               </div>
           </div>
       </div>
@@ -52,21 +56,21 @@
 
     <div class="container">      
       <h3>Operaciones</h3>
-      <form>
+      <form method="post" action="@routes.Application.formCrearOperacion()">
         <div class="form-group">
           <div class="form-group">
             <label>Cuenta</label>
-            <input type="text" class="form-control" id="cliente" placeholder="Ingrese el id del cliente">
+            <input type="text" class="form-control" name="cliente" placeholder="Ingrese el id del cliente">
           </div>
           <div class="radio">
             <label>
-              <input type="radio" name="optionsRadios" id="cuenta" value="cuenta">
+              <input type="radio" name="cuenta" value="cuenta">
               Realizar operaciones sobre cuenta
             </label>
           </div>
           <div class="radio">
             <label>
-              <input type="radio" name="optionsRadios" id="prestamo" value="prestamo">
+              <input type="radio" name="prestamo" value="prestamo">
               Realizar operaciones sobre prestamo
             </label>
           </div>
@@ -134,6 +138,7 @@
             }
         </script>
         </div>
+      </form>
       <hr>
       <form>
         <p id="content"></p>

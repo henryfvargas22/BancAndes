@@ -48,6 +48,14 @@ public class Application extends Controller {
 		mensaje=null;
 		return ok(gerente_de_oficina_bancandes.render(msg));
 	}
+	
+	public Result cajero()
+	{
+		redirect("/cajero");
+		String msg=mensaje;
+		mensaje=null;
+		return ok(cajero.render(msg,null));
+	}
 
 	public Result admin()
 	{
@@ -184,6 +192,10 @@ public class Application extends Controller {
 			else if(BancAndes.darInstancia().esGerente(user, pass))
 			{
 				return gerente();
+			}
+			else if(BancAndes.darInstancia().esCajero(user, pass))
+			{
+				return cajero();
 			}
 			else if(BancAndes.darInstancia().esCliente(user, pass))
 			{
@@ -354,6 +366,15 @@ public class Application extends Controller {
 			oficinas=new ArrayList<Oficina>();
 		}
 		return ok(registro_punto_fisico.render(oficinas));
+	}
+	
+	public Result formCrearOperacion()
+	{
+		DynamicForm dynamicForm=Form.form().bindFromRequest();
+		Logger.info("idCliente "+dynamicForm.get("cliente"));
+		Logger.info("cuenta "+dynamicForm.field("cuenta").value());
+		Logger.info("prestamo "+dynamicForm.field("prestamo").value());
+		return ok("Recibí");
 	}
 
 	public Result getUsuarios()
