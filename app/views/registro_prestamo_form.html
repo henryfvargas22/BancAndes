@@ -1,4 +1,4 @@
-@(prestamos: List[vos.Prestamo])
+@(clientes: List[vos.Cliente])
 <html>
     <head>
         <meta charset="utf-8">
@@ -36,7 +36,7 @@
       <br>
       <h1>Nuevo Prestamo</h1>
       <hr>
-      <form>         
+      <form method="post" action="@routes.Application.createPrestamo()">         
           <div class="form-group">
               <label>ID</label>
               <input type="text" class="form-control" name="id" placeholder="Ingrese el identificador del prestamo">
@@ -69,7 +69,7 @@
           
           <div class="form-group">
             <label>Cliente</label>
-            <select class="form-control" name="cliente">
+            <select class="form-control" name="cliente" id="clientes">
               @for(c <- clientes){
                 <option>@c.getIdUsuario()</option>
                 }
