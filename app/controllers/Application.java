@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fachada.BancAndes;
+
 import play.*;
 import play.data.DynamicForm;
 import play.data.Form;
@@ -139,14 +140,14 @@ public class Application extends Controller {
         
         public Result formCrearPrestamo()
         {
-            ArrayList<Prestamo> prestamos;
+            ArrayList<Cliente> clientes;
             try{
-                prestamos=BancAndes.darInstancia().darPrestamosDefault();
+                clientes=BancAndes.darInstancia().darClientesDefault();
             }
             catch(Exception e){
-               prestamos=new ArrayList<Prestamo>();
+               clientes=new ArrayList<Cliente>();
             }
-            return ok(registro_prestamo_form.render(prestamos));
+            return ok(registro_prestamo_form.render(clientes));
         }
         public Result createPrestamo(){
 		try{
