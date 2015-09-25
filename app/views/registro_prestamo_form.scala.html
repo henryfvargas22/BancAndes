@@ -67,7 +67,7 @@
             <label>Cliente</label>
             <select class="form-control" name="cliente">
               @for(c <- clientes){
-                <option>@c.getIdUsuario()</option>
+                <option value="@c.getIdUsuario()">@c.getNombre()</option>
                 }
             </select>
           </div>
