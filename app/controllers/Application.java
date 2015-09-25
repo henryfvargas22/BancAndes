@@ -152,22 +152,23 @@ public class Application extends Controller {
         public Result createPrestamo(){
 		try{
 			DynamicForm dynamicForm=Form.form().bindFromRequest();
-			Logger.info("id "+dynamicForm.get("id"));
+			
 			Logger.info("monto "+dynamicForm.get("monto"));
                         Logger.info("interes "+dynamicForm.get("interes"));
 			Logger.info("cuotas "+dynamicForm.get("cuotas"));
                         Logger.info("diaPago "+dynamicForm.get("diaPago"));
                         Logger.info("cuotaMensual "+dynamicForm.get("cuotaMensual"));
                         Logger.info("cliente "+dynamicForm.get("cliente"));
-			String id=dynamicForm.get("id");
+			
 			long monto=Long.parseLong(dynamicForm.get("monto"));
                         double interes=Double.parseDouble(dynamicForm.get("interes"));
 			int cuotas=Integer.parseInt(dynamicForm.get("cuotas"));
                         int diaPago=Integer.parseInt(dynamicForm.get("diaPago"));
                         int cuotaMensual=Integer.parseInt(dynamicForm.get("cuotaMensual"));
                         int cliente=Integer.parseInt(dynamicForm.get("cliente"));
+                        
 			BancAndes.darInstancia().agregarPrestamo(monto, interes, cuotas, diaPago, cuotaMensual, cliente);
-			mensaje="Se agregó correctamente la el prestamo: "+id;
+			mensaje="Se agregó correctamente la el prestamo";
 			return redirect("/gerente");
 		}
 		catch(Exception e){
