@@ -455,16 +455,23 @@ public class Application extends Controller {
 		try
 		{
 			long id=Long.parseLong(idCuentaOp);
-			double mont=Double.parseDouble(monto);
 			if(operacion.equals("Consignar")|operacion.equals("Retirar"))
 			{
+				double mont=Double.parseDouble(monto);
 				BancAndes.darInstancia().insertarOperacionCuenta(mont, operacion, id);
 			}
 			else
 			{
-				long montol=Long.parseLong(monto);
 				int idi=Integer.parseInt(idCuentaOp);
-				BancAndes.darInstancia().insertarOperacionPrestamo(montol, operacion, idi);
+				if(operacion.equals("PagarCuotaExtraordinaria"))
+				{
+					double montol=Long.parseLong(monto);
+					BancAndes.darInstancia().insertarOperacionPrestamo(montol, operacion, idi);
+				}
+				else
+				{
+					BancAndes.darInstancia().insertarOperacionPrestamo(0, operacion, idi);
+				}
 			}
 			mensaje="Se insertó la operación correctamente";
 			return redirect("/cajero");

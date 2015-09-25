@@ -49,7 +49,7 @@ public class DaoCuentas
 
 	private static final String consultaCuentasId="SELECT * FROM "+tablaCuenta+" WHERE id=";
 	
-	private static final String actualizarMontoCuenta="UPDATE "+tablaCuenta+"SET monto=";
+	private static final String actualizarMontoCuenta="UPDATE "+tablaCuenta+" SET monto=";
 	// ---------------------------------------------------
 	// Métodos asociados a los casos de uso: Consulta
 	// ---------------------------------------------------

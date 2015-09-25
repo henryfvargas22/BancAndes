@@ -58,7 +58,7 @@ public class DaoPrestamos
 
 	private static final String consultaPrestamoId="SELECT * FROM "+tablaPrestamo+" WHERE id=";
 	
-	private static final String actualizarMontoPrestamo="UPDATE "+tablaPrestamo+"SET monto=";
+	private static final String actualizarMontoPrestamo="UPDATE "+tablaPrestamo+" SET monto=";
 
 	// ---------------------------------------------------
     // Métodos asociados a los casos de uso: Consulta

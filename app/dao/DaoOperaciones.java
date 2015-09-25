@@ -118,7 +118,7 @@ public class DaoOperaciones
 		return Operacions;
     }
     
-    public void registrarOperacionPrestamo(int idClient,long monto,String tipo, int idPrestam) throws Exception
+    public void registrarOperacionPrestamo(int idClient,double monto,String tipo, int idPrestam) throws Exception
     {
     	Connection conexion=null;
 		try

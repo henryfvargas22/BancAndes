@@ -231,7 +231,7 @@ public class BancAndes
 		}
 	}
 
-	public void insertarOperacionPrestamo(long monto,String tipo, int idPrestam) throws Exception
+	public void insertarOperacionPrestamo(double monto,String tipo, int idPrestam) throws Exception
 	{
 		Prestamo actual=daoPrestamos.darPrestamoId(idPrestam);
 		if(!actual.isCerrado())
@@ -239,7 +239,7 @@ public class BancAndes
 			int idClient=actual.getIdCliente();
 			if(tipo.equals("PagarCuota"))
 			{
-				long monto2=actual.getMonto();
+				double monto2=actual.getCuotaMensual();
 				daoOperaciones.registrarOperacionPrestamo(idClient, monto2, tipo, idPrestam);
 				daoPrestamos.actualizarMonto(idPrestam, monto2*-1);
 			}
