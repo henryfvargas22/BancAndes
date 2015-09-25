@@ -54,7 +54,7 @@ public class Application extends Controller {
 		redirect("/cajero");
 		String msg=mensaje;
 		mensaje=null;
-		return ok(cajero.render(msg,null));
+		return ok(cajero.render(msg,null,null,null));
 	}
 
 	public Result admin()
@@ -374,7 +374,38 @@ public class Application extends Controller {
 		Logger.info("idCliente "+dynamicForm.get("cliente"));
 		Logger.info("cuenta "+dynamicForm.field("cuenta").value());
 		Logger.info("prestamo "+dynamicForm.field("prestamo").value());
-		return ok("Recibí");
+		String cliente=dynamicForm.get("cliente");
+		String cuenta=dynamicForm.field("cuenta").value();
+		String prestamo=dynamicForm.field("prestamo").value();
+		String tipo=(cuenta==null?prestamo:cuenta);
+		List<Cuenta> cuentas=new ArrayList<Cuenta>();
+		List<Prestamo> prestamos=new ArrayList<Prestamo>();
+		try
+		{
+			int idCliente=Integer.parseInt(cliente);
+			if(tipo.equals("cuenta"))
+			{
+				cuentas=BancAndes.darInstancia().darCuentasCliente(idCliente);
+			}
+			else
+			{
+				prestamos=BancAndes.darInstancia().darPrestamosCliente(idCliente);
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return ok(cajero.render(mensaje, tipo,cuentas,prestamos));
+	}
+	
+	public Result createOperacion()
+	{
+		DynamicForm dynamicForm=Form.form().bindFromRequest();
+		Logger.info("cuenta/prestamo "+dynamicForm.get("select"));
+		Logger.info("operacion "+dynamicForm.get("operacion"));
+		Logger.info("valor "+dynamicForm.get("valor"));
+		return ok("recibi");
 	}
 
 	public Result getUsuarios()

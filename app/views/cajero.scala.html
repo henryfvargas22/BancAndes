@@ -1,4 +1,4 @@
-@(message: String,tipo: String)
+@(message: String,tipo: String,cuentas: List[vos.Cuenta],prestamos: List[vos.Prestamo])
 <html>
     <head>
         <meta charset="utf-8">
@@ -75,99 +75,53 @@
             </label>
           </div>
           <button onclick="operaciones()" type="submit" class="btn btn-default">Mostrar operaciones</button>
-          <script>
-            function operaciones()
-            {
-                var cliente, cont, mensaje, tipo;
-
-                cliente = document.getElementById("cliente").value;
-                if(cliente=="")
-                {
-                  document.getElementById("alert").innerHTML = "<div class=\"alert alert-"+"danger"+"\" role=\"alert\">"+"Ingrese el id del usuario"+"</div>";
-                }
-                if(document.getElementById("cuenta").checked&&cliente!="")
-                {
-                    //Busca al cliente y da sus cuentas
-                    var numeroCuentas=5;
-                    cont = "<div class=\"form-group\"><label>Cuentas</label><select class=\"form-control\" id=\"select\">"
-                    for (var i = 0; i < numeroCuentas; i++) 
-                    {
-                      cont+="<option>"+"tipoCuenta + numeroCuenta "+i+"</option>";
-                    };
-                    cont+="</select></div>";
-                    cont+="<div class=\"form-group\">
-                          <label>Operacion</label>
-                          <select class=\"form-control\" id=\"operacion\">
-                            <option value=\"Consignar\">Consignar</option>
-                            <option value=\"Retirar\">Retirar</option>
-                          </select>
-                        </div> 
-                        <div class=\"form-group\">
-                          <label>Valor</label>
-                          <input type=\"number\" class=\"form-control\" id=\"valor\" placeholder=\"Ingrese el valor\">
-                        </div>\"
-                        <button type=\"button\" class=\"btn btn-default\" onclick=\"realizarOperacion()\">Realizar operacion</button>";
-
-                    document.getElementById("content").innerHTML = cont;
-                }
-                if(document.getElementById("prestamo").checked&&cliente!="")
-                {
-                    //Busca al cliente y da sus prestamos
-                    var numeroPrestamos=5;
-                    cont = "<div class=\"form-group\"><label>Prestamos</label><select class=\"form-control\" id=\"select\">"
-                    for (var i = 0; i < numeroPrestamos; i++) 
-                    {
-                      cont+="<option>"+"tipoPrestamo + monto "+i+"</option>";
-                    };
-                    cont+="</select></div>";
-                    cont+="<div class=\"form-group\">
-                          <label>Operacion</label>
-                          <select class=\"form-control\" id=\"operacion\">
-                            <option value=\"PagarCuota\">Pagar cuota</option>
-                            <option value=\"PagarCuotaExtraordinaria\">Pagar cuota extraordinaria</option>
-                          </select>
-                        </div> 
-                        <div class=\"form-group\">
-                          <label>Valor</label>
-                          <input type=\"number\" class=\"form-control\" id=\"valor\" placeholder=\"Ingrese el valor\">
-                        </div>\"
-                        <button type=\"button\" class=\"btn btn-default\" onclick=\"realizarOperacion()\">Realizar operacion</button>";
-
-                    document.getElementById("content").innerHTML = cont;
-                }
+       </form>
+       <form method="post" action="@routes.Application.createOperacion()">
+          @if(tipo!=null){
+          @if(tipo.equals("cuenta")){
+ 			<div class="form-group">
+ 			<label>Cuentas</label>
+ 			<select class="form-control" name="select">
+ 			@for(c <- cuentas){
+ 			<option value="@c.getId()">@c.getTipo()- @c.getId()</option>
+ 			}
+            </select>
+            </div>
+           <div class="form-group">
+           <label>Operacion</label>
+           <select class="form-control" name="operacion">
+              <option value="Consignar">Consignar</option>
+              <option value="Retirar">Retirar</option>
+           </select>
+           </div> 
+           <div class="form-group">
+           <label>Valor</label>
+             <input type="number" class="form-control" name="valor" placeholder="Ingrese el valor">
+           </div>
+           <button type="submit" class="btn btn-default">Realizar operacion</button>
+			}else{
+			<div class="form-group">
+			<label>Prestamos</label>
+			<select class="form-control" name="select">
+			@for(p <- prestamos){
+			<option value="@p.getId()">@p.getId() - $@p.getMonto()</option>
             }
-        </script>
-        </div>
-      </form>
-      <hr>
-      <form>
-        <p id="content"></p>
-        <script>
-          function realizarOperacion()
-          {
-              var select, operacion, valor, mensaje, tipo;
-              select=document.getElementById("select").value;
-              operacion=document.getElementById("operacion").value;
-              valor=document.getElementById("valor");
-              if(valor=="")
-              {
-                mensaje = "Ingrese un valor para realizar la operacion";
-                tipo = "danger";
-              }
-              else if(valor<0)
-              {
-                mensaje = "El valor debe ser positivo";
-                tipo = "danger";
-              }
-              else
-              {
-                //Realizar operacion
-                mensaje = "Se ha realizado la operacion exitosamente";
-                tipo = "info";
-              }
-              document.getElementById("alert").innerHTML = "<div class=\"alert alert-"+tipo+"\" role=\"alert\">"+mensaje+"</div>";   
-          }
-        </script>
+            </select>
+            </div>
+            <div class="form-group">
+            <label>Operacion</label>
+            <select class="form-control" name="operacion">
+             <option value="PagarCuota">Pagar cuota</option>
+             <option value="PagarCuotaExtraordinaria">Pagar cuota extraordinaria</option>
+            </select>
+            </div> 
+            <div class="form-group">
+            <label>Valor</label>
+            <input type="number" class="form-control" name="valor" placeholder="Ingrese el valor">
+            </div>
+            <button type="submit" class="btn btn-default">Realizar operacion</button>
+			}
+		}
       </form>
       <hr>
       <footer>
