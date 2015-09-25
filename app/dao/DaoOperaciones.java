@@ -118,14 +118,14 @@ public class DaoOperaciones
 		return Operacions;
     }
     
-    public void registrarOperacionPrestamo(Date fecha,int idClient,long monto,String tipo, int idPrestam) throws Exception
+    public void registrarOperacionPrestamo(int idClient,long monto,String tipo, int idPrestam) throws Exception
     {
     	Connection conexion=null;
 		try
 		{
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			Statement st=conexion.createStatement();
-			st.executeUpdate(ingresarOperacion+"("+fecha.toString()+","
+			st.executeUpdate(ingresarOperacion+"(CURRENT_TIMESTAMP,"
 					+-1+","+
 					"'"+tipo+"',"+
 					monto+","+
@@ -144,14 +144,14 @@ public class DaoOperaciones
 		}
     }
     
-    public void registrarOperacionCuenta(Date fecha,int idClient,long monto,String tipo, int idCuent) throws Exception
+    public void registrarOperacionCuenta(int idClient,double monto,String tipo, long idCuent) throws Exception
     {
     	Connection conexion=null;
 		try
 		{
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			Statement st=conexion.createStatement();
-			st.executeUpdate(ingresarOperacion+"("+fecha.toString()+","
+			st.executeUpdate(ingresarOperacion+"(CURRENT_TIMESTAMP,"
 					+idCuent+","+
 					"'"+tipo+"',"+
 					monto+","+

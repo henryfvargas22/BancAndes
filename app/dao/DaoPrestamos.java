@@ -56,6 +56,10 @@ public class DaoPrestamos
 	
 	private static final String consultaPrestamosCliente="SELECT * FROM "+tablaPrestamo+" WHERE id_Cliente=";
 
+	private static final String consultaPrestamoId="SELECT * FROM "+tablaPrestamo+" WHERE id=";
+	
+	private static final String actualizarMontoPrestamo="UPDATE "+tablaPrestamo+"SET monto=";
+
 	// ---------------------------------------------------
     // Métodos asociados a los casos de uso: Consulta
     // ---------------------------------------------------
@@ -249,5 +253,75 @@ public class DaoPrestamos
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}		
 		return Cuentas;
+	}
+    
+    public Prestamo darPrestamoId(int idPrestamo) throws Exception
+	{
+		PreparedStatement prepStmt = null;
+		Prestamo PrestamoValue = new Prestamo();
+		Connection conexion=null;
+		try {
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(consultaPrestamoId+idPrestamo+" ORDER BY id");
+
+			ResultSet rs = prepStmt.executeQuery();
+
+			while(rs.next())
+			{
+				int idCliente = rs.getInt(idPrestamo_Cliente);
+				long monto=rs.getLong(montoPrestamo);
+				double cuotaMensual=rs.getDouble(cuotaMensualPrestamo);
+				boolean estaCerra=rs.getBoolean(estaCerrado);
+				
+				PrestamoValue.setId(idPrestamo);
+				PrestamoValue.setIdCliente(idCliente);
+				PrestamoValue.setCuotaMensual(cuotaMensual);
+				PrestamoValue.setMonto(monto);
+				PrestamoValue.setCerrado(estaCerra);
+				
+				return PrestamoValue;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(consultaPrestamoId+idPrestamo);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}finally 
+		{
+			if (prepStmt != null) 
+			{
+				try {
+					prepStmt.close();
+				} catch (SQLException exception) {
+
+					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
+				}
+			}
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}		
+		return null;
+	}
+    
+    public void actualizarMonto(int idPrestamo,double montoNuevo) throws Exception
+	{
+		Prestamo actual=darPrestamoId(idPrestamo);
+		double monto=actual.getMonto()+montoNuevo;
+		Connection conexion=null;
+		try
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			Statement st=conexion.createStatement();
+			st.executeUpdate(actualizarMontoPrestamo+monto+" WHERE id="+idPrestamo);
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			System.out.println(actualizarMontoPrestamo);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}	
 	}
 }

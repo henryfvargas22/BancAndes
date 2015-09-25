@@ -76,11 +76,12 @@
           </div>
           <button onclick="operaciones()" type="submit" class="btn btn-default">Mostrar operaciones</button>
        </form>
+       <hr>
        <form method="post" action="@routes.Application.createOperacion()">
           @if(tipo!=null){
           @if(tipo.equals("cuenta")){
  			<div class="form-group">
- 			<label>Cuentas</label>
+ 			<label name="actual">Cuentas</label>
  			<select class="form-control" name="select">
  			@for(c <- cuentas){
  			<option value="@c.getId()">@c.getTipo()- @c.getId()</option>
@@ -101,10 +102,10 @@
            <button type="submit" class="btn btn-default">Realizar operacion</button>
 			}else{
 			<div class="form-group">
-			<label>Prestamos</label>
+			<label name="actual">Prestamos</label>
 			<select class="form-control" name="select">
 			@for(p <- prestamos){
-			<option value="@p.getId()">@p.getId() - $@p.getMonto()</option>
+			<option value="@p.getId()">@p.getId() - $@p.getMonto() - Cuota:$@p.getCuotaMensual()</option>
             }
             </select>
             </div>

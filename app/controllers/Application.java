@@ -49,7 +49,7 @@ public class Application extends Controller {
 		mensaje=null;
 		return ok(gerente_de_oficina_bancandes.render(msg));
 	}
-	
+
 	public Result cajero()
 	{
 		redirect("/cajero");
@@ -136,37 +136,37 @@ public class Application extends Controller {
 		ArrayList<Cuenta> cuentas=BancAndes.darInstancia().darCuentasCliente(Integer.parseInt(user));
 		return ok(cerrar_cuenta_form.render(cuentas));
 	}
-        
-        
-        public Result formCrearPrestamo()
-        {
-            ArrayList<Cliente> clientes;
-            try{
-                clientes=BancAndes.darInstancia().darClientesDefault();
-            }
-            catch(Exception e){
-               clientes=new ArrayList<Cliente>();
-            }
-            return ok(registro_prestamo_form.render(clientes));
-        }
-        public Result createPrestamo(){
+
+
+	public Result formCrearPrestamo()
+	{
+		ArrayList<Cliente> clientes;
+		try{
+			clientes=BancAndes.darInstancia().darClientesDefault();
+		}
+		catch(Exception e){
+			clientes=new ArrayList<Cliente>();
+		}
+		return ok(registro_prestamo_form.render(clientes));
+	}
+	public Result createPrestamo(){
 		try{
 			DynamicForm dynamicForm=Form.form().bindFromRequest();
-			
+
 			Logger.info("monto "+dynamicForm.get("monto"));
-                        Logger.info("interes "+dynamicForm.get("interes"));
+			Logger.info("interes "+dynamicForm.get("interes"));
 			Logger.info("cuotas "+dynamicForm.get("cuotas"));
-                        Logger.info("diaPago "+dynamicForm.get("diaPago"));
-                        Logger.info("cuotaMensual "+dynamicForm.get("cuotaMensual"));
-                        Logger.info("cliente "+dynamicForm.get("cliente"));
-			
+			Logger.info("diaPago "+dynamicForm.get("diaPago"));
+			Logger.info("cuotaMensual "+dynamicForm.get("cuotaMensual"));
+			Logger.info("cliente "+dynamicForm.get("cliente"));
+
 			long monto=Long.parseLong(dynamicForm.get("monto"));
-                        double interes=Double.parseDouble(dynamicForm.get("interes"));
+			double interes=Double.parseDouble(dynamicForm.get("interes"));
 			int cuotas=Integer.parseInt(dynamicForm.get("cuotas"));
-                        int diaPago=Integer.parseInt(dynamicForm.get("diaPago"));
-                        int cuotaMensual=Integer.parseInt(dynamicForm.get("cuotaMensual"));
-                        int cliente=Integer.parseInt(dynamicForm.get("cliente"));
-                        
+			int diaPago=Integer.parseInt(dynamicForm.get("diaPago"));
+			int cuotaMensual=Integer.parseInt(dynamicForm.get("cuotaMensual"));
+			int cliente=Integer.parseInt(dynamicForm.get("cliente"));
+
 			BancAndes.darInstancia().agregarPrestamo(monto, interes, cuotas, diaPago, cuotaMensual, cliente);
 			mensaje="Se agregó correctamente la el prestamo";
 			return redirect("/gerente");
@@ -177,8 +177,8 @@ public class Application extends Controller {
 			return redirect("/gerente");
 		}
 	}
-        
-        
+
+
 	public Result formCrearCuenta()
 	{
 		ArrayList<Cliente> clientes;
@@ -328,7 +328,7 @@ public class Application extends Controller {
 			return redirect("/admin");
 		}
 	}
-	
+
 	public Result createPuntoFisico()
 	{
 		try
@@ -396,7 +396,7 @@ public class Application extends Controller {
 			return redirect("/admin");
 		}
 	}
-	
+
 	public Result formCrearPuntoFisico()
 	{
 		List<Oficina> oficinas;
@@ -410,7 +410,7 @@ public class Application extends Controller {
 		}
 		return ok(registro_punto_fisico.render(oficinas));
 	}
-	
+
 	public Result formCrearOperacion()
 	{
 		DynamicForm dynamicForm=Form.form().bindFromRequest();
@@ -441,14 +441,40 @@ public class Application extends Controller {
 		}
 		return ok(cajero.render(mensaje, tipo,cuentas,prestamos));
 	}
-	
+
 	public Result createOperacion()
 	{
 		DynamicForm dynamicForm=Form.form().bindFromRequest();
 		Logger.info("cuenta/prestamo "+dynamicForm.get("select"));
 		Logger.info("operacion "+dynamicForm.get("operacion"));
 		Logger.info("valor "+dynamicForm.get("valor"));
-		return ok("recibi");
+		Logger.info("id "+dynamicForm.field("actual").value());
+		String idCuentaOp=dynamicForm.get("select");
+		String operacion=dynamicForm.get("operacion");
+		String monto=dynamicForm.get("valor");
+		try
+		{
+			long id=Long.parseLong(idCuentaOp);
+			double mont=Double.parseDouble(monto);
+			if(operacion.equals("Consignar")|operacion.equals("Retirar"))
+			{
+				BancAndes.darInstancia().insertarOperacionCuenta(mont, operacion, id);
+			}
+			else
+			{
+				long montol=Long.parseLong(monto);
+				int idi=Integer.parseInt(idCuentaOp);
+				BancAndes.darInstancia().insertarOperacionPrestamo(montol, operacion, idi);
+			}
+			mensaje="Se insertó la operación correctamente";
+			return redirect("/cajero");
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			mensaje="No se pudo completar la operación";
+			return redirect("/cajero");
+		}
 	}
 
 	public Result getUsuarios()

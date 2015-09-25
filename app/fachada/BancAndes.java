@@ -2,7 +2,6 @@ package fachada;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Date;
 import dao.DaoClientes;
 import dao.DaoCuentas;
 import dao.DaoEmpleados;
@@ -209,14 +208,47 @@ public class BancAndes
 		return daoOperaciones.darOperacionesDefault();
 	}
 
-	public void insertarOperacionCuenta(Date fecha,int idClient,long monto,String tipo, int idCuent) throws Exception
+	public void insertarOperacionCuenta(double monto,String tipo, long idCuent) throws Exception
 	{
-		daoOperaciones.registrarOperacionCuenta(fecha, idClient, monto, tipo, idCuent);
+		Cuenta actual=daoCuentas.darCuentaId(idCuent);
+		if(!actual.isEstaCerrada())
+		{
+			int idClient=actual.getId_Cliente();
+			daoOperaciones.registrarOperacionCuenta(idClient, monto, tipo, idCuent);
+			if(tipo.equals("Consignar"))
+			{
+				daoCuentas.actualizarMonto(idCuent, monto);
+			}
+			else
+			{
+				double monto2=monto*-1;
+				daoCuentas.actualizarMonto(idCuent, monto2);
+			}
+		}
+		else
+		{
+			throw new Exception("Esta cerrada la cuenta");
+		}
 	}
 
-	public void insertarOperacionPrestamo(Date fecha,int idClient,long monto,String tipo, int idPrestam) throws Exception
+	public void insertarOperacionPrestamo(long monto,String tipo, int idPrestam) throws Exception
 	{
-		daoOperaciones.registrarOperacionPrestamo(fecha, idClient, monto, tipo, idPrestam);
+		Prestamo actual=daoPrestamos.darPrestamoId(idPrestam);
+		if(!actual.isCerrado())
+		{
+			int idClient=actual.getIdCliente();
+			if(tipo.equals("PagarCuota"))
+			{
+				long monto2=actual.getMonto();
+				daoOperaciones.registrarOperacionPrestamo(idClient, monto2, tipo, idPrestam);
+				daoPrestamos.actualizarMonto(idPrestam, monto2*-1);
+			}
+			else
+			{
+				daoOperaciones.registrarOperacionPrestamo(idClient, monto, tipo, idPrestam);
+				daoPrestamos.actualizarMonto(idPrestam, monto*-1);
+			}
+		}
 	}
 
 	public boolean esAdmin(String usuario,String contrasenia)

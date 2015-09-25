@@ -47,6 +47,9 @@ public class DaoCuentas
 	
 	private static final String consultaCuentasCliente="SELECT * FROM "+tablaCuenta+" WHERE id_Cliente=";
 
+	private static final String consultaCuentasId="SELECT * FROM "+tablaCuenta+" WHERE id=";
+	
+	private static final String actualizarMontoCuenta="UPDATE "+tablaCuenta+"SET monto=";
 	// ---------------------------------------------------
 	// Métodos asociados a los casos de uso: Consulta
 	// ---------------------------------------------------
@@ -78,8 +81,8 @@ public class DaoCuentas
 				long id = rs.getLong(idCuenta);
 				int id_Cliente = rs.getInt(idCuenta_Cliente);
 				String tipo = rs.getString(tipoCuenta);
-				boolean cerrada= rs.getBoolean(estaCerrada);
 				double monto=rs.getDouble(montoCuenta);
+				boolean cerrada= rs.getBoolean(estaCerrada);
 
 				CuentaValue.setId(id);
 				CuentaValue.setId_Cliente(id_Cliente);
@@ -157,6 +160,52 @@ public class DaoCuentas
 		}	
 	}
 
+	public Cuenta darCuentaId(long idCuenta) throws Exception
+	{
+		PreparedStatement prepStmt = null;
+		Cuenta CuentaValue = new Cuenta();
+		Connection conexion=null;
+		try {
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(consultaCuentasId+idCuenta+" ORDER BY id");
+
+			ResultSet rs = prepStmt.executeQuery();
+
+			while(rs.next())
+			{
+				int id = rs.getInt(idCuenta_Cliente);
+				String tipo = rs.getString(tipoCuenta);
+				double monto=rs.getDouble(montoCuenta);
+				boolean cerrada= rs.getBoolean(estaCerrada);
+
+				CuentaValue.setId(idCuenta);
+				CuentaValue.setId_Cliente(id);
+				CuentaValue.setTipo(tipo);
+				CuentaValue.setMonto(monto);
+				CuentaValue.setEstaCerrada(cerrada);
+				return CuentaValue;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(consultaCuentasId+idCuenta);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}finally 
+		{
+			if (prepStmt != null) 
+			{
+				try {
+					prepStmt.close();
+				} catch (SQLException exception) {
+
+					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
+				}
+			}
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}		
+		return null;
+	}
+	
 	public ArrayList<Cuenta> darCuentasCliente(int idCliente) throws Exception
 	{
 		PreparedStatement prepStmt = null;
@@ -166,7 +215,7 @@ public class DaoCuentas
 		Connection conexion=null;
 		try {
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
-			prepStmt = conexion.prepareStatement(consultaCuentasCliente+idCliente+" ORDER BY id");
+			prepStmt = conexion.prepareStatement(consultaCuentasCliente+idCliente);
 
 			ResultSet rs = prepStmt.executeQuery();
 
@@ -204,5 +253,28 @@ public class DaoCuentas
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}		
 		return Cuentas;
+	}
+	
+	public void actualizarMonto(long idCuenta,double montoNuevo) throws Exception
+	{
+		Cuenta actual=darCuentaId(idCuenta);
+		double monto=actual.getMonto()+montoNuevo;
+		Connection conexion=null;
+		try
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			Statement st=conexion.createStatement();
+			st.executeUpdate(actualizarMontoCuenta+monto+" WHERE id="+idCuenta);
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			System.out.println(actualizarMontoCuenta);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}	
 	}
 }
