@@ -135,7 +135,48 @@ public class Application extends Controller {
 		ArrayList<Cuenta> cuentas=BancAndes.darInstancia().darCuentasCliente(Integer.parseInt(user));
 		return ok(cerrar_cuenta_form.render(cuentas));
 	}
-
+        
+        
+        public Result formCrearPrestamo()
+        {
+            ArrayList<Prestamo> prestamos;
+            try{
+                prestamos=BancAndes.darInstancia().darPrestamosDefault();
+            }
+            catch(Exception e){
+               prestamos=new ArrayList<Prestamo>();
+            }
+            return ok(registro_prestamo_form.html.render(prestamos));
+        }
+        public Result createPrestamo(){
+		try{
+			DynamicForm dynamicForm=Form.form().bindFromRequest();
+			Logger.info("id "+dynamicForm.get("id"));
+			Logger.info("monto "+dynamicForm.get("monto"));
+                        Logger.info("interes "+dynamicForm.get("interes"));
+			Logger.info("cuotas "+dynamicForm.get("cuotas"));
+                        Logger.info("diaPago "+dynamicForm.get("diaPago"));
+                        Logger.info("cuotaMensual "+dynamicForm.get("cuotaMensual"));
+                        Logger.info("cliente "+dynamicForm.get("cliente"));
+			String id=dynamicForm.get("id");
+			long monto=dynamicForm.get("cliente");
+                        double interes=dynamicForm.get("interes");
+			int cuotas=dynamicForm.get("cuotas");
+                        int diaPago=dynamicForm.get("diaPago");
+                        int cuotaMensual=dynamicForm.get("cuotaMensual");
+                        int cliente=dynamicForm.get("cliente");
+			BancAndes.darInstancia().agregarPrestamo(monto, interes, cuotas, diaPago, cuotaMensual, cliente);
+			mensaje="Se agregó correctamente la el prestamo: "+id;
+			return redirect("/gerente");
+		}
+		catch(Exception e){
+			mensaje="No se pudo agregar el prestamo";
+			e.printStackTrace();
+			return redirect("/gerente");
+		}
+	}
+        
+        
 	public Result formCrearCuenta()
 	{
 		ArrayList<Cliente> clientes;

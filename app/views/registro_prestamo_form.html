@@ -42,16 +42,40 @@
           </div>
 
           <div class="form-group">
-              <label>ID</label>
+              <label>Monto</label>
               <input type="number" class="form-control" name="monto" placeholder="Ingrese el monto del prestamo">
+          </div>
+
+          <div class="form-group">
+              <label>Tasa de interes</label>
+              <input type="number" class="form-control" name="interes" placeholder="Ingrese la tasa de interes del prestamo">
+          </div>
+
+          <div class="form-group">
+              <label>Cuotas</label>
+              <input type="number" class="form-control" name="cuotas" placeholder="Ingrese el n&uacute;mero de cuotas del prestamo">
+          </div>
+
+          <div class="form-group">
+              <label>D&iiacite;a de pago</label>
+              <input type="number" class="form-control" name="diaPago" placeholder="Ingrese el dia del mes en el que se debe realizar el pago">
+          </div>
+
+          <div class="form-group">
+              <label>Cuota mensual</label>
+              <input type="number" class="form-control" name="cuotaMensual" placeholder="Ingrese el valor de la cuota mensual">
           </div>
           
           <div class="form-group">
             <label>Cliente</label>
-            <select class="form-control" id="cliente">
-                <option value="ahorro">Clientes</option>
+            <select class="form-control" name="cliente">
+              @for(c <- clientes){
+                <option>@c.getIdUsuario()</option>
+                }
             </select>
           </div>
+
+
 
           <button onclick="validar()" type="submit" class="btn btn-default">Crear Cuenta</button>
           <script>
