@@ -23,6 +23,6 @@ EclipseKeys.projectFlavor := EclipseProjectFlavor.Java
 EclipseKeys.createSrc := EclipseCreateSrc.ValueSet(EclipseCreateSrc.ManagedClasses, EclipseCreateSrc.ManagedResources)  
 // Use .class files instead of generated .scala files for views and routes 
 
-
+herokuAppName in Compile := "bancandes"
 
 fork in run := true
