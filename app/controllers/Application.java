@@ -122,7 +122,7 @@ public class Application extends Controller {
 		}
 		catch(Exception e)
 		{
-			mensaje="No se pudo agregar el usuario";
+			mensaje="No se pudo agregar el usuario, revise los datos";
 			e.printStackTrace();
 			return redirect("/gerente");
 		}
@@ -172,7 +172,7 @@ public class Application extends Controller {
 			return redirect("/gerente");
 		}
 		catch(Exception e){
-			mensaje="No se pudo agregar el prestamo";
+			mensaje="No se pudo agregar el prestamo, revise los datos";
 			e.printStackTrace();
 			return redirect("/gerente");
 		}
@@ -210,7 +210,7 @@ public class Application extends Controller {
 		}
 		catch(Exception e)
 		{
-			mensaje="No se pudo agregar la cuenta";
+			mensaje="No se pudo agregar la cuenta, revise los datos";
 			e.printStackTrace();
 			return redirect("/gerente");
 		}
@@ -323,7 +323,7 @@ public class Application extends Controller {
 		}
 		catch(Exception e)
 		{
-			mensaje="No se pudo agregar la oficina";
+			mensaje="No se pudo agregar la oficina, revise los datos";
 			e.printStackTrace();
 			return redirect("/admin");
 		}
@@ -391,7 +391,7 @@ public class Application extends Controller {
 		}
 		catch(Exception e)
 		{
-			mensaje="No se pudo agregar el usuario";
+			mensaje="No se pudo agregar el usuario, revise los datos";
 			e.printStackTrace();
 			return redirect("/admin");
 		}
@@ -479,7 +479,7 @@ public class Application extends Controller {
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			mensaje="No se pudo completar la operación";
+			mensaje="No se pudo completar la operación, revise los datos";
 			return redirect("/cajero");
 		}
 	}
@@ -608,7 +608,7 @@ public class Application extends Controller {
 		}
 		catch(Exception e)
 		{
-			mensaje="No se pudo cerrar la cuenta";
+			mensaje="No se pudo cerrar la cuenta, revise los datos";
 			e.printStackTrace();
 			return redirect("/gerente");
 		}
@@ -627,7 +627,7 @@ public class Application extends Controller {
 		}
 		catch(Exception e)
 		{
-			mensaje="No se pudo cerrar el prestamo";
+			mensaje="No se pudo cerrar el prestamo, revise los datos";
 			e.printStackTrace();
 			return redirect("/gerente");
 		}
