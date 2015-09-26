@@ -658,6 +658,34 @@ public class Application extends Controller {
 		return internalServerError();
 	}
 
+	public Result mostrarCliente(int idCliente)
+	{
+		if(usuarioActual!=null)
+		{
+			List<Operacion> operaciones;
+			List<Cuenta> cuentas;
+			List<Prestamo> prestamos;
+			try
+			{
+				operaciones=BancAndes.darInstancia().darOperacionesCliente(idCliente);
+				cuentas=BancAndes.darInstancia().darCuentasCliente(idCliente);
+				prestamos=BancAndes.darInstancia().darPrestamosCliente(idCliente);
+			}
+			catch(Exception e)
+			{
+				operaciones=new ArrayList<Operacion>();
+				cuentas=new ArrayList<Cuenta>();
+				prestamos=new ArrayList<Prestamo>();
+			}
+			boolean esGerente=BancAndes.darInstancia().esGerente(usuarioActual.getUsuario(), usuarioActual.getContrasenia());
+			return ok(resultado_cliente.render(esGerente, cuentas, prestamos, operaciones));
+		}
+		else
+		{
+			return internalServerError();
+		}
+	}
+
 	public Result filtrarClientes() throws Exception
 	{
 		DynamicForm dynamicForm=Form.form().bindFromRequest();

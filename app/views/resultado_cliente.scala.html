@@ -1,4 +1,4 @@
-@(cuentas: List[vos.Cuenta],prestamos: List[vos.Prestamo], operaciones: List[vos.Operacion])
+@(esGerente: Boolean,cuentas: List[vos.Cuenta],prestamos: List[vos.Prestamo], operaciones: List[vos.Operacion])
 <html>
     <head>
         <meta charset="utf-8">
@@ -24,7 +24,11 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">         
-          <a class="navbar-brand">BancAndes</a>
+          @if(esGerente){         
+          <a class="navbar-brand" href="@routes.Application.gerente()">BancAndes</a>
+          }else{
+          <a class="navbar-brand" href="@routes.Application.admin()">BancAndes</a>
+          }
         </div>
       </div>
     </nav>
@@ -48,9 +52,11 @@
               <tr>
               @if(c.getTipo().equals("savings")){
                 <td>Ahorros</td>
-                }else{
+                }else{ @if(c.getTipo().equals("current")){
                 <td>Corriente</td>
-                }
+                }else{
+                <td>@c.getTipo()</td>
+                }}
                 <td>@c.getId()</td> 
                 <td>$@c.getMonto()</td>
               </tr>
@@ -96,9 +102,13 @@
           <tbody>
               @for(o <-operaciones){
               <tr>
-                <td>$@o.getId()</td> 
-                <td>@p.getMonto()</td>
-                <th>@p.getFecha()</th>
+                <td>$@o.getMonto()</td>
+                @if(o.getIdCuenta()<0){ 
+                <td>@o.getIdPrestamo()</td>
+                }else{
+                <td>@o.getIdCuenta()</td>
+                }
+                <th>@o.getFecha()</th>
               </tr>
                 }
           </tbody>                               
