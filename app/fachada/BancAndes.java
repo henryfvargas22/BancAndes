@@ -350,6 +350,18 @@ public class BancAndes
 			return new ArrayList<Prestamo>();
 		}
 	}
+	
+	public ArrayList<Operacion> darOperacionesCliente(int idCliente)
+	{
+		try
+		{
+			return daoOperaciones.darOperacionesCliente(idCliente);
+		}
+		catch(Exception e)
+		{
+			return new ArrayList<Operacion>();
+		}
+	}
 
 	public ArrayList<Empleado> darGerentes() throws Exception
 	{

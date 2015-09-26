@@ -43,35 +43,37 @@ public class DaoOperaciones
 	 * Consulta que devuelve isan, titulo, y año de los videos en orden alfabetico
 	 */
 	private static final String consultaOperacionesDefault="SELECT * FROM "+tablaOperacion;
-	
+
 	private static final String ingresarOperacion="INSERT INTO "+tablaOperacion+" VALUES";
 	
+	private static final String consultaOperacionesCliente="SELECT * FROM "+tablaOperacion+" WHERE id_cliente=";
+
 	// ---------------------------------------------------
-    // Métodos asociados a los casos de uso: Consulta
-    // ---------------------------------------------------
-    
-    /**
-     * Método que se encarga de realizar la consulta en la base de datos
-     * y retorna un ArrayList de elementos tipo VideosValue.
-     * @return ArrayList lista que contiene elementos tipo VideosValue.
-     * La lista contiene los videos ordenados alfabeticamente
-     * @throws Exception se lanza una excepción si ocurre un error en
-     * la conexión o en la consulta. 
-     */
-    public ArrayList<Operacion> darOperacionesDefault() throws Exception
-    {
-    	PreparedStatement prepStmt = null;
-    	
-    	ArrayList<Operacion> Operacions = new ArrayList<Operacion>();
+	// Métodos asociados a los casos de uso: Consulta
+	// ---------------------------------------------------
+
+	/**
+	 * Método que se encarga de realizar la consulta en la base de datos
+	 * y retorna un ArrayList de elementos tipo VideosValue.
+	 * @return ArrayList lista que contiene elementos tipo VideosValue.
+	 * La lista contiene los videos ordenados alfabeticamente
+	 * @throws Exception se lanza una excepción si ocurre un error en
+	 * la conexión o en la consulta. 
+	 */
+	public ArrayList<Operacion> darOperacionesDefault() throws Exception
+	{
+		PreparedStatement prepStmt = null;
+
+		ArrayList<Operacion> Operacions = new ArrayList<Operacion>();
 		Operacion OperacionValue = new Operacion();
-    	Connection conexion=null;
-		
+		Connection conexion=null;
+
 		try {
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			prepStmt = conexion.prepareStatement(consultaOperacionesDefault);
-			
+
 			ResultSet rs = prepStmt.executeQuery();
-			
+
 			while(rs.next())
 			{
 				int idPrest = rs.getInt(idPrestamo);
@@ -80,7 +82,7 @@ public class DaoOperaciones
 				int idCuent=rs.getInt(idCuenta);
 				String tipo = rs.getString(tipoOperacion);
 				Date fecha=rs.getDate(fechaOperacion);
-				
+
 				OperacionValue.setFecha(fecha);
 				OperacionValue.setIdCliente(idClien);
 				OperacionValue.setMonto(monto);
@@ -95,9 +97,9 @@ public class DaoOperaciones
 				}
 				Operacions.add(OperacionValue);
 				OperacionValue = new Operacion();
-							
+
 			}
-		
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaOperacionesDefault);
@@ -109,18 +111,18 @@ public class DaoOperaciones
 				try {
 					prepStmt.close();
 				} catch (SQLException exception) {
-					
+
 					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
 				}
 			}
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}		
 		return Operacions;
-    }
-    
-    public void registrarOperacionPrestamo(int idClient,double monto,String tipo, int idPrestam) throws Exception
-    {
-    	Connection conexion=null;
+	}
+
+	public void registrarOperacionPrestamo(int idClient,double monto,String tipo, int idPrestam) throws Exception
+	{
+		Connection conexion=null;
 		try
 		{
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
@@ -142,11 +144,11 @@ public class DaoOperaciones
 		{
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}
-    }
-    
-    public void registrarOperacionCuenta(int idClient,double monto,String tipo, long idCuent) throws Exception
-    {
-    	Connection conexion=null;
+	}
+
+	public void registrarOperacionCuenta(int idClient,double monto,String tipo, long idCuent) throws Exception
+	{
+		Connection conexion=null;
 		try
 		{
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
@@ -168,5 +170,67 @@ public class DaoOperaciones
 		{
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}
-    }
+	}
+
+	public ArrayList<Operacion> darOperacionesCliente(int idCliente) throws Exception
+	{
+		PreparedStatement prepStmt = null;
+
+		ArrayList<Operacion> Operacions = new ArrayList<Operacion>();
+		Operacion OperacionValue = new Operacion();
+		Connection conexion=null;
+
+		try {
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(consultaOperacionesCliente+idCliente);
+
+			ResultSet rs = prepStmt.executeQuery();
+
+			while(rs.next())
+			{
+				int idPrest = rs.getInt(idPrestamo);
+				//int idClien = rs.getInt(idCliente);
+				long monto=rs.getLong(montoOperacion);
+				int idCuent=rs.getInt(idCuenta);
+				String tipo = rs.getString(tipoOperacion);
+				Date fecha=rs.getDate(fechaOperacion);
+
+				OperacionValue.setFecha(fecha);
+				OperacionValue.setIdCliente(idCliente);
+				OperacionValue.setMonto(monto);
+				OperacionValue.setTipo(tipo);
+				if(idPrest>0)
+				{
+					OperacionValue.setIdPrestamo(idPrest);
+					OperacionValue.setIdCuenta(-1);
+				}
+				else
+				{
+					OperacionValue.setIdCuenta(idCuent);
+					OperacionValue.setIdPrestamo(-1);
+				}
+				Operacions.add(OperacionValue);
+				OperacionValue = new Operacion();
+
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(consultaOperacionesDefault+idCliente);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}finally 
+		{
+			if (prepStmt != null) 
+			{
+				try {
+					prepStmt.close();
+				} catch (SQLException exception) {
+
+					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
+				}
+			}
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}		
+		return Operacions;
+	}
 }

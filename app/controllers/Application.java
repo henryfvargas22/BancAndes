@@ -261,20 +261,23 @@ public class Application extends Controller {
 	{
 		List<Cuenta> cuentas;
 		List<Prestamo> prestamos;
+		List<Operacion> operaciones;
 		try
 		{
 			cuentas=BancAndes.darInstancia().darCuentasCliente(usuarioActual.getCedula());
 			prestamos=BancAndes.darInstancia().darPrestamosCliente(usuarioActual.getCedula());
+			operaciones=BancAndes.darInstancia().darOperacionesCliente(usuarioActual.getCedula());
 		}
 		catch(Exception e)
 		{
 			cuentas=new ArrayList<Cuenta>();
 			prestamos=new ArrayList<Prestamo>();
+			operaciones=new ArrayList<Operacion>();
 		}
 		redirect("/cliente");
 		String msg=mensaje;
 		mensaje=null;
-		return(ok(cliente.render(msg, cuentas, prestamos)));
+		return(ok(cliente.render(msg, cuentas, prestamos, operaciones)));
 	}
 
 	public Result formCrearEmpleado()
@@ -631,5 +634,10 @@ public class Application extends Controller {
 			e.printStackTrace();
 			return redirect("/gerente");
 		}
+	}
+	
+	public Result formBusquedaClientes()
+	{
+		return ok(busqueda_clientes.render(false));
 	}
 }

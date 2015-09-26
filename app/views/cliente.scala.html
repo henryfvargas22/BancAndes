@@ -1,4 +1,4 @@
-@(message: String,cuentas: List[vos.Cuenta],prestamos: List[vos.Prestamo])
+@(message: String,cuentas: List[vos.Cuenta],prestamos: List[vos.Prestamo],operaciones: List[vos.Operacion])
 <html>
     <head>
         <meta charset="utf-8">
@@ -97,6 +97,32 @@
                 <th>@p.getCuotas()</th>
                 <th>@p.getDiaPago()</th>
                 <th>@p.getCuotaMensual()</th>
+              </tr>
+                }
+          </tbody>                               
+        </table>
+      <hr>
+      <h3>Operaciones</h3>
+      <table class="table table-hover" id="tablaOperaciones">
+        <thead>
+            <tr>
+              <th>Servicio</th>
+              <th>Monto</th>
+              <th>Tipo</th>
+              <th>Fecha</th>            
+              </tr>
+          </thead>
+          <tbody>
+              @for(o <-operaciones){
+              <tr>
+              @if(o.getIdPrestamo()==(-1)){
+                <td>@o.getIdCuenta()</td> 
+                }else{
+                <td>@o.getIdPrestamo()</td>
+                }
+                <td>@o.getTipo()</td>
+                <td>$@o.getMonto()</td>
+                <td>@o.getFecha()</td>
               </tr>
                 }
           </tbody>                               
