@@ -137,7 +137,7 @@ public class BancAndes
 		}
 		catch(SQLException e)
 		{
-			//Ya estaba agregado
+			throw e;
 		}
 		catch(Exception a)
 		{
@@ -393,5 +393,18 @@ public class BancAndes
 			e.printStackTrace();
 		}
 		return resp;
+	}
+	
+	public void eliminarUsuario(boolean esCliente, int cedula) throws Exception
+	{
+		if(esCliente)
+		{
+			daoClientes.eliminarCliente(cedula);
+		}
+		else
+		{
+			//
+		}
+		daoUsuarios.eliminarUsuario(cedula);
 	}
 }

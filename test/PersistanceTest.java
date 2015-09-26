@@ -7,11 +7,14 @@ import dao.DaoPrestamos;
 import dao.DaoPuntosDeAtencion;
 import dao.DaoTrabaja;
 import dao.DaoUsuarios;
+import fachada.BancAndes;
 import junit.framework.TestCase;
+
+import static org.junit.Assert.*;
 
 import org.junit.*;
 
-public class PersistanceTest extends TestCase
+public class PersistanceTest
 {
 	private DaoTrabaja daoTrabaja;
 	private DaoOperaciones daoOperaciones;
@@ -23,20 +26,22 @@ public class PersistanceTest extends TestCase
 	private DaoUsuarios daoUsuarios;
 	private DaoPrestamos daoPrestamos;
 	
+	private BancAndes fachada;
+	
 	@Test
 	public void unicidadTuplas()
 	{
 		try
 		{
-			daoUsuarios.registrarUsuario("nombre", 9000, "usuario", "contrasenia", 30, "male", "ciudad", "direccion", "natural");
-			daoUsuarios.registrarUsuario("nombre", 9000, "usuario", "contrasenia", 30, "male", "ciudad", "direccion", "natural");
-			fail("Se pudo registrar el usuario");
+			fachada.darInstancia().insertarUsuario("nombre", 9000, "usuario", "contrasenia", 30, "male", "ciudad", "direccion", "natural", null, false, 0);
+			fachada.darInstancia().insertarUsuario("nombre", 9000, "usuario", "contrasenia", 30, "male", "ciudad", "direccion", "natural", null, false, 0);
+			fail("Tupla duplicada");
 		}
 		catch(Exception e)
 		{
 			try 
 			{
-				daoUsuarios.eliminarUsuario(9000);
+				fachada.darInstancia().eliminarUsuario(true, 9000);
 			} 
 			catch (Exception e1) 
 			{
