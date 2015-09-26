@@ -641,4 +641,18 @@ public class Application extends Controller {
 		boolean esGerente=BancAndes.darInstancia().esGerente(usuarioActual.getUsuario(), usuarioActual.getContrasenia());
 		return ok(busqueda_clientes.render(esGerente));
 	}
+	
+	public Result filtrarClientes()
+	{
+		DynamicForm dynamicForm=Form.form().bindFromRequest();
+		Logger.info("natural "+dynamicForm.field("natural").value());
+		Logger.info("juridica "+dynamicForm.field("juridica").value());
+		Logger.info("cuenta "+dynamicForm.get("cuenta"));
+		Logger.info("saldo "+dynamicForm.get("saldo"));
+		Logger.info("fechaInicio "+dynamicForm.get("fechaInicio"));
+		Logger.info("fecha fin "+dynamicForm.get("fechaFinal"));
+		Logger.info("valor "+dynamicForm.get("valor"));
+
+		return ok("Recibimos");
+	}
 }
