@@ -82,6 +82,8 @@ public class DaoClientes
 	
 	private static final String consultaClienteUsuario="SELECT * FROM "+tablaCliente+" JOIN usuario ON cliente.id_usuario=usuario.cedula ";
 	
+	private static final String eliminarCliente="DELETE FROM "+tablaCliente+" WHERE "+idCliente_Usuario+"=";
+	
 	// ---------------------------------------------------
     // Métodos asociados a los casos de uso: Consulta
     // ---------------------------------------------------
@@ -246,4 +248,25 @@ public class DaoClientes
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}	
 	}
+    
+    public void eliminarCliente(int cedula) throws Exception
+    {
+    	Connection conexion=null;
+		try
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			Statement st=conexion.createStatement();
+			st.executeUpdate(eliminarCliente+cedula);
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			System.out.println(eliminarCliente);
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}
+    }
 }

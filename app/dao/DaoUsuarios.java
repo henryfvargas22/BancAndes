@@ -72,7 +72,7 @@ public class DaoUsuarios
 
 	private static final String insertarUsuario="INSERT INTO "+tablaUsuario+" VALUES";
 
-
+	private static final String eliminarUsuario="DELETE FROM "+tablaUsuario+" WHERE cedula=";
 	// ---------------------------------------------------
 	// Métodos asociados a los casos de uso: Consulta
 	// ---------------------------------------------------
@@ -165,6 +165,27 @@ public class DaoUsuarios
 		{
 			//e.printStackTrace();
 			System.out.println(insertarUsuario);
+			throw e;
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}	
+	}
+	
+	public void eliminarUsuario(int cedula) throws Exception
+	{
+		Connection conexion=null;
+		try
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			Statement st=conexion.createStatement();
+			st.executeUpdate(eliminarUsuario+cedula);
+		}
+		catch(SQLException e)
+		{
+			//e.printStackTrace();
+			System.out.println(eliminarUsuario);
 			throw e;
 		}
 		finally 
