@@ -3,6 +3,7 @@ package controllers;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import fachada.BancAndes;
 
@@ -642,7 +643,7 @@ public class Application extends Controller {
 		return ok(busqueda_clientes.render(esGerente));
 	}
 	
-	public Result filtrarClientes()
+	public Result filtrarClientes() throws Exception
 	{
 		DynamicForm dynamicForm=Form.form().bindFromRequest();
 		Logger.info("natural "+dynamicForm.field("natural").value());
@@ -652,7 +653,66 @@ public class Application extends Controller {
 		Logger.info("fechaInicio "+dynamicForm.get("fechaInicio"));
 		Logger.info("fecha fin "+dynamicForm.get("fechaFinal"));
 		Logger.info("valor "+dynamicForm.get("valor"));
-
-		return ok("Recibimos");
+		
+		String natural=dynamicForm.field("natural").value();
+		String juridica=dynamicForm.field("juridica").value();
+		String cuenta=dynamicForm.get("cuenta");
+		String saldo=dynamicForm.get("saldo");
+		
+		List<Cliente> clientes=BancAndes.darInstancia().darClientesDefault();
+		if(natural!=null && juridica==null)
+		{			
+			clientes=clientes.stream().filter(c ->c.getTipo().equals("natural")).collect(Collectors.toList());
+		}
+		else if(juridica!=null && natural==null)
+		{
+			clientes=clientes.stream().filter(c ->c.getTipo().equals("legal")).collect(Collectors.toList());
+		}
+		else if(juridica!=null && natural!=null)
+		{
+			clientes=new ArrayList<Cliente>();
+		}
+		if(!cuenta.equals("") && saldo.equals(""))
+		{
+			long cuent=Long.parseLong(cuenta);
+			Cuenta cuentTemp=BancAndes.darInstancia().darCuentaPorId(cuent);
+			int ced=cuentTemp.getId_Cliente();
+			clientes=clientes.stream().filter(c ->(c.getCedula()==ced)).collect(Collectors.toList());
+		}
+		else if(cuenta.equals("") && !saldo.equals(""))
+		{
+			double sald=Double.parseDouble(saldo);
+			List<Cuenta> cuentas=BancAndes.darInstancia().darCuentasDefault();
+			List<Integer> ids=new ArrayList<Integer>();
+			for(int i=0;i<cuentas.size();i++)
+			{
+				Cuenta temp=cuentas.get(i);
+				if(temp.getMonto()==sald)
+				{
+					ids.add(temp.getId_Cliente());
+				}
+			}
+			for(int j=0;j<ids.size();j++)
+			{
+				int ced=ids.get(j);
+				clientes=clientes.stream().filter(c ->(c.getCedula()==ced)).collect(Collectors.toList());
+			}
+		}
+		else if(!cuenta.equals("") && !saldo.equals(""))
+		{
+			long cuent=Long.parseLong(cuenta);
+			double sald=Double.parseDouble(saldo);
+			Cuenta cuentTemp=BancAndes.darInstancia().darCuentaPorId(cuent);
+			int ced=cuentTemp.getId_Cliente();
+			if(cuentTemp.getMonto()==sald)
+			{
+				clientes=clientes.stream().filter(c ->(c.getCedula()==ced)).collect(Collectors.toList());
+			}
+			else
+			{
+				clientes=new ArrayList<Cliente>();
+			}
+		}
+		return ok(toJson(clientes));
 	}
 }

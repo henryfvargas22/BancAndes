@@ -419,4 +419,9 @@ public class BancAndes
 		}
 		daoUsuarios.eliminarUsuario(cedula);
 	}
+	
+	public Cuenta darCuentaPorId(long id) throws Exception
+	{
+		return daoCuentas.darCuentaId(id);
+	}
 }
