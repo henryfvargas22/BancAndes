@@ -638,6 +638,7 @@ public class Application extends Controller {
 	
 	public Result formBusquedaClientes()
 	{
-		return ok(busqueda_clientes.render(false));
+		boolean esGerente=BancAndes.darInstancia().esGerente(usuarioActual.getUsuario(), usuarioActual.getContrasenia());
+		return ok(busqueda_clientes.render(esGerente));
 	}
 }
