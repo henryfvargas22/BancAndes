@@ -1,4 +1,4 @@
-@(esGerente: Boolean)
+@(esGerente: Boolean,clientes: List[vos.Cliente])
 <html>
     <head>
         <meta charset="utf-8">
@@ -78,19 +78,19 @@
                     <table class="sortable">
                                 <thead>
                                     <tr>
-                                        <th>Tipo</th>
+                                        <th>Tipo   </th>
                                         <th>Nombre</th>
                                         <th>Accion</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-
+									@for(c <-clientes){
                                     <tr>
-                                        <td>  </td>
-                                        <td>  </td>
+                                        <td>@c.getTipo()   </td>
+                                        <td>@c.getNombre()</td>
                                         <td><a class="btn btn-info" href="resultado_cliente.html" role="button">Ver informaci&oacute;n</a></td>
                                     </tr>
-
+									}
                             </tbody>
                     </table>
                     <br>

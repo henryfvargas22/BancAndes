@@ -1,7 +1,6 @@
 package controllers;
 
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -642,8 +641,21 @@ public class Application extends Controller {
 
 	public Result formBusquedaClientes()
 	{
-		boolean esGerente=BancAndes.darInstancia().esGerente(usuarioActual.getUsuario(), usuarioActual.getContrasenia());
-		return ok(busqueda_clientes.render(esGerente));
+		if(usuarioActual!=null)
+		{
+			List<Cliente> clientes;
+			try 
+			{
+				clientes=BancAndes.darInstancia().darClientesDefault();
+			} 
+			catch (Exception e) 
+			{
+				clientes=new ArrayList<Cliente>();
+			}
+			boolean esGerente=BancAndes.darInstancia().esGerente(usuarioActual.getUsuario(), usuarioActual.getContrasenia());
+			return ok(busqueda_clientes.render(esGerente,clientes));
+		}
+		return internalServerError();
 	}
 
 	public Result filtrarClientes() throws Exception
@@ -722,9 +734,9 @@ public class Application extends Controller {
 		if(!fechaI.equals("") && fechaF.equals("") && valor.equals(""))
 		{
 			List<Operacion> ops=BancAndes.darInstancia().darOperacionesDefault();
-			SimpleDateFormat format=new SimpleDateFormat("YYYY-MM-DD");
-			long fechaIni=format.parse(fechaI).getTime();
-			ops=ops.stream().filter(o ->(o.getFecha().getTime()>=fechaIni)).collect(Collectors.toList());
+			SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+			Date fechaIni=format.parse(fechaI);
+			ops=ops.stream().filter(o ->(fechaIni.compareTo(o.getFecha())<0)).collect(Collectors.toList());
 			if(ops.size()>0)
 			{
 				for(int i=0;i<ops.size();i++)
@@ -740,18 +752,17 @@ public class Application extends Controller {
 		}
 		else if(fechaI.equals("") && !fechaF.equals("") && valor.equals(""))
 		{
-			System.out.println(fechaF);
 			List<Operacion> ops=BancAndes.darInstancia().darOperacionesDefault();
-			SimpleDateFormat format=new SimpleDateFormat("YYYY-MM-DD");
-			Long fechafin=format.parse(fechaF).getTime();
+			SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+			Date fechafin=format.parse(fechaF);
 			System.out.println(fechafin);
-			ops=ops.stream().filter(o ->(fechafin.compareTo(o.getFecha().getTime()))>0).collect(Collectors.toList());
+			System.out.println(ops.get(0).getFecha());
+			ops=ops.stream().filter(o ->(fechafin.compareTo(o.getFecha())>0)).collect(Collectors.toList());
 			if(ops.size()>0)
 			{
 				for(int i=0;i<ops.size();i++)
 				{
 					int ced=ops.get(i).getIdCliente();
-					System.out.println("wha");
 					clientes=clientes.stream().filter(c ->(c.getCedula()==ced)).collect(Collectors.toList());
 				}
 			}
@@ -760,6 +771,116 @@ public class Application extends Controller {
 				clientes=new ArrayList<Cliente>();
 			}
 		}
-		return ok(toJson(clientes));
+		else if(fechaI.equals("") && fechaF.equals("") && !valor.equals(""))
+		{
+			double val=Double.parseDouble(valor);
+			List<Operacion> ops=BancAndes.darInstancia().darOperacionesDefault();
+			ops=ops.stream().filter(o ->o.getMonto()==val).collect(Collectors.toList());
+			if(ops.size()>0)
+			{
+				for(int i=0;i<ops.size();i++)
+				{
+					int ced=ops.get(i).getIdCliente();
+					clientes=clientes.stream().filter(c ->(c.getCedula()==ced)).collect(Collectors.toList());
+				}
+			}
+			else
+			{
+				clientes=new ArrayList<Cliente>();
+			}
+		}
+		else if(!fechaI.equals("") && !fechaF.equals("") && valor.equals(""))
+		{
+			List<Operacion> ops=BancAndes.darInstancia().darOperacionesDefault();
+			SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+			Date fechafin=format.parse(fechaF);
+			Date fechaIni=format.parse(fechaI);
+			ops=ops.stream().filter(o ->(fechafin.compareTo(o.getFecha())>0)).collect(Collectors.toList());
+			ops=ops.stream().filter(o ->(fechaIni.compareTo(o.getFecha())<0)).collect(Collectors.toList());
+			if(ops.size()>0)
+			{
+				for(int i=0;i<ops.size();i++)
+				{
+					int ced=ops.get(i).getIdCliente();
+					clientes=clientes.stream().filter(c ->(c.getCedula()==ced)).collect(Collectors.toList());
+				}
+			}
+			else
+			{
+				clientes=new ArrayList<Cliente>();
+			}
+		}
+		else if(!fechaI.equals("") && fechaF.equals("") && !valor.equals(""))
+		{
+			List<Operacion> ops=BancAndes.darInstancia().darOperacionesDefault();
+			double val=Double.parseDouble(valor);
+			SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+			Date fechaIni=format.parse(fechaI);
+			ops=ops.stream().filter(o ->(fechaIni.compareTo(o.getFecha())<0)).collect(Collectors.toList());
+			ops=ops.stream().filter(o ->o.getMonto()==val).collect(Collectors.toList());
+			if(ops.size()>0)
+			{
+				for(int i=0;i<ops.size();i++)
+				{
+					int ced=ops.get(i).getIdCliente();
+					clientes=clientes.stream().filter(c ->(c.getCedula()==ced)).collect(Collectors.toList());
+				}
+			}
+			else
+			{
+				clientes=new ArrayList<Cliente>();
+			}
+		}
+		else if(fechaI.equals("") && !fechaF.equals("") && !valor.equals(""))
+		{
+			List<Operacion> ops=BancAndes.darInstancia().darOperacionesDefault();
+			double val=Double.parseDouble(valor);
+			SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+			Date fechafin=format.parse(fechaF);
+			ops=ops.stream().filter(o ->(fechafin.compareTo(o.getFecha())>0)).collect(Collectors.toList());
+			ops=ops.stream().filter(o ->o.getMonto()==val).collect(Collectors.toList());
+			if(ops.size()>0)
+			{
+				for(int i=0;i<ops.size();i++)
+				{
+					int ced=ops.get(i).getIdCliente();
+					clientes=clientes.stream().filter(c ->(c.getCedula()==ced)).collect(Collectors.toList());
+				}
+			}
+			else
+			{
+				clientes=new ArrayList<Cliente>();
+			}
+		}
+		else if(!fechaI.equals("") && !fechaF.equals("") && !valor.equals(""))
+		{
+			List<Operacion> ops=BancAndes.darInstancia().darOperacionesDefault();
+			double val=Double.parseDouble(valor);
+			SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+			Date fechafin=format.parse(fechaF);
+			Date fechaIni=format.parse(fechaI);
+			ops=ops.stream().filter(o ->(fechafin.compareTo(o.getFecha())>0)).collect(Collectors.toList());
+			ops=ops.stream().filter(o ->(fechaIni.compareTo(o.getFecha())<0)).collect(Collectors.toList());
+			ops=ops.stream().filter(o ->o.getMonto()==val).collect(Collectors.toList());
+			if(ops.size()>0)
+			{
+				for(int i=0;i<ops.size();i++)
+				{
+					int ced=ops.get(i).getIdCliente();
+					clientes=clientes.stream().filter(c ->(c.getCedula()==ced)).collect(Collectors.toList());
+				}
+			}
+			else
+			{
+				clientes=new ArrayList<Cliente>();
+			}
+		}
+		if(usuarioActual!=null)
+		{
+			boolean esGerente=BancAndes.darInstancia().esGerente(usuarioActual.getUsuario(), usuarioActual.getContrasenia());
+			System.out.println("wee");
+			return ok(busqueda_clientes.render(esGerente,clientes));
+		}
+		return internalServerError();
 	}
 }

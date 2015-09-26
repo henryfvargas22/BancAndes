@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -81,9 +82,13 @@ public class DaoOperaciones
 				long monto=rs.getLong(montoOperacion);
 				int idCuent=rs.getInt(idCuenta);
 				String tipo = rs.getString(tipoOperacion);
-				Date fecha=rs.getDate(fechaOperacion);
+				String fecha=rs.getString(fechaOperacion);
+				System.out.println(fecha);
+				SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Date fech=format.parse(fecha);
+				System.out.println(fech);
 
-				OperacionValue.setFecha(fecha);
+				OperacionValue.setFecha(fech);
 				OperacionValue.setIdCliente(idClien);
 				OperacionValue.setMonto(monto);
 				OperacionValue.setTipo(tipo);
