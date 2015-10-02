@@ -30,6 +30,7 @@ public class Application extends Controller {
 
 	private String mensaje;
 	private Usuario usuarioActual;
+	
 	public Result index() 
 	{
 		if(mensaje==null)
