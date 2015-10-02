@@ -5,9 +5,9 @@ import java.util.Date;
 public class Operacion 
 {
 	private Date fecha;
-	private int idPrestamo;
+	private long idPrestamo;
 	private int idCliente;
-	private int idCuenta;
+	private long idCuenta;
 	private String tipo;
 	private double monto;
 	
@@ -17,10 +17,10 @@ public class Operacion
 	public void setFecha(Date fecha) {
 		this.fecha = fecha;
 	}
-	public int getIdPrestamo() {
+	public long getIdPrestamo() {
 		return idPrestamo;
 	}
-	public void setIdPrestamo(int idPrestamo) {
+	public void setIdPrestamo(long idPrestamo) {
 		this.idPrestamo = idPrestamo;
 	}
 	public String getTipo() {
@@ -35,10 +35,10 @@ public class Operacion
 	public void setMonto(double monto) {
 		this.monto = monto;
 	}
-	public int getIdCuenta() {
+	public long getIdCuenta() {
 		return idCuenta;
 	}
-	public void setIdCuenta(int idCuenta) {
+	public void setIdCuenta(long idCuenta) {
 		this.idCuenta = idCuenta;
 	}
 	public int getIdCliente() {

@@ -33,7 +33,7 @@
     <div class="container">
             <div class="row">
                 <div class="col-md-3">
-                        <form method="post" action="@routes.Application.filtrarClientes()">
+                        <form method="post" action="@routes.Application.filtrarCuentas()">
 
                             <div class="form-group">
                                 <label>Tipo</label>
@@ -55,11 +55,6 @@
                                 <label>Rango de saldos</label>
                                 <input type="number" class="form-control" name="valorInicial" placeholder="Ingrese el valor inicial">
                                 <input type="number" class="form-control" name="valorFinal" placeholder="Ingrese el valor final">
-                            </div>
-
-                            <div class="form-group">
-                                <label>Fecha de creaci&oacute;n</label>
-                                <input type="date" class="form-control" name="fechaCreacion">
                             </div>
 
                             <div class="form-group">
@@ -88,11 +83,18 @@
                                 <tbody>
 									@for(c <-cuentas){
                                     <tr>
-                                        <td>@c.getTipo()</td>
+                                    	@if(c.getTipo().equals("savings")){
+                                        <td>Ahorros</td>
+                                        }else{
+                                        @if(c.getTipo().equals("current")){
+                                        <td>Corriente</td>
+                                        }else{
+                                     	<td>@c.getTipo()</td>
+                                     	}}
                                         <td>@c.getId()</td>
                                         <td>$ @c.getMonto()</td>
                                         <td>@c.getId_Cliente()</td>
-                                        @if(@c.isEstaCerrada()){
+                                        @if(c.isEstaCerrada()){
                                         <td>Cerrada</td>
                                         }else{
                                         <td>Normal</td>

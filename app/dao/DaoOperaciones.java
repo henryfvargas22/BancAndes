@@ -77,16 +77,16 @@ public class DaoOperaciones
 
 			while(rs.next())
 			{
-				int idPrest = rs.getInt(idPrestamo);
+				long idPrest = rs.getLong(idPrestamo);
 				int idClien = rs.getInt(idCliente);
 				long monto=rs.getLong(montoOperacion);
-				int idCuent=rs.getInt(idCuenta);
+				long idCuent=rs.getLong(idCuenta);
 				String tipo = rs.getString(tipoOperacion);
 				String fecha=rs.getString(fechaOperacion);
-				System.out.println(fecha);
+				//System.out.println(fecha);
 				SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Date fech=format.parse(fecha);
-				System.out.println(fech);
+//				System.out.println(fech);
 
 				OperacionValue.setFecha(fech);
 				OperacionValue.setIdCliente(idClien);
@@ -193,10 +193,10 @@ public class DaoOperaciones
 
 			while(rs.next())
 			{
-				int idPrest = rs.getInt(idPrestamo);
+				long idPrest = rs.getLong(idPrestamo);
 				//int idClien = rs.getInt(idCliente);
 				long monto=rs.getLong(montoOperacion);
-				int idCuent=rs.getInt(idCuenta);
+				long idCuent=rs.getLong(idCuenta);
 				String tipo = rs.getString(tipoOperacion);
 				Date fecha=rs.getDate(fechaOperacion);
 
