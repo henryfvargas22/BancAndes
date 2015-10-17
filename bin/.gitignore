@@ -1,8 +1,4 @@
 /.DS_Store
-/ApplicationTest.class
-/IntegrationTest$1.class
-/IntegrationTest.class
-/PersistanceTest.class
 /application.conf
 /conexion.properties
 /controllers/
@@ -12,3 +8,7 @@
 /routes
 /views/
 /vos/
+/ApplicationTest.class
+/IntegrationTest$1.class
+/IntegrationTest.class
+/PersistanceTest.class
