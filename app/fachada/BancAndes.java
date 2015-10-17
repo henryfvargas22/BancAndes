@@ -188,9 +188,9 @@ public class BancAndes
 		daoCuentas.registrarCuenta(id, tipo, idCliente);
 	}
 
-	public void cerrarCuenta(long id) throws Exception
+	public boolean cerrarCuenta(long id) throws Exception
 	{
-		daoCuentas.cerrarCuenta(id);
+		return daoCuentas.cerrarCuenta(id);
 	}
 
 	public void agregarPrestamo(long monto,double interes,int cuotas,int diaPago,int cuotaMensual, int idCliente) throws Exception
@@ -198,9 +198,9 @@ public class BancAndes
 		daoPrestamos.registrarPrestamo(monto, interes, cuotas, diaPago, cuotaMensual, idCliente);
 	}
 
-	public void cerrarPrestamo(int id) throws Exception
+	public boolean cerrarPrestamo(int id) throws Exception
 	{
-		daoPrestamos.cerrarPrestamo(id);
+		return daoPrestamos.cerrarPrestamo(id);
 	}
 
 	public ArrayList<Operacion> darOperacionesDefault() throws Exception

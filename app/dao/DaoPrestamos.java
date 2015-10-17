@@ -16,76 +16,76 @@ public class DaoPrestamos
 	 * nombre de la tabla Empleados
 	 */
 	private static final String tablaPrestamo = "prestamo";
-	
+
 	/**
 	 * nombre de la columna titulo_original en la tabla videos.
 	 */
 	private static final String idPrestamo = "id";
-	
+
 	/**
 	 * nombre de la columna anyo en la tabla videos.
 	 */
 	private static final String montoPrestamo = "monto";
-	
+
 	private static final String interesPrestamo="interes";
-	
+
 	private static final String cuotasPrestamo="cuotas";
-	
+
 	private static final String diaPagoPrestamo="dia_de_pago";
-	
+
 	private static final String cuotaMensualPrestamo="cuota_mensual";
-	
+
 	private static final String idPrestamo_Cliente="id_cliente";
-	
+
 	private static final String estaCerrado="cerrado";
 
 	//----------------------------------------------------
 	//Consultas
 	//----------------------------------------------------
-	
+
 	/**
 	 * Consulta que devuelve isan, titulo, y año de los videos en orden alfabetico
 	 */
 	private static final String consultaPrestamosDefault="SELECT * FROM "+tablaPrestamo;
-	
+
 	private static final String maxIdPrestamo="SELECT MAX(id) AS maximo FROM "+tablaPrestamo;
-	
+
 	private static final String insertarPrestamo="INSERT INTO "+tablaPrestamo+" VALUES";
 
 	private static final String cerrarPrestamo="UPDATE "+tablaPrestamo+" SET cerrado=1 WHERE id=";
-	
+
 	private static final String consultaPrestamosCliente="SELECT * FROM "+tablaPrestamo+" WHERE id_Cliente=";
 
 	private static final String consultaPrestamoId="SELECT * FROM "+tablaPrestamo+" WHERE id=";
-	
+
 	private static final String actualizarMontoPrestamo="UPDATE "+tablaPrestamo+" SET monto=";
 
 	// ---------------------------------------------------
-    // Métodos asociados a los casos de uso: Consulta
-    // ---------------------------------------------------
-    
-    /**
-     * Método que se encarga de realizar la consulta en la base de datos
-     * y retorna un ArrayList de elementos tipo VideosValue.
-     * @return ArrayList lista que contiene elementos tipo VideosValue.
-     * La lista contiene los videos ordenados alfabeticamente
-     * @throws Exception se lanza una excepción si ocurre un error en
-     * la conexión o en la consulta. 
-     */
-    public ArrayList<Prestamo> darPrestamosDefault() throws Exception
-    {
-    	PreparedStatement prepStmt = null;
-    	
-    	ArrayList<Prestamo> Prestamos = new ArrayList<Prestamo>();
+	// Métodos asociados a los casos de uso: Consulta
+	// ---------------------------------------------------
+
+	/**
+	 * Método que se encarga de realizar la consulta en la base de datos
+	 * y retorna un ArrayList de elementos tipo VideosValue.
+	 * @return ArrayList lista que contiene elementos tipo VideosValue.
+	 * La lista contiene los videos ordenados alfabeticamente
+	 * @throws Exception se lanza una excepción si ocurre un error en
+	 * la conexión o en la consulta. 
+	 */
+	public ArrayList<Prestamo> darPrestamosDefault() throws Exception
+	{
+		PreparedStatement prepStmt = null;
+
+		ArrayList<Prestamo> Prestamos = new ArrayList<Prestamo>();
 		Prestamo PrestamoValue = new Prestamo();
-    	Connection conexion=null;
-		
+		Connection conexion=null;
+
 		try {
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			prepStmt = conexion.prepareStatement(consultaPrestamosDefault);
-			
+
 			ResultSet rs = prepStmt.executeQuery();
-			
+
 			while(rs.next())
 			{
 				int id = rs.getInt(idPrestamo);
@@ -96,7 +96,7 @@ public class DaoPrestamos
 				int diaPago=rs.getInt(diaPagoPrestamo);
 				double cuotaMensual=rs.getDouble(cuotaMensualPrestamo);
 				boolean estaCerra=rs.getBoolean(estaCerrado);
-				
+
 				PrestamoValue.setId(id);
 				PrestamoValue.setIdCliente(idCliente);
 				PrestamoValue.setCuotaMensual(cuotaMensual);
@@ -107,9 +107,9 @@ public class DaoPrestamos
 				PrestamoValue.setCerrado(estaCerra);
 				Prestamos.add(PrestamoValue);
 				PrestamoValue = new Prestamo();
-							
+
 			}
-		
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaPrestamosDefault);
@@ -121,16 +121,16 @@ public class DaoPrestamos
 				try {
 					prepStmt.close();
 				} catch (SQLException exception) {
-					
+
 					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
 				}
 			}
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}		
 		return Prestamos;
-    }
-    
-    private int mayorId() throws Exception
+	}
+
+	private int mayorId() throws Exception
 	{
 		PreparedStatement prepStmt = null;
 		Connection conexion=null;
@@ -153,8 +153,8 @@ public class DaoPrestamos
 		}	
 		return valor+1;
 	}
-    
-    public void registrarPrestamo(long monto,double interes,int cuotas,int diaPago,int cuotaMensual, int idCliente) throws Exception
+
+	public void registrarPrestamo(long monto,double interes,int cuotas,int diaPago,int cuotaMensual, int idCliente) throws Exception
 	{
 		Connection conexion=null;
 		try
@@ -181,29 +181,38 @@ public class DaoPrestamos
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}	
 	}
-    
-    public void cerrarPrestamo(int id) throws Exception
-    {
-    	Connection conexion=null;
-    	try
+
+	public boolean cerrarPrestamo(int id) throws Exception
+	{
+		Prestamo actual=darPrestamoId(id);
+		if(actual.getMonto()==0)
 		{
-			conexion=ConsultaDAO.darInstancia().establecerConexion();
-			Statement st=conexion.createStatement();
-			st.executeUpdate(cerrarPrestamo+id);
+			Connection conexion=null;
+			try
+			{
+				conexion=ConsultaDAO.darInstancia().establecerConexion();
+				Statement st=conexion.createStatement();
+				st.executeUpdate(cerrarPrestamo+id);
+				return true;
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+				System.out.println(cerrarPrestamo);
+				throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+			}
+			finally 
+			{
+				ConsultaDAO.darInstancia().closeConnection(conexion);
+			}
 		}
-		catch(SQLException e)
+		else
 		{
-			e.printStackTrace();
-			System.out.println(cerrarPrestamo);
-			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+			return false;
 		}
-		finally 
-		{
-			ConsultaDAO.darInstancia().closeConnection(conexion);
-		}	
-    }
-    
-    public ArrayList<Prestamo> darPrestamosCliente(int idCliente) throws Exception
+	}
+
+	public ArrayList<Prestamo> darPrestamosCliente(int idCliente) throws Exception
 	{
 		PreparedStatement prepStmt = null;
 
@@ -254,8 +263,8 @@ public class DaoPrestamos
 		}		
 		return Cuentas;
 	}
-    
-    public Prestamo darPrestamoId(int idPrestamo) throws Exception
+
+	public Prestamo darPrestamoId(int idPrestamo) throws Exception
 	{
 		PreparedStatement prepStmt = null;
 		Prestamo PrestamoValue = new Prestamo();
@@ -272,13 +281,13 @@ public class DaoPrestamos
 				long monto=rs.getLong(montoPrestamo);
 				double cuotaMensual=rs.getDouble(cuotaMensualPrestamo);
 				boolean estaCerra=rs.getBoolean(estaCerrado);
-				
+
 				PrestamoValue.setId(idPrestamo);
 				PrestamoValue.setIdCliente(idCliente);
 				PrestamoValue.setCuotaMensual(cuotaMensual);
 				PrestamoValue.setMonto(monto);
 				PrestamoValue.setCerrado(estaCerra);
-				
+
 				return PrestamoValue;
 			}
 
@@ -301,8 +310,8 @@ public class DaoPrestamos
 		}		
 		return null;
 	}
-    
-    public void actualizarMonto(int idPrestamo,double montoNuevo) throws Exception
+
+	public void actualizarMonto(int idPrestamo,double montoNuevo) throws Exception
 	{
 		Prestamo actual=darPrestamoId(idPrestamo);
 		double monto=actual.getMonto()+montoNuevo;

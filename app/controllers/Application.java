@@ -30,7 +30,7 @@ public class Application extends Controller {
 
 	private String mensaje;
 	private Usuario usuarioActual;
-	
+
 	public Result index() 
 	{
 		if(mensaje==null)
@@ -609,8 +609,15 @@ public class Application extends Controller {
 			DynamicForm dynamicForm = Form.form().bindFromRequest();
 			Logger.info("Cuenta is: " + dynamicForm.get("cuenta"));
 			String cuenta=dynamicForm.get("cuenta");
-			BancAndes.darInstancia().cerrarCuenta(Long.parseLong(cuenta));
-			mensaje="Se cerró la cuenta con id: "+cuenta;
+			boolean resp=BancAndes.darInstancia().cerrarCuenta(Long.parseLong(cuenta));
+			if(resp)
+			{
+				mensaje="Se cerró la cuenta con id: "+cuenta;
+			}
+			else
+			{
+				mensaje="No se pudo cerrar la cuenta con id: "+cuenta+", pues no tiene su saldo en 0";
+			}
 			return redirect("/gerente");
 		}
 		catch(Exception e)
@@ -628,8 +635,15 @@ public class Application extends Controller {
 			DynamicForm dynamicForm = Form.form().bindFromRequest();
 			Logger.info("Prestamos is: " + dynamicForm.get("prestamo"));
 			String prestamo=dynamicForm.get("prestamo");
-			BancAndes.darInstancia().cerrarPrestamo(Integer.parseInt(prestamo));
-			mensaje="Se cerró el prestamo con id: "+prestamo;
+			boolean resp=BancAndes.darInstancia().cerrarPrestamo(Integer.parseInt(prestamo));
+			if(resp)
+			{
+				mensaje="Se cerró el prestamo con id: "+prestamo;
+			}
+			else
+			{
+				mensaje="No se pudo cerrar el préstamo con id: "+prestamo+", pues no tiene su monto en 0";
+			}
 			return redirect("/gerente");
 		}
 		catch(Exception e)
@@ -828,7 +842,7 @@ public class Application extends Controller {
 		}
 		return unauthorized("Error 401 - No autorizado");
 	}
-	
+
 	public Result formBusquedaCuentas()
 	{
 		if(usuarioActual!=null)
@@ -844,11 +858,11 @@ public class Application extends Controller {
 			}
 			boolean esAdmin=BancAndes.darInstancia().esAdmin(usuarioActual.getUsuario(), usuarioActual.getContrasenia());
 			if(esAdmin)
-			return ok(busqueda_cuentas.render(cuentas));
+				return ok(busqueda_cuentas.render(cuentas));
 		}
 		return internalServerError();
 	}
-	
+
 	public Result filtrarCuentas() throws Exception
 	{
 		DynamicForm dynamicForm=Form.form().bindFromRequest();
@@ -911,10 +925,10 @@ public class Application extends Controller {
 					for(int i=0;i<cuentas.size();i++)
 					{
 						if(ced>-1)
-						if(cuentas.get(i).getId()==ced)
-						{
-							resultados.add(cuentas.get(i));
-						}
+							if(cuentas.get(i).getId()==ced)
+							{
+								resultados.add(cuentas.get(i));
+							}
 					}
 				}
 				cuentas=resultados;
@@ -925,7 +939,7 @@ public class Application extends Controller {
 			boolean esAdmin=BancAndes.darInstancia().esAdmin(usuarioActual.getUsuario(), usuarioActual.getContrasenia());
 			System.out.println("wee");
 			if(esAdmin)
-			return ok(busqueda_cuentas.render(cuentas));
+				return ok(busqueda_cuentas.render(cuentas));
 		}
 		return unauthorized("Error 401 - No autorizado");
 	}

@@ -29,7 +29,7 @@ public class DaoCuentas
 	private static final String tipoCuenta= "tipo";
 
 	private static final String estaCerrada="cerrada";
-	
+
 	private static final String montoCuenta="monto";
 
 	//----------------------------------------------------
@@ -44,11 +44,11 @@ public class DaoCuentas
 	private static final String insertarCuenta="INSERT INTO "+tablaCuenta+" VALUES";
 
 	private static final String cerrarCuenta="UPDATE "+tablaCuenta+" SET cerrada=1 WHERE id=";
-	
+
 	private static final String consultaCuentasCliente="SELECT * FROM "+tablaCuenta+" WHERE id_Cliente=";
 
 	private static final String consultaCuentasId="SELECT * FROM "+tablaCuenta+" WHERE id=";
-	
+
 	private static final String actualizarMontoCuenta="UPDATE "+tablaCuenta+" SET monto=";
 	// ---------------------------------------------------
 	// Métodos asociados a los casos de uso: Consulta
@@ -139,25 +139,34 @@ public class DaoCuentas
 		}	
 	}
 
-	public void cerrarCuenta(long id) throws Exception
+	public boolean cerrarCuenta(long id) throws Exception
 	{
-		Connection conexion=null;
-		try
+		Cuenta actual=darCuentaId(id);
+		if(actual.getMonto()==0)
 		{
-			conexion=ConsultaDAO.darInstancia().establecerConexion();
-			Statement st=conexion.createStatement();
-			st.executeUpdate(cerrarCuenta+id);
+			Connection conexion=null;
+			try
+			{
+				conexion=ConsultaDAO.darInstancia().establecerConexion();
+				Statement st=conexion.createStatement();
+				st.executeUpdate(cerrarCuenta+id);
+				return true;
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+				System.out.println(cerrarCuenta);
+				throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+			}
+			finally 
+			{
+				ConsultaDAO.darInstancia().closeConnection(conexion);
+			}
 		}
-		catch(SQLException e)
+		else
 		{
-			e.printStackTrace();
-			System.out.println(cerrarCuenta);
-			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+			return false;
 		}
-		finally 
-		{
-			ConsultaDAO.darInstancia().closeConnection(conexion);
-		}	
 	}
 
 	public Cuenta darCuentaId(long idCuenta) throws Exception
@@ -205,7 +214,7 @@ public class DaoCuentas
 		}		
 		return null;
 	}
-	
+
 	public ArrayList<Cuenta> darCuentasCliente(int idCliente) throws Exception
 	{
 		PreparedStatement prepStmt = null;
@@ -254,7 +263,7 @@ public class DaoCuentas
 		}		
 		return Cuentas;
 	}
-	
+
 	public void actualizarMonto(long idCuenta,double montoNuevo) throws Exception
 	{
 		Cuenta actual=darCuentaId(idCuenta);
