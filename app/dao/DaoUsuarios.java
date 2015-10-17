@@ -123,10 +123,12 @@ public class DaoUsuarios
 				usuarioValue = new Usuario();
 
 			}
+			conexion.commit();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaUsuariosDefault);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{
@@ -160,11 +162,13 @@ public class DaoUsuarios
 					"'"+ciudad+"',"+
 					"'"+direccion+"',"+
 					"'"+tipo+"')");
+			conexion.commit();
 		}
 		catch(SQLException e)
 		{
 			//e.printStackTrace();
 			System.out.println(insertarUsuario);
+			conexion.rollback();
 			throw e;
 		}
 		finally 
@@ -181,11 +185,13 @@ public class DaoUsuarios
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			Statement st=conexion.createStatement();
 			st.executeUpdate(eliminarUsuario+cedula);
+			conexion.commit();
 		}
 		catch(SQLException e)
 		{
 			//e.printStackTrace();
 			System.out.println(eliminarUsuario);
+			conexion.rollback();
 			throw e;
 		}
 		finally 
@@ -226,14 +232,17 @@ public class DaoUsuarios
 				usuarioValue.setCiudad(ciudad);
 				usuarioValue.setDireccion(direccion);
 				usuarioValue.setTipo(tipo);
+				conexion.commit();
 				return usuarioValue;
 			}
-
+			
+			conexion.commit();
 		} 
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 			System.out.println(consultaUsuariosDefault);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}
 		finally 

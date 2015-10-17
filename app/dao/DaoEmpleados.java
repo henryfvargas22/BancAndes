@@ -140,10 +140,12 @@ public class DaoEmpleados
 				EmpleadoValue = new Empleado();
 
 			}
+			conexion.commit();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaEmpleadosDefault);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{
@@ -180,14 +182,17 @@ public class DaoEmpleados
 				usuarioValue.setUsuario(usuario);
 				usuarioValue.setContrasenia(contrasenia);
 				usuarioValue.setRol(rol);
+				conexion.commit();
 				return usuarioValue;
 			}
+			conexion.commit();
 
 		} 
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 			System.out.println(consultaEmpleadosDefault);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}
 		finally 
@@ -245,14 +250,17 @@ public class DaoEmpleados
 				usuarioValue.setIdUsuario(idUsuario);
 				usuarioValue.setRol(rol);
 				usuarioValue.setIdOficina(idOfi);
+				conexion.commit();
 				return usuarioValue;
 			}
+			conexion.commit();
 
 		} 
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 			System.out.println(consultaEmpleadosDefault);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}
 		finally 
@@ -283,11 +291,13 @@ public class DaoEmpleados
 			ResultSet rs = prepStmt.executeQuery();
 			while(rs.next())
 				valor=rs.getInt("maximo");
+			conexion.commit();
 		}
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 			System.out.println(maxIdEmpleado);
+			conexion.rollback();
 		}
 		finally 
 		{
@@ -342,10 +352,12 @@ public class DaoEmpleados
 				EmpleadoValue = new Empleado();
 
 			}
+			conexion.commit();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaEmpleadosDefault);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{
@@ -373,16 +385,19 @@ public class DaoEmpleados
 			if(rol.equals("admin"))
 			{
 				st.executeUpdate(insertarEmpleado+"("+mayorId()+","+cedula+",'"+rol+"',NULL)");
+				conexion.commit();
 			}
 			else
 			{
 				st.executeUpdate(insertarEmpleado+"("+mayorId()+","+cedula+",'"+rol+"',"+idOficin+ ")");
+				conexion.commit();
 			}
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
 			System.out.println(insertarEmpleado);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}
 		finally 

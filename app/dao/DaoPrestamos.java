@@ -109,10 +109,12 @@ public class DaoPrestamos
 				PrestamoValue = new Prestamo();
 
 			}
+			conexion.commit();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaPrestamosDefault);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{
@@ -141,11 +143,13 @@ public class DaoPrestamos
 
 			ResultSet rs = prepStmt.executeQuery();
 			valor=rs.getInt("maximo");
+			conexion.commit();
 		}
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 			System.out.println(maxIdPrestamo);
+			conexion.rollback();
 		}
 		finally 
 		{
@@ -169,11 +173,13 @@ public class DaoPrestamos
 					cuotaMensual+","+
 					idCliente+","+
 					0+")");
+			conexion.commit();
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
 			System.out.println(insertarPrestamo);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}
 		finally 
@@ -193,12 +199,14 @@ public class DaoPrestamos
 				conexion=ConsultaDAO.darInstancia().establecerConexion();
 				Statement st=conexion.createStatement();
 				st.executeUpdate(cerrarPrestamo+id);
+				conexion.commit();
 				return true;
 			}
 			catch(SQLException e)
 			{
 				e.printStackTrace();
 				System.out.println(cerrarPrestamo);
+				conexion.rollback();
 				throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 			}
 			finally 
@@ -244,9 +252,11 @@ public class DaoPrestamos
 				Cuentas.add(CuentaValue);
 				CuentaValue = new Prestamo();
 			}
+			conexion.commit();
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaPrestamosCliente+idCliente);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{
@@ -290,10 +300,12 @@ public class DaoPrestamos
 
 				return PrestamoValue;
 			}
+			conexion.commit();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaPrestamoId+idPrestamo);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{
@@ -321,11 +333,13 @@ public class DaoPrestamos
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			Statement st=conexion.createStatement();
 			st.executeUpdate(actualizarMontoPrestamo+monto+" WHERE id="+idPrestamo);
+			conexion.commit();
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
 			System.out.println(actualizarMontoPrestamo);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}
 		finally 

@@ -138,10 +138,12 @@ public class DaoClientes
 				clienteValue = new Cliente();
 							
 			}
+			conexion.commit();
 		
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaClientesDefault);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{
@@ -178,13 +180,15 @@ public class DaoClientes
 				clienteValue.setUsuario(usuario);
 				clienteValue.setContrasenia(contrasenia);
 				clienteValue = new Cliente();
-				
+				conexion.commit();
 				return clienteValue;
 			}
+			conexion.commit();
 		
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaClienteUsuario);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{
@@ -214,11 +218,14 @@ public class DaoClientes
 			ResultSet rs = prepStmt.executeQuery();
 			while(rs.next())
 			valor=rs.getInt("maximo");
+			
+			conexion.commit();
 		}
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 			System.out.println(maxIdCliente);
+			conexion.rollback();
 		}
 		finally 
 		{
@@ -236,11 +243,13 @@ public class DaoClientes
 			Statement st=conexion.createStatement();
 			st.executeUpdate(insertarCliente+"("+mayorId()+","
 					+cedula+")");
+			conexion.commit();
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
 			System.out.println(insertarCliente);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}
 		finally 
@@ -257,11 +266,13 @@ public class DaoClientes
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			Statement st=conexion.createStatement();
 			st.executeUpdate(eliminarCliente+cedula);
+			conexion.commit();
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
 			System.out.println(eliminarCliente);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}
 		finally 

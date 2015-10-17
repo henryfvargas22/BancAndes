@@ -25,3 +25,8 @@ project/play-fork-run.sbt
 /nbproject/private/
 *.01
 /build/
+*.class
+
+*.class
+
+*.class

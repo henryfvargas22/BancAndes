@@ -93,10 +93,12 @@ public class DaoCuentas
 				CuentaValue = new Cuenta();
 
 			}
+			conexion.commit();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaCuentasDefault);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{
@@ -126,11 +128,13 @@ public class DaoCuentas
 					idCliente+","+
 					0+","+
 					0+")");
+			conexion.commit();
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
 			System.out.println(insertarCuenta);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}
 		finally 
@@ -150,12 +154,14 @@ public class DaoCuentas
 				conexion=ConsultaDAO.darInstancia().establecerConexion();
 				Statement st=conexion.createStatement();
 				st.executeUpdate(cerrarCuenta+id);
+				conexion.commit();
 				return true;
 			}
 			catch(SQLException e)
 			{
 				e.printStackTrace();
 				System.out.println(cerrarCuenta);
+				conexion.rollback();
 				throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 			}
 			finally 
@@ -192,12 +198,15 @@ public class DaoCuentas
 				CuentaValue.setTipo(tipo);
 				CuentaValue.setMonto(monto);
 				CuentaValue.setEstaCerrada(cerrada);
+				conexion.commit();
 				return CuentaValue;
 			}
+			conexion.commit();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaCuentasId+idCuenta);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{
@@ -243,10 +252,12 @@ public class DaoCuentas
 				CuentaValue = new Cuenta();
 
 			}
+			conexion.commit();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaCuentasDefault+idCliente);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{
@@ -274,11 +285,13 @@ public class DaoCuentas
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			Statement st=conexion.createStatement();
 			st.executeUpdate(actualizarMontoCuenta+monto+" WHERE id="+idCuenta);
+			conexion.commit();
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
 			System.out.println(actualizarMontoCuenta);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}
 		finally 

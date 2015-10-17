@@ -104,10 +104,12 @@ public class DaoOperaciones
 				OperacionValue = new Operacion();
 
 			}
+			conexion.commit();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaOperacionesDefault);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{
@@ -138,11 +140,13 @@ public class DaoOperaciones
 					monto+","+
 					idPrestam+","+
 					idClient+")");
+			conexion.commit();
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
 			System.out.println(ingresarOperacion);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}
 		finally 
@@ -164,11 +168,13 @@ public class DaoOperaciones
 					monto+","+
 					-1+","+
 					idClient+")");
+			conexion.commit();
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
 			System.out.println(ingresarOperacion);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}
 		finally 
@@ -218,10 +224,12 @@ public class DaoOperaciones
 				OperacionValue = new Operacion();
 
 			}
+			conexion.commit();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaOperacionesDefault+idCliente);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{

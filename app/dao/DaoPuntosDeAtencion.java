@@ -83,10 +83,12 @@ public class DaoPuntosDeAtencion
 				Punto_De_Atencions.add(PuntoDeAtencionValue);
 				PuntoDeAtencionValue = new PuntoDeAtencion();		
 			}
+			conexion.commit();
 		
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaPunto_De_AtencionsDefault);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{
@@ -116,11 +118,13 @@ public class DaoPuntosDeAtencion
 			ResultSet rs = prepStmt.executeQuery();
 			while(rs.next())
 			valor=rs.getInt("maximo");
+			conexion.commit();
 		}
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 			System.out.println(maxIdPuntos);
+			conexion.rollback();
 		}
 		finally 
 		{
@@ -140,11 +144,13 @@ public class DaoPuntosDeAtencion
 					+"'"+tipo+"',"+
 					"'"+localizacion+"',"+
 					idOficina+")");
+			conexion.commit();
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
 			System.out.println(insertarPunto);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}
 		finally 

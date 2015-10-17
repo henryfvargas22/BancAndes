@@ -74,10 +74,12 @@ public class DaoTrabaja
 				TrabajaValue = new Trabaja();
 
 			}
+			conexion.commit();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaTrabajaDefault);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{
@@ -104,11 +106,13 @@ public class DaoTrabaja
 			Statement st=conexion.createStatement();
 			st.executeUpdate(ingresarTrabaja+"("+idOfic+","
 					+idEmple+")");
+			conexion.commit();
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
 			System.out.println(ingresarTrabaja);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}
 		finally 
@@ -136,10 +140,12 @@ public class DaoTrabaja
 				empleado = rs.getInt(idEmpleado);
 				empleados.add(empleado);
 			}
-
+			conexion.commit();
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaTrabajaDefault);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{

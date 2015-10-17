@@ -103,6 +103,7 @@ public class ConsultaDAO
 	    	try
 	        {
 				conexion = DriverManager.getConnection(cadenaConexion,usuario,clave);
+				conexion.setAutoCommit(false);
 				return conexion;
 	        }
 	        catch( SQLException exception )

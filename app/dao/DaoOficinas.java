@@ -91,10 +91,12 @@ public class DaoOficinas
 				OficinaValue = new Oficina();
 
 			}
+			conexion.commit();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaOficinasDefault);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 
 		{
@@ -124,11 +126,14 @@ public class DaoOficinas
 			ResultSet rs = prepStmt.executeQuery();
 			while(rs.next())
 			valor=rs.getInt("maximo");
+			
+			conexion.commit();
 		}
 		catch (SQLException e) 
 		{
 			e.printStackTrace();
 			System.out.println(maxIdOficina);
+			conexion.close();
 		}
 		finally 
 		{
@@ -149,11 +154,13 @@ public class DaoOficinas
 					"'"+direccion+"',"+
 					"'"+telefono+"',"+
 					idGerente+")");
+			conexion.commit();
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
 			System.out.println(insertarOficina);
+			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}
 		finally 
@@ -185,15 +192,17 @@ public class DaoOficinas
 				OficinaValue.setDireccion(direccion);
 				OficinaValue.setNombre(nombre);
 				OficinaValue.setTelefono(telefono);
-				
+				conexion.commit();
 				return OficinaValue;
 			}
+			conexion.commit();
 			return null;
 		}
 		catch(Exception e)
 		{
 			e.printStackTrace();
 			System.out.println(consultarOficinaId+idOficina);
+			conexion.rollback();
 			return null;
 		}
 		finally
