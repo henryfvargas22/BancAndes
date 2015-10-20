@@ -249,6 +249,10 @@ public class BancAndes
 				daoPrestamos.actualizarMonto(idPrestam, monto*-1);
 			}
 		}
+		else
+		{
+			throw new Exception("El préstamo está cerrado.");
+		}
 	}
 
 	public boolean esAdmin(String usuario,String contrasenia)
@@ -423,5 +427,56 @@ public class BancAndes
 	public Cuenta darCuentaPorId(long id) throws Exception
 	{
 		return daoCuentas.darCuentaId(id);
+	}
+	
+	public void insertarTransaccionCuentas(long idOrigen, long idDestino, double monto) throws Exception
+	{
+		Cuenta origen=daoCuentas.darCuentaId(idOrigen);
+		Cuenta destino=daoCuentas.darCuentaId(idDestino);
+		if(!origen.isEstaCerrada() && !destino.isEstaCerrada())
+		{
+			if(origen.getMonto()<monto)
+			{
+				throw new Exception("La cuenta de origen no tiene fondos suficientes. Transfiera dinero suficiente.");
+			}
+			else
+			{
+				int idClient=origen.getId_Cliente();
+				daoOperaciones.registrarOperacionCuenta(idClient, monto, "Transaccion", idOrigen);
+				daoCuentas.actualizarMonto(idOrigen, -1*monto);
+				daoCuentas.actualizarMonto(idDestino, monto);
+			}
+		}
+		else
+		{
+			throw new Exception("Alguna de las cuentas está cerrada.");
+		}
+	}
+	
+	public void insertarTransaccionPrestamo(long idOrigen, int idPrestamo, double monto, String tipo) throws Exception
+	{
+		Prestamo actual=daoPrestamos.darPrestamoId(idPrestamo);
+		Cuenta origen=daoCuentas.darCuentaId(idOrigen);
+		if(!actual.isCerrado() && !origen.isEstaCerrada())
+		{
+			int idClient=actual.getIdCliente();
+			if(tipo.equals("PagarCuota"))
+			{
+				double monto2=actual.getCuotaMensual();
+				daoOperaciones.registrarOperacionPrestamo(idClient, monto2, tipo, idPrestamo);
+				daoPrestamos.actualizarMonto(idPrestamo, monto2*-1);
+				daoCuentas.actualizarMonto(idOrigen, -1*monto2);
+			}
+			else
+			{
+				daoOperaciones.registrarOperacionPrestamo(idClient, monto, tipo, idPrestamo);
+				daoPrestamos.actualizarMonto(idPrestamo, monto*-1);
+				daoCuentas.actualizarMonto(idOrigen, monto*-1);
+			}
+		}
+		else
+		{
+			throw new Exception("El préstamo o la cuenta está(n) cerrado(s).");
+		}
 	}
 }
