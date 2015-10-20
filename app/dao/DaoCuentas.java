@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import vos.Cuenta;
 
@@ -301,8 +303,25 @@ public class DaoCuentas
 		}	
 	}
 	
-	public HashMap<Long,Boolean> pagarNomina(Cuenta origen, HashMap<Long,Double> cuentas) throws Exception
+	public HashMap<Long,Boolean> pagarNomina(long origen, HashMap<Long,Double> cuentas) throws Exception
 	{
-		
+		Connection conexion=null;
+		try
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			Iterator i=cuentas.entrySet().iterator();
+			while(i.hasNext())
+			{
+				Statement st=conexion.createStatement();
+				Entry<Long,Double> cuentaActual=(Entry<Long, Double>) i.next();
+				Cuenta ori=darCuentaId(origen);
+				double temp=ori.getMonto()-cuentaActual.getValue();
+				if(temp>=0)
+				{
+					st.executeUpdate(actualizarMontoCuenta+(-1*cuentaActual.getValue())+" WHERE id="+origen);
+					st.executeUpdate(actualizarMontoCuenta+cuentaActual.getValue()+" WHERE id="+cuentaActual.getKey());
+				}
+			}
+		}
 	}
 }
