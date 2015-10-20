@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import vos.Empresa;
@@ -24,7 +25,7 @@ public class DaoEmpresa
 	 * nombre de la columna anyo en la tabla videos.
 	 */
 	private static final String idEmpleado = "id_empleado";
-	
+
 	/**
 	 * nombre de la columna titulo_original en la tabla videos.
 	 */
@@ -43,6 +44,10 @@ public class DaoEmpresa
 	 * Consulta que devuelve isan, titulo, y año de los videos en orden alfabetico
 	 */
 	private static final String consultaEmpresaDefault="SELECT * FROM "+tablaEmpresa+ " ORDER BY "+idEmpleador;
+
+	private static final String ingresarEmpresa="INSERT INTO "+tablaEmpresa+" VALUES ";
+
+	private static final String consultaEmpresaCuenta="SELECT * FROM "+tablaEmpresa+" WHERE "+idEmpleador+"=";
 
 	// ---------------------------------------------------
 	// Métodos asociados a los casos de uso: Consulta
@@ -106,5 +111,69 @@ public class DaoEmpresa
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}		
 		return Empresas;
+	}
+
+	public void asociarCuentaEmpleado(int idEmpleador, int idEmpleado, long idCuentaOrigen, long idCuentaDestino) throws Exception
+	{
+		Connection conexion=null;
+		try
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			Statement st=conexion.createStatement();
+			if(existeCuentaAsociada(idEmpleador, idCuentaOrigen))
+			{
+				st.executeUpdate(ingresarEmpresa+"("+idEmpleador+","
+						+idEmpleado+","
+						+idCuentaOrigen+","
+						+idCuentaDestino+")");
+
+				conexion.commit();
+			}
+			else
+			{
+				throw new Exception("Ya tiene una cuenta asociada.");
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			System.out.println(ingresarEmpresa);
+			conexion.rollback();
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}
+	}
+
+	private boolean existeCuentaAsociada(int idEmpleador, long pCuentaOrigen) throws Exception
+	{
+		PreparedStatement prepStmt = null;
+		Connection conexion=null;
+		boolean existe=false;
+		try {
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(consultaEmpresaCuenta+idEmpleador);
+
+			ResultSet rs = prepStmt.executeQuery();
+			while(rs.next())
+			{
+				long cuentaOrigen=rs.getLong(idCuentaOrigen);
+				existe=existe&&(cuentaOrigen==pCuentaOrigen);
+			}
+			conexion.commit();
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			System.out.println(consultaEmpresaCuenta);
+			conexion.rollback();
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}	
+		return existe;
 	}
 }

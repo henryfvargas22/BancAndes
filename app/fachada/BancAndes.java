@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import dao.DaoClientes;
 import dao.DaoCuentas;
 import dao.DaoEmpleados;
+import dao.DaoEmpresa;
 import dao.DaoOficinas;
 import dao.DaoOperaciones;
 import dao.DaoPrestamos;
@@ -41,8 +42,10 @@ public class BancAndes
 	private DaoPuntosDeAtencion	daoPuntosDeAtencion;
 
 	private DaoOperaciones daoOperaciones;
-	
+
 	private DaoTrabaja daoTrabaja;
+
+	private DaoEmpresa daoEmpresa;
 
 	// -----------------------------------------------------------------
 	// Singleton
@@ -81,6 +84,7 @@ public class BancAndes
 		daoPuntosDeAtencion= new DaoPuntosDeAtencion();
 		daoOperaciones= new DaoOperaciones();
 		daoTrabaja=new DaoTrabaja();
+		daoEmpresa=new DaoEmpresa();
 	}
 
 
@@ -288,7 +292,7 @@ public class BancAndes
 		}
 		return false;
 	}
-	
+
 	public boolean esCliente(String usuario, String contrasenia)
 	{
 		try
@@ -308,7 +312,7 @@ public class BancAndes
 			return false;
 		}
 	}
-	
+
 	public boolean esCajero(String usuario, String contrasenia)
 	{
 		try
@@ -354,7 +358,7 @@ public class BancAndes
 			return new ArrayList<Prestamo>();
 		}
 	}
-	
+
 	public ArrayList<Operacion> darOperacionesCliente(int idCliente)
 	{
 		try
@@ -371,7 +375,7 @@ public class BancAndes
 	{
 		return daoEmpleados.darGerentes();
 	}
-	
+
 	public Oficina darOficinaPorId(int idOficina)
 	{
 		try
@@ -383,7 +387,7 @@ public class BancAndes
 			return null;
 		}
 	}
-	
+
 	public ArrayList<Empleado> darEmpleadosPorOficina(int idOficina)
 	{
 		ArrayList<Empleado> resp=new ArrayList<Empleado>();
@@ -410,7 +414,7 @@ public class BancAndes
 		}
 		return resp;
 	}
-	
+
 	public void eliminarUsuario(boolean esCliente, int cedula) throws Exception
 	{
 		if(esCliente)
@@ -423,12 +427,12 @@ public class BancAndes
 		}
 		daoUsuarios.eliminarUsuario(cedula);
 	}
-	
+
 	public Cuenta darCuentaPorId(long id) throws Exception
 	{
 		return daoCuentas.darCuentaId(id);
 	}
-	
+
 	public void insertarTransaccionCuentas(long idOrigen, long idDestino, double monto) throws Exception
 	{
 		Cuenta origen=daoCuentas.darCuentaId(idOrigen);
@@ -452,7 +456,7 @@ public class BancAndes
 			throw new Exception("Alguna de las cuentas está cerrada.");
 		}
 	}
-	
+
 	public void insertarTransaccionPrestamo(long idOrigen, int idPrestamo, double monto, String tipo) throws Exception
 	{
 		Prestamo actual=daoPrestamos.darPrestamoId(idPrestamo);
@@ -476,7 +480,20 @@ public class BancAndes
 		}
 		else
 		{
-			throw new Exception("El préstamo o la cuenta está(n) cerrado(s).");
+			throw new Exception("El préstamo y/o la cuenta está(n) cerrado(s).");
+		}
+	}
+
+	public void asociarEmpleadoEmpresa(int idEmpleador, int idEmpleado, long idCuentaOrigen, long idCuentaDestino) throws Exception
+	{
+		Cliente actual=daoClientes.darClientePorId(idEmpleador);
+		if(actual.getTipo().equals("legal"))
+		{
+			daoEmpresa.asociarCuentaEmpleado(idEmpleador, idEmpleado, idCuentaOrigen, idCuentaDestino);
+		}
+		else
+		{
+			throw new Exception("Su cuenta no está asociada a una persona jurídica. Contacte a Bancandes.");
 		}
 	}
 }

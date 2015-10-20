@@ -16,17 +16,17 @@ public class DaoClientes
 	 * nombre de la tabla clientes
 	 */
 	private static final String tablaCliente = "cliente";
-	
+
 	/**
 	 * nombre de la columna titulo_original en la tabla videos.
 	 */
 	private static final String idCliente = "id";
-	
+
 	/**
 	 * nombre de la columna anyo en la tabla videos.
 	 */
 	private static final String idCliente_Usuario = "id_usuario";
-	
+
 	/**
 	 * nombre de la columna nombre en la tabla usuario.
 	 */
@@ -70,46 +70,48 @@ public class DaoClientes
 	//----------------------------------------------------
 	//Consultas
 	//----------------------------------------------------
-	
+
 	/**
 	 * Consulta que devuelve isan, titulo, y año de los videos en orden alfabetico
 	 */
 	private static final String consultaClientesDefault="SELECT * FROM "+tablaCliente+ " ORDER BY "+idCliente_Usuario;
-	
+
 	private static final String maxIdCliente="SELECT MAX(id) AS maximo FROM "+tablaCliente;
-	
+
 	private static final String insertarCliente="INSERT INTO "+tablaCliente+" VALUES";
-	
+
 	private static final String consultaClienteUsuario="SELECT * FROM "+tablaCliente+" JOIN usuario ON cliente.id_usuario=usuario.cedula ";
-	
+
 	private static final String eliminarCliente="DELETE FROM "+tablaCliente+" WHERE "+idCliente_Usuario+"=";
 	
+	private static final String clientePorId=consultaClienteUsuario+" WHERE cedula=";
+
 	// ---------------------------------------------------
-    // Métodos asociados a los casos de uso: Consulta
-    // ---------------------------------------------------
-    
-    /**
-     * Método que se encarga de realizar la consulta en la base de datos
-     * y retorna un ArrayList de elementos tipo VideosValue.
-     * @return ArrayList lista que contiene elementos tipo VideosValue.
-     * La lista contiene los videos ordenados alfabeticamente
-     * @throws Exception se lanza una excepción si ocurre un error en
-     * la conexión o en la consulta. 
-     */
-    public ArrayList<Cliente> darClientesDefault() throws Exception
-    {
-    	PreparedStatement prepStmt = null;
-    	
-    	ArrayList<Cliente> clientes = new ArrayList<Cliente>();
+	// Métodos asociados a los casos de uso: Consulta
+	// ---------------------------------------------------
+
+	/**
+	 * Método que se encarga de realizar la consulta en la base de datos
+	 * y retorna un ArrayList de elementos tipo VideosValue.
+	 * @return ArrayList lista que contiene elementos tipo VideosValue.
+	 * La lista contiene los videos ordenados alfabeticamente
+	 * @throws Exception se lanza una excepción si ocurre un error en
+	 * la conexión o en la consulta. 
+	 */
+	public ArrayList<Cliente> darClientesDefault() throws Exception
+	{
+		PreparedStatement prepStmt = null;
+
+		ArrayList<Cliente> clientes = new ArrayList<Cliente>();
 		Cliente clienteValue = new Cliente();
-    	Connection conexion=null;
-		
+		Connection conexion=null;
+
 		try {
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			prepStmt = conexion.prepareStatement(consultaClienteUsuario);
-			
+
 			ResultSet rs = prepStmt.executeQuery();
-			
+
 			while(rs.next())
 			{
 				int idCli = rs.getInt(idCliente);
@@ -122,7 +124,7 @@ public class DaoClientes
 				String tipo=rs.getString(tipoUsuario);
 				String usuario= rs.getString(usernameUsuario);
 				String contrasenia = rs.getString(contraseniaUsuario);
-				
+
 				clienteValue.setIdCliente(idCli);
 				clienteValue.setIdUsuario(cedCli);
 				clienteValue.setCedula(cedCli);
@@ -136,10 +138,10 @@ public class DaoClientes
 				clienteValue.setUsuario(usuario);
 				clientes.add(clienteValue);
 				clienteValue = new Cliente();
-							
+
 			}
 			conexion.commit();
-		
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaClientesDefault);
@@ -152,29 +154,29 @@ public class DaoClientes
 				try {
 					prepStmt.close();
 				} catch (SQLException exception) {
-					
+
 					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
 				}
 			}
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}		
 		return clientes;
-    }
-    
-    public Cliente iniciarSesion(String usuario, String contrasenia) throws Exception
-    {
-    	PreparedStatement prepStmt = null;
-    	
+	}
+
+	public Cliente iniciarSesion(String usuario, String contrasenia) throws Exception
+	{
+		PreparedStatement prepStmt = null;
+
 		Cliente clienteValue = new Cliente();
-    	Connection conexion=null;
-		
+		Connection conexion=null;
+
 		try {
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			prepStmt = conexion.prepareStatement(consultaClienteUsuario+"WHERE usuario='"+usuario+"' AND "+
-			"contrasenia='"+contrasenia+"'");
-			
+					"contrasenia='"+contrasenia+"'");
+
 			ResultSet rs = prepStmt.executeQuery();
-			
+
 			while(rs.next())
 			{
 				clienteValue.setUsuario(usuario);
@@ -184,7 +186,7 @@ public class DaoClientes
 				return clienteValue;
 			}
 			conexion.commit();
-		
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println(consultaClienteUsuario);
@@ -197,16 +199,16 @@ public class DaoClientes
 				try {
 					prepStmt.close();
 				} catch (SQLException exception) {
-					
+
 					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
 				}
 			}
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}		
 		return null;
-    }
-    
-    private int mayorId() throws Exception
+	}
+
+	private int mayorId() throws Exception
 	{
 		PreparedStatement prepStmt = null;
 		Connection conexion=null;
@@ -217,8 +219,8 @@ public class DaoClientes
 
 			ResultSet rs = prepStmt.executeQuery();
 			while(rs.next())
-			valor=rs.getInt("maximo");
-			
+				valor=rs.getInt("maximo");
+
 			conexion.commit();
 		}
 		catch (SQLException e) 
@@ -233,8 +235,8 @@ public class DaoClientes
 		}	
 		return valor+1;
 	}
-    
-    public void registrarCliente(int cedula) throws Exception
+
+	public void registrarCliente(int cedula) throws Exception
 	{
 		Connection conexion=null;
 		try
@@ -257,10 +259,10 @@ public class DaoClientes
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}	
 	}
-    
-    public void eliminarCliente(int cedula) throws Exception
-    {
-    	Connection conexion=null;
+
+	public void eliminarCliente(int cedula) throws Exception
+	{
+		Connection conexion=null;
 		try
 		{
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
@@ -279,5 +281,39 @@ public class DaoClientes
 		{
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}
-    }
+	}
+
+	public Cliente darClientePorId(int cedula) throws Exception
+	{
+		PreparedStatement prepStmt = null;
+		Connection conexion=null;
+		Cliente resultado=null;
+		try 
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(clientePorId+cedula);
+
+			ResultSet rs = prepStmt.executeQuery();
+			while(rs.next())
+			{
+				String tipo=rs.getString(tipoUsuario);
+				
+				resultado=new Cliente();
+				resultado.setCedula(cedula);
+				resultado.setTipo(tipo);
+			}
+			conexion.commit();
+		}
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+			System.out.println(clientePorId);
+			conexion.rollback();
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}
+		return resultado;
+	}
 }
