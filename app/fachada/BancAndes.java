@@ -196,6 +196,7 @@ public class BancAndes
 
 	public boolean cerrarCuenta(long id) throws Exception
 	{
+		
 		return daoCuentas.cerrarCuenta(id);
 	}
 
@@ -499,10 +500,9 @@ public class BancAndes
 		}
 	}
 	
-	public void pagarNomina(int idEmpleador, long idCuentaPagos) throws Exception
+	public HashMap<Long,Boolean> pagarNomina(int idEmpleador, long idCuentaPagos) throws Exception
 	{
 		HashMap<Long,Double> cuentas=daoEmpresa.cuentasAPagarNomina(idEmpleador);
-		Cuenta origen=daoCuentas.darCuentaId(idCuentaPagos);
-		
+		return daoCuentas.pagarNomina(idCuentaPagos, cuentas);
 	}
 }

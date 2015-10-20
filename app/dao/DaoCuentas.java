@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Savepoint;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -305,11 +306,13 @@ public class DaoCuentas
 	
 	public HashMap<Long,Boolean> pagarNomina(long origen, HashMap<Long,Double> cuentas) throws Exception
 	{
+		HashMap<Long, Boolean> resp=new HashMap<Long,Boolean>();
 		Connection conexion=null;
+		conexion=ConsultaDAO.darInstancia().establecerConexion();
+		Savepoint point=null;
+		Iterator i=cuentas.entrySet().iterator();
 		try
 		{
-			conexion=ConsultaDAO.darInstancia().establecerConexion();
-			Iterator i=cuentas.entrySet().iterator();
 			while(i.hasNext())
 			{
 				Statement st=conexion.createStatement();
@@ -320,8 +323,20 @@ public class DaoCuentas
 				{
 					st.executeUpdate(actualizarMontoCuenta+(-1*cuentaActual.getValue())+" WHERE id="+origen);
 					st.executeUpdate(actualizarMontoCuenta+cuentaActual.getValue()+" WHERE id="+cuentaActual.getKey());
+					point=conexion.setSavepoint();
+					resp.put(cuentaActual.getKey(), true);
 				}
 			}
 		}
+		catch(SQLException e)
+		{
+			conexion.rollback(point);
+			while(i.hasNext())
+			{
+				Entry<Long,Double> cuentaActual=(Entry<Long, Double>) i.next();
+				resp.put(cuentaActual.getKey(), false);
+			}
+		}
+		return resp;
 	}
 }
