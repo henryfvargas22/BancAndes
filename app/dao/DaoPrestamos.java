@@ -331,6 +331,7 @@ public class DaoPrestamos
 		try
 		{
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			conexion.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			Statement st=conexion.createStatement();
 			st.executeUpdate(actualizarMontoPrestamo+monto+" WHERE id="+idPrestamo);
 			conexion.commit();

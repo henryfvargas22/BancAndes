@@ -287,6 +287,7 @@ public class DaoCuentas
 		try
 		{
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			conexion.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			Statement st=conexion.createStatement();
 			st.executeUpdate(actualizarMontoCuenta+monto+" WHERE id="+idCuenta);
 			conexion.commit();
@@ -309,6 +310,7 @@ public class DaoCuentas
 		HashMap<Long, Boolean> resp=new HashMap<Long,Boolean>();
 		Connection conexion=null;
 		conexion=ConsultaDAO.darInstancia().establecerConexion();
+		conexion.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 		Savepoint point=null;
 		Iterator i=cuentas.entrySet().iterator();
 		try

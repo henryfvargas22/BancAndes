@@ -133,6 +133,7 @@ public class DaoOperaciones
 		try
 		{
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			conexion.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			Statement st=conexion.createStatement();
 			st.executeUpdate(ingresarOperacion+"(CURRENT_TIMESTAMP,"
 					+-1+","+
@@ -161,6 +162,7 @@ public class DaoOperaciones
 		try
 		{
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			conexion.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			Statement st=conexion.createStatement();
 			st.executeUpdate(ingresarOperacion+"(CURRENT_TIMESTAMP,"
 					+idCuent+","+
