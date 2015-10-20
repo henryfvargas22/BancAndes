@@ -10,6 +10,10 @@ public class Empresa
 	
 	private long id_Destino;
 	
+	private double monto;
+	
+	private String tipo;
+	
 	public int getId_Empleador() {
 		return id_Empleador;
 	}
@@ -33,5 +37,17 @@ public class Empresa
 	}
 	public void setId_Destino(long id_Destino) {
 		this.id_Destino = id_Destino;
+	}
+	public double getMonto() {
+		return monto;
+	}
+	public void setMonto(double monto) {
+		this.monto = monto;
+	}
+	public String getTipo() {
+		return tipo;
+	}
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 }

@@ -2,6 +2,8 @@ package fachada;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import dao.DaoClientes;
 import dao.DaoCuentas;
 import dao.DaoEmpleados;
@@ -484,16 +486,23 @@ public class BancAndes
 		}
 	}
 
-	public void asociarEmpleadoEmpresa(int idEmpleador, int idEmpleado, long idCuentaOrigen, long idCuentaDestino) throws Exception
+	public void asociarEmpleadoEmpresa(int idEmpleador, int idEmpleado, long idCuentaOrigen, long idCuentaDestino, String tipo, double monto) throws Exception
 	{
 		Cliente actual=daoClientes.darClientePorId(idEmpleador);
 		if(actual.getTipo().equals("legal"))
 		{
-			daoEmpresa.asociarCuentaEmpleado(idEmpleador, idEmpleado, idCuentaOrigen, idCuentaDestino);
+			daoEmpresa.asociarCuentaEmpleado(idEmpleador, idEmpleado, idCuentaOrigen, idCuentaDestino,tipo,monto);
 		}
 		else
 		{
-			throw new Exception("Su cuenta no está asociada a una persona jurídica. Contacte a Bancandes.");
+			throw new Exception("Su cuenta no está asociada a una persona jurídica. Contacte a BancAndes.");
 		}
+	}
+	
+	public void pagarNomina(int idEmpleador, long idCuentaPagos) throws Exception
+	{
+		HashMap<Long,Double> cuentas=daoEmpresa.cuentasAPagarNomina(idEmpleador);
+		Cuenta origen=daoCuentas.darCuentaId(idCuentaPagos);
+		
 	}
 }

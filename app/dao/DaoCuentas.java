@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import vos.Cuenta;
 
@@ -298,5 +299,10 @@ public class DaoCuentas
 		{
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}	
+	}
+	
+	public HashMap<Long,Boolean> pagarNomina(Cuenta origen, HashMap<Long,Double> cuentas) throws Exception
+	{
+		
 	}
 }

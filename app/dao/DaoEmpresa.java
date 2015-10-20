@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import vos.Empresa;
 
@@ -35,6 +36,10 @@ public class DaoEmpresa
 	 * nombre de la columna anyo en la tabla videos.
 	 */
 	private static final String idCuentaDestino = "id_cuentadestino";
+	
+	private static final String tipo="tipo";
+	
+	private static final String monto="monto";
 
 	//----------------------------------------------------
 	//Consultas
@@ -81,11 +86,15 @@ public class DaoEmpresa
 				int idEmplead = rs.getInt(idEmpleado);
 				long idCuentaOr = rs.getLong(idCuentaOrigen);
 				long idCuentaDes = rs.getLong(idCuentaDestino);
+				double montoPag = rs.getDouble(monto);
+				String tipoPag = rs.getString(tipo);
 
 				EmpresaValue.setId_Empleado(idEmplead);
 				EmpresaValue.setId_Empleador(idEmpleadr);
 				EmpresaValue.setId_Origen(idCuentaOr);
 				EmpresaValue.setId_Destino(idCuentaDes);
+				EmpresaValue.setMonto(montoPag);
+				EmpresaValue.setTipo(tipoPag);
 				Empresas.add(EmpresaValue);
 				EmpresaValue = new Empresa();
 
@@ -113,7 +122,7 @@ public class DaoEmpresa
 		return Empresas;
 	}
 
-	public void asociarCuentaEmpleado(int idEmpleador, int idEmpleado, long idCuentaOrigen, long idCuentaDestino) throws Exception
+	public void asociarCuentaEmpleado(int idEmpleador, int idEmpleado, long idCuentaOrigen, long idCuentaDestino, String tipo, double monto) throws Exception
 	{
 		Connection conexion=null;
 		try
@@ -125,7 +134,9 @@ public class DaoEmpresa
 				st.executeUpdate(ingresarEmpresa+"("+idEmpleador+","
 						+idEmpleado+","
 						+idCuentaOrigen+","
-						+idCuentaDestino+")");
+						+idCuentaDestino+","
+						+monto+","
+						+"'"+tipo+"')");
 
 				conexion.commit();
 			}
@@ -175,5 +186,47 @@ public class DaoEmpresa
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}	
 		return existe;
+	}
+	
+	public HashMap<Long,Double> cuentasAPagarNomina(int idEmpleador) throws Exception
+	{
+		PreparedStatement prepStmt = null;
+
+		HashMap<Long,Double> cuentas = new HashMap<Long,Double>();
+		Connection conexion=null;
+
+		try {
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(consultaEmpresaCuenta+idEmpleador);
+
+			ResultSet rs = prepStmt.executeQuery();
+
+			while(rs.next())
+			{
+				long idCuentaDes = rs.getLong(idCuentaDestino);
+				double montoPag = rs.getDouble(monto);
+				cuentas.put(idCuentaDes, montoPag);
+			}
+			conexion.commit();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(consultaEmpresaDefault);
+			conexion.rollback();
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}finally 
+		{
+			if (prepStmt != null) 
+			{
+				try {
+					prepStmt.close();
+				} catch (SQLException exception) {
+
+					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
+				}
+			}
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}		
+		return cuentas;
 	}
 }
