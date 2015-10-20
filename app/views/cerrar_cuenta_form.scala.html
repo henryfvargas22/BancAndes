@@ -1,4 +1,4 @@
-@(cuentas: List[vos.Cuenta])
+@(cuentas: List[vos.Cuenta], esLegal: Boolean)
 <html>
     <head>
         <meta charset="utf-8">
@@ -23,7 +23,7 @@
     <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
-        <div class="navbar-header">         
+        <div class="navbar-header">
           <a class="navbar-brand" href="@routes.Application.gerente()">BancAndes</a>
         </div>
       </div>
@@ -41,7 +41,7 @@
             <label>Cliente</label>
               <input type="text" placeholder="Id del Cliente" name="cliente" class="form-control">
             <br>
-			<button type="submit" class="form-control btn btn-primary">Buscar cuentas</button>       
+			<button type="submit" class="form-control btn btn-primary">Buscar cuentas</button>
           </div>
        </form>
        <form method="post" action="@routes.Application.closeCuenta()" name="cerrar">
@@ -52,8 +52,18 @@
               @for(c <- cuentas){
                   <option>@c.getId()</option>
                   }
-              </select>                  
-          </div>             
+              </select>
+          </div>
+          @if(esLegal){
+            <br>
+            <label>Cuentas</label>
+            <p>Seleccione una cuenta de respaldo</p>
+            <select class="form-control" name="cuenta">
+            @for(c <- cuentas){
+                <option>@c.getId()</option>
+                }
+            </select>
+          }
           <p id="content"></p>
 		<button type="submit" class="btn btn-default">Cerrar Cuenta</button>
       </form>

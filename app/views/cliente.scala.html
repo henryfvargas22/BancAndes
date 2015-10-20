@@ -1,4 +1,4 @@
-@(message: String,cuentas: List[vos.Cuenta],prestamos: List[vos.Prestamo],operaciones: List[vos.Operacion])
+@(message: String,cuentas: List[vos.Cuenta],prestamos: List[vos.Prestamo],operaciones: List[vos.Operacion], esLegal: Boolean)
 <html>
     <head>
         <meta charset="utf-8">
@@ -23,11 +23,11 @@
     <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
-        <div class="navbar-header">         
+        <div class="navbar-header">
           <a class="navbar-brand">BancAndes</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form" action="@routes.Application.index()">            
+          <form class="navbar-form navbar-right" role="form" action="@routes.Application.index()">
             <button type="submit" class="btn btn-success">Cerrar Sesi&oacute;n</button>
           </form>
         </div>
@@ -52,80 +52,190 @@
       </div>
     </div>
 
-    <div class="container">      
-      <h3>Cuentas</h3>
-      <table class="table table-hover" id="tablaCuentas">
-        <thead>
-            <tr>
-              <th>Tipo</th>
-              <th>N&uacute;mero</th>
-              <th>Saldo</th>
-              </tr>
-          </thead>
-          <tbody>    
-              @for(c <-cuentas){
-              <tr>
-              @if(c.getTipo().equals("savings")){
-                <td>Ahorros</td>
-                }else{
-                <td>Corriente</td>
-                }
-                <td>@c.getId()</td> 
-                <td>$@c.getMonto()</td>
-              </tr>
-                }
-          </tbody>                               
-        </table>
-        <br>
-        <h3>Prestamos</h3>
-      <table class="table table-hover" id="tablaCuentas">
-        <thead>
-            <tr>
-              <th>Monto</th>
-              <th>Tasa</th>
-              <th>No. cuotas</th>
-              <th>Día de pago</th>
-              <th>Valor cuota</th>              
-              </tr>
-          </thead>
-          <tbody>
-              @for(p <-prestamos){
-              <tr>
-                <td>$@p.getMonto()</td> 
-                <td>@p.getInteres()</td>
-                <th>@p.getCuotas()</th>
-                <th>@p.getDiaPago()</th>
-                <th>@p.getCuotaMensual()</th>
-              </tr>
-                }
-          </tbody>                               
-        </table>
-      <hr>
-      <h3>Operaciones</h3>
-      <table class="table table-hover" id="tablaOperaciones">
-        <thead>
-            <tr>
-              <th>Servicio</th>
-              <th>Tipo</th>
-              <th>Monto</th>
-              <th>Fecha</th>            
-              </tr>
-          </thead>
-          <tbody>
-              @for(o <-operaciones){
-              <tr>
-              @if(o.getIdPrestamo()==(-1)){
-                <td>@o.getIdCuenta()</td> 
-                }else{
-                <td>@o.getIdPrestamo()</td>
-                }
-                <td>@o.getTipo()</td>
-                <td>$ @o.getMonto()</td>
-                <td>@o.getFecha()</td>
-              </tr>
-                }
-          </tbody>                               
-        </table>
+    <div class="container">
+      @if(esLegal){
+        <h3>Opciones cliente jur&iacute;dico</h3>
+        <a class="btn btn-default" href="agregar_cuentas.html" role="button">Agregar cuentas</a>
+        <a class="btn btn-default" href="pagar_nomina.html" role="button">Pagar nomina</a>
+        <hr>
+      }
+      <div class="row">
+        <div class="col-md-3">
+          <h4>Filtros cuenta</h4>
+          <form class="form-horizontal">
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Tipo de cuenta</label>
+              <div class="col-sm-10">
+                <select class="form-control">
+                  <option>Ahorros</option>
+                  <option>Corriente</option>
+                  <option>CDT</option>
+                  <option>ARF</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Cuenta</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="cuenta" placeholder="Ingrese la cuenta">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Rango de saldos</label>
+              <div class="col-sm-10">
+                <input type="number" class="form-control" id="saldoMenor" placeholder="Ingrese el saldo menor">
+                <br>
+                <input type="number" class="form-control" id="saldoMayor" placeholder="Ingrese el saldo mayor">
+              </div>
+            </div>
+            <h4>Filtros operaciones</h4>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Rango de fechas</label>
+              <div class="col-sm-10">
+                <input type="date" class="form-control" id="fechaMenor">
+                <br>
+                <input type="date" class="form-control" id="fechaMayor">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Rango de valores</label>
+              <div class="col-sm-10">
+                <input type="number" class="form-control" id="valorMenor" placeholder="Ingrese el valor menor">
+                <br>
+                <input type="number" class="form-control" id="valorMayor" placeholder="Ingrese el valor mayor">
+              </div>
+            </div>
+            <hr>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Agrupar por</label>
+              <div class="col-sm-10">
+                <label class="radio-inline">
+                  <input type="radio" name="tipo" id="tipo" value="tipo"> Tipo
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="numero" id="numero" value="numero"> N&uacute;mero
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="saldo" id="saldo" value="saldo"> Saldo
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Ordenar por</label>
+              <div class="col-sm-10">
+                <label class="radio-inline">
+                  <input type="radio" name="tipo" id="tipo" value="tipo"> Tipo
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="numero" id="numero" value="numero"> N&uacute;mero
+                </label>
+                <label class="radio-inline">
+                  <input type="radio" name="saldo" id="saldo" value="saldo"> Saldo
+                </label>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="col-sm-offset-2 col-sm-10">
+                <button type="submit" class="btn btn-default">Filtrar</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-md-9">
+          <h3>Informaci&oacute;n cliente</h3>
+          <table class="table table-hover" id="tablaCliente">
+            <thead>
+                <tr>
+                  <th>Tipo</th>
+                  <th>Nombre</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <td>tipo</td>
+                  <td>nombre</td>
+              </tbody>
+            </table>
+            <h3>Cuentas</h3>
+            <table class="table table-hover" id="tablaCuentas">
+              <thead>
+                  <tr>
+                    <th>Tipo</th>
+                    <th>N&uacute;mero</th>
+                    <th>Saldo</th>
+                    <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for(c <-cuentas){
+                    <tr>
+                    @if(c.getTipo().equals("savings")){
+                      <td>Ahorros</td>
+                      }else{
+                      <td>Corriente</td>
+                      }
+                      <td>@c.getId()</td>
+                      <td>$@c.getMonto()</td>
+                      <td><a class="btn btn-default btn-xs" href="transaccion.html" role="button">Realizar transacci&oacute;n</a></td>
+                    </tr>
+                      }
+                </tbody>
+              </table>
+              <a class="btn btn-default" href="cuentas_cliente.html" role="button">Consultar cuentas</a>
+              <br>
+              <h3>Prestamos</h3>
+            <table class="table table-hover" id="tablaCuentas">
+              <thead>
+                  <tr>
+                    <th>Monto</th>
+                    <th>Tasa</th>
+                    <th>No. cuotas</th>
+                    <th>Día de pago</th>
+                    <th>Valor cuota</th>
+                    <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for(p <-prestamos){
+                    <tr>
+                      <td>$@p.getMonto()</td>
+                      <td>@p.getInteres()</td>
+                      <th>@p.getCuotas()</th>
+                      <th>@p.getDiaPago()</th>
+                      <th>@p.getCuotaMensual()</th>
+                      <td><a class="btn btn-default btn-xs" href="transaccion_prestamo.html" role="button">Realizar pago</a></td>
+                    </tr>
+                      }
+                </tbody>
+              </table>
+            <hr>
+            <h3>Operaciones</h3>
+            <table class="table table-hover" id="tablaOperaciones">
+              <thead>
+                  <tr>
+                    <th>Servicio</th>
+                    <th>Tipo</th>
+                    <th>Monto</th>
+                    <th>Fecha</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for(o <-operaciones){
+                    <tr>
+                    @if(o.getIdPrestamo()==(-1)){
+                      <td>@o.getIdCuenta()</td>
+                      }else{
+                      <td>@o.getIdPrestamo()</td>
+                      }
+                      <td>@o.getTipo()</td>
+                      <td>$ @o.getMonto()</td>
+                      <td>@o.getFecha()</td>
+                    </tr>
+                      }
+                </tbody>
+              </table>
+            <br>
+        </div>
+      </div>
       <hr>
       <footer>
         <p>&copy; BancAndes 2015</p>

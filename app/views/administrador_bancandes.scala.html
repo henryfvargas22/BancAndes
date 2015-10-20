@@ -23,11 +23,11 @@
     <body>
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
-        <div class="navbar-header">         
+        <div class="navbar-header">
           <a class="navbar-brand" href="#">BancAndes</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-          <form class="navbar-form navbar-right" role="form" action="@routes.Application.index()">            
+          <form class="navbar-form navbar-right" role="form" action="@routes.Application.index()">
             <button type="submit" class="btn btn-success">Cerrar Sesi&oacute;n</button>
           </form>
         </div>
@@ -58,31 +58,26 @@
       <hr>
       <div class="row">
         <div class="col-md-3">
-          <h3>Empleados</h3>
-          <p>Registro de nuevos empleados en el sistema.</p>
+          <h3>Registros</h3>
+          <p>Registros del sistema BancAndes.</p>
           <br>
-          <p><a class="btn btn-default" href="@routes.Application.formCrearEmpleado()" role="button">Registrar</a></p>
-        </div>
-        <div class="col-md-3">
-          <h3>Oficinas</h3>
-          <p>Registro de nuevas oficinas de BancAndes.</p>
-          <br>
-          <p><a class="btn btn-default" href="@routes.Application.formCrearOficina()" role="button">Registrar</a></p>
-       </div>
-        <div class="col-md-3">
-          <h3>Puntos de Atenci&oacute;n</h3>
-          <p>Registro de puntos de antencion de BancAndes.</p>
-          <br>
-          <p><a class="btn btn-default" href="@routes.Application.formCrearPuntoFisico()" role="button">Punto f&iacute;sico</a> <a class="btn btn-default" role="button">Cajero autom&aacute;tico</a></p>
+          <p><a class="btn btn-default" href="@routes.Application.formCrearEmpleado()" role="button">Registrar Empleado</a></p>
+          <p><a class="btn btn-default" href="@routes.Application.formCrearOficina()" role="button">Registrar Oficina</a></p>
+          <p><a class="btn btn-default" href="@routes.Application.formCrearPuntoFisico()" role="button">Registrar Punto F&iacute;sico</a></p>
         </div>
         <div class="col-md-3">
           <h3>B&uacute;squedas</h3>
           <p>Filtros de busqueda BancAndes.</p>
           <br>
-          <!--<p><a class="btn btn-default" href="@routes.Application.formBusquedaClientes()" role="button">Buscar</a></p>-->
           <p><a class="btn btn-default" href="@routes.Application.formBusquedaClientes()" role="button">Buscar Clientes</a></p>
           <p><a class="btn btn-default" href="@routes.Application.formBusquedaCuentas()" role="button">Buscar Cuentas</a></p>
-
+        </div>
+        <div class="col-md-3">
+          <h3>B&uacute;squedas</h3>
+          <p>Filtros de busqueda BancAndes.</p>
+          <br>
+          <p><a class="btn btn-default" href="@routes.Application.formBusquedaClientes()" role="button">Buscar Clientes</a></p>
+          <p><a class="btn btn-default" href="@routes.Application.formBusquedaCuentas()" role="button">Buscar Cuentas</a></p>
         </div>
       </div>
 
