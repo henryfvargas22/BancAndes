@@ -3,6 +3,8 @@ package fachada;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import dao.DaoClientes;
 import dao.DaoCuentas;
@@ -196,8 +198,52 @@ public class BancAndes
 
 	public boolean cerrarCuenta(long id) throws Exception
 	{
-		
 		return daoCuentas.cerrarCuenta(id);
+	}
+
+	public HashMap<Long,Boolean> cerrarCuentaLegal(long id, long idCuentaNueva) throws Exception
+	{
+		Cuenta actual=daoCuentas.darCuentaId(id);
+		Cliente temp=daoClientes.darClientePorId(actual.getId_Cliente());
+		HashMap<Long,Boolean> resp=null;
+		if(temp.getTipo().equals("legal"))
+		{
+			HashMap<Long,Double> cuentas=daoEmpresa.cuentasAPagarNomina(temp.getCedula());
+			if(!cuentas.isEmpty() && idCuentaNueva==-1 && id==idCuentaNueva)
+			{
+				throw new Exception("Suministre una cuenta de respaldo para la nómina de sus empleados.");
+			}
+			else
+			{
+				desasociarEmpleadosCuenta(id);
+				daoCuentas.cerrarCuenta(id);
+				Iterator i=cuentas.entrySet().iterator();
+				try
+				{
+					while(i.hasNext())
+					{
+						Entry<Long,Double> temporal=(Entry<Long, Double>) i.next();
+						Cuenta empleado=daoCuentas.darCuentaId(temporal.getKey());
+						int cedEmpleado=empleado.getId_Cliente();
+						asociarEmpleadoEmpresa(temp.getCedula(), cedEmpleado, idCuentaNueva, temporal.getKey(), "Quincenal", temporal.getValue());
+						resp.put(empleado.getId(), true);
+					}
+				}
+				catch(Exception e)
+				{
+					while(i.hasNext())
+					{
+						Entry<Long,Double> temporal=(Entry<Long, Double>) i.next();
+						resp.put(temporal.getKey(), false);
+					}
+				}
+			}
+		}
+		else
+		{
+			throw new Exception("El cliente no es una persona jurídica.");
+		}
+		return resp;
 	}
 
 	public void agregarPrestamo(long monto,double interes,int cuotas,int diaPago,int cuotaMensual, int idCliente) throws Exception
@@ -499,7 +545,12 @@ public class BancAndes
 			throw new Exception("Su cuenta no está asociada a una persona jurídica. Contacte a BancAndes.");
 		}
 	}
-	
+
+	public void desasociarEmpleadosCuenta(long idCuentaOrigen) throws Exception
+	{
+		daoEmpresa.desasociarEmpleadosCuenta(idCuentaOrigen);
+	}
+
 	public HashMap<Long,Boolean> pagarNomina(int idEmpleador, long idCuentaPagos) throws Exception
 	{
 		HashMap<Long,Double> cuentas=daoEmpresa.cuentasAPagarNomina(idEmpleador);

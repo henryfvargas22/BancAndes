@@ -54,6 +54,7 @@ public class DaoEmpresa
 
 	private static final String consultaEmpresaCuenta="SELECT * FROM "+tablaEmpresa+" WHERE "+idEmpleador+"=";
 
+	private static final String eliminarEmpleadosCuenta="DELETE FROM "+tablaEmpresa+" WHERE "+idCuentaOrigen+"=";
 	// ---------------------------------------------------
 	// Métodos asociados a los casos de uso: Consulta
 	// ---------------------------------------------------
@@ -128,6 +129,7 @@ public class DaoEmpresa
 		try
 		{
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			conexion.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			Statement st=conexion.createStatement();
 			if(existeCuentaAsociada(idEmpleador, idCuentaOrigen))
 			{
@@ -228,5 +230,29 @@ public class DaoEmpresa
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}		
 		return cuentas;
+	}
+	
+	public void desasociarEmpleadosCuenta(long idOrigen) throws Exception
+	{
+		Connection conexion=null;
+		try
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			conexion.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
+			Statement st=conexion.createStatement();
+			st.executeUpdate(eliminarEmpleadosCuenta+idOrigen);
+			conexion.commit();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			System.out.println(eliminarEmpleadosCuenta);
+			conexion.rollback();
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}
 	}
 }
