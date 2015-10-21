@@ -967,4 +967,18 @@ public class Application extends Controller {
 		}
 		return internalServerError();
 	}
+	
+	public Result filtrarPrestamos() throws Exception
+	{
+		DynamicForm dynamicForm=Form.form().bindFromRequest();
+		Logger.info("ahorros "+dynamicForm.field("ahorros").value());
+		Logger.info("corriente "+dynamicForm.field("corriente").value());
+		Logger.info("cdt "+dynamicForm.field("afc").value());
+		Logger.info("afc "+dynamicForm.field("cdt").value());
+		Logger.info("valorInicial "+dynamicForm.get("valorInicial"));
+		Logger.info("valorFinal "+dynamicForm.get("valorFinal"));
+		Logger.info("fechaUltimoMov "+dynamicForm.get("fechaUltimoMovimiento"));
+
+		List<Prestamo> prestamos=BancAndes.darInstancia().darPrestamosDefault();
+	}
 }
