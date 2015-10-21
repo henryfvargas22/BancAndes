@@ -947,7 +947,7 @@ public class Application extends Controller {
 		return unauthorized("Error 401 - No autorizado");
 	}
 	
-	public Result formBusquedaPrestamos()
+	public Result formConsultasBancandes()
 	{
 		if(usuarioActual!=null)
 		{
@@ -980,5 +980,6 @@ public class Application extends Controller {
 		Logger.info("fechaUltimoMov "+dynamicForm.get("fechaUltimoMovimiento"));
 
 		List<Prestamo> prestamos=BancAndes.darInstancia().darPrestamosDefault();
+		return ok();
 	}
 }
