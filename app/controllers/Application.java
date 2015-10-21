@@ -30,6 +30,8 @@ public class Application extends Controller {
 
 	private String mensaje;
 	private Usuario usuarioActual;
+	private long idCuenta;
+	private int idPrestamo;
 
 	public Result index() 
 	{
@@ -284,7 +286,7 @@ public class Application extends Controller {
 		String msg=mensaje;
 		boolean esLegal=(usuarioActual.getTipo().equals("legal")?true:false);
 		mensaje=null;
-		return(ok(cliente.render(msg, cuentas, prestamos, operaciones,esLegal)));
+		return(ok(cliente.render(msg, cuentas, prestamos, operaciones,esLegal,usuarioActual.getNombre())));
 	}
 
 	public Result formCrearEmpleado()
@@ -981,5 +983,36 @@ public class Application extends Controller {
 
 		List<Prestamo> prestamos=BancAndes.darInstancia().darPrestamosDefault();
 		return ok();
+	}
+	
+	public Result formTransaccionCuentas(long idCuentaOrigen)
+	{
+		idCuenta=idCuentaOrigen;
+		return ok(transaccion.render());
+	}
+	
+	public Result insertarTransaccionCuentas()
+	{
+		DynamicForm dynamicForm=Form.form().bindFromRequest();
+		long idCuentaDes=Long.parseLong(dynamicForm.get("cuenta"));
+		double monto=Double.parseDouble(dynamicForm.get("monto"));
+		try 
+		{
+			BancAndes.darInstancia().insertarTransaccionCuentas(idCuenta, idCuentaDes, monto);
+			mensaje="Se realizó correctamente la transacción.";
+			return redirect("/cliente");
+		} 
+		catch (Exception e)
+		{
+			if(!e.getMessage().startsWith("ERROR"))
+			{
+				mensaje=e.getMessage();
+			}
+			else
+			{
+				mensaje="No se pudo realizar la transacción.";
+			}
+			return redirect("/cliente");
+		}
 	}
 }

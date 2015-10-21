@@ -30,14 +30,14 @@
     </nav>
       <div class="container">
       <h2>Transacci&oacute;n</h2>
-      <form>
+      <form method="post" action="@routes.Application.insertarTransaccionCuentas()">
         <div class="form-group">
           <label>N&uacute;mero de cuenta</label>
-          <input type="text" class="form-control" id="cuenta" placeholder="Ingrese la cuenta de destino">
+          <input type="number" class="form-control" name="cuenta" placeholder="Ingrese la cuenta de destino">
         </div>
         <div class="form-group">
           <label>Monto transacci&oacute;n</label>
-          <input type="text" class="form-control" id="cuenta" placeholder="Ingrese el monto">
+          <input type="number" class="form-control" name="monto" placeholder="Ingrese el monto">
         </div>
         <button type="submit" class="btn btn-default">Realizar transacci&oacute;n</button>
       </form>
