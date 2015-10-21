@@ -946,4 +946,25 @@ public class Application extends Controller {
 		}
 		return unauthorized("Error 401 - No autorizado");
 	}
+	
+	public Result formBusquedaPrestamos()
+	{
+		if(usuarioActual!=null)
+		{
+			List<Prestamo> prestamos;
+			try 
+			{
+				prestamos=BancAndes.darInstancia().darPrestamosDefault();
+			} 
+			catch (Exception e) 
+			{
+				prestamos=new ArrayList<Prestamo>();
+			}
+			boolean esGerente=BancAndes.darInstancia().esGerente(usuarioActual.getUsuario(), usuarioActual.getContrasenia());
+			return ok(
+					//busqueda_clientes.render(esGerente,clientes)
+					);
+		}
+		return internalServerError();
+	}
 }
