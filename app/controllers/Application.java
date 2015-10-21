@@ -1015,4 +1015,40 @@ public class Application extends Controller {
 			return redirect("/cliente");
 		}
 	}
+	
+	public Result formTransaccionPrestamo(int idPrestam)
+	{
+		idPrestamo=idPrestam;
+		ArrayList<Cuenta> cuentas=BancAndes.darInstancia().darCuentasCliente(usuarioActual.getCedula());
+		return ok(transaccion_prestamo.render(cuentas));
+	}
+	
+	public Result insertarTransaccionPrestamo()
+	{
+		DynamicForm dynamicForm=Form.form().bindFromRequest();
+		long cuenta=Long.parseLong(dynamicForm.get("cuentas"));
+		String pagarCuota=dynamicForm.field("cuota").value();
+		try
+		{
+			String tipo=(pagarCuota==null?"PagarCuotaExtraordinaria":"PagarCuota");
+			double monto = 0;
+			if(pagarCuota==null)
+			monto=Double.parseDouble(dynamicForm.get("monto"));
+			BancAndes.darInstancia().insertarTransaccionPrestamo(cuenta, idPrestamo, monto, tipo);
+			mensaje="Se realizó correctamente el pago.";
+			return redirect("/cliente");
+		}
+		catch(Exception e)
+		{
+			if(!e.getMessage().startsWith("ERROR"))
+			{
+				mensaje=e.getMessage();
+			}
+			else
+			{
+				mensaje="No se pudo realizar el pago. Revise los datos.";
+			}
+			return redirect("/cliente");
+		}
+	}
 }

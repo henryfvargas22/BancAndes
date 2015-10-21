@@ -60,90 +60,6 @@
         <hr>
       }
       <div class="row">
-        <div class="col-md-3">
-          <h4>Filtros cuentas</h4>
-          <form class="form-horizontal">
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Tipo de cuenta</label>
-              <div class="col-sm-10">
-                <select class="form-control">
-                  <option>Ahorros</option>
-                  <option>Corriente</option>
-                  <option>CDT</option>
-                  <option>ARF</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Cuenta</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="cuenta" placeholder="Ingrese la cuenta">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Rango de saldos</label>
-              <div class="col-sm-10">
-                <input type="number" class="form-control" id="saldoMenor" placeholder="Ingrese el saldo menor">
-                <br>
-                <input type="number" class="form-control" id="saldoMayor" placeholder="Ingrese el saldo mayor">
-              </div>
-            </div>
-            <h4>Filtros prestamos</h4>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Rango de montos</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="montoMenor" placeholder="Ingrese el monto menor">
-                <br>
-                <input type="text" class="form-control" id="montoMayor" placeholder="Ingrese el monto mayor">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Rango de valores de cuota</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="valorMenor" placeholder="Ingrese el valor menor">
-                <br>
-                <input type="text" class="form-control" id="valorMayor" placeholder="Ingrese el valor mayor">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Rango de n&uacute;mero de cuotas</label>
-              <div class="col-sm-10">
-                <input type="number" class="form-control" id="cuotaMenor" placeholder="Ingrese el n&uacute;mero menor">
-                <br>
-                <input type="number" class="form-control" id="cuotaMayor" placeholder="Ingrese el n&uacute;mero mayor">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Rango de valores</label>
-              <div class="col-sm-10">
-                <input type="number" class="form-control" id="valorMenor" placeholder="Ingrese el valor menor">
-              </div>
-            </div>
-            <h4>Filtros operaciones</h4>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Rango de fechas</label>
-              <div class="col-sm-10">
-                <input type="date" class="form-control" id="fechaMenor">
-                <br>
-                <input type="date" class="form-control" id="fechaMayor">
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Rango de valores</label>
-              <div class="col-sm-10">
-                <input type="number" class="form-control" id="valorMenor" placeholder="Ingrese el valor menor">
-                <br>
-                <input type="number" class="form-control" id="valorMayor" placeholder="Ingrese el valor mayor">
-              </div>
-            </div>
-            <hr>
-            <div class="form-group">
-              <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">Filtrar</button>
-              </div>
-            </div>
-          </form>
-        </div>
         <div class="col-md-9">
           <h3>Informaci&oacute;n cliente</h3>
           <table class="table table-hover" id="tablaCliente">
@@ -187,7 +103,6 @@
                       }
                 </tbody>
               </table>
-              <a class="btn btn-default" href="cuentas_cliente.html" role="button">Consultar cuentas</a>
               <br>
               <h3>Prestamos</h3>
             <table class="table table-hover" id="tablaCuentas">
@@ -209,7 +124,7 @@
                       <th>@p.getCuotas()</th>
                       <th>@p.getDiaPago()</th>
                       <th>@p.getCuotaMensual()</th>
-                      <td><a class="btn btn-default btn-xs" href="transaccion_prestamo.html" role="button">Realizar pago</a></td>
+                      <td><a class="btn btn-default btn-xs" href="@routes.Application.formTransaccionPrestamo(p.getId())" role="button">Realizar pago</a></td>
                     </tr>
                       }
                 </tbody>

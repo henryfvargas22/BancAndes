@@ -31,12 +31,12 @@
     </nav>
       <div class="container">
       <h2>Transacci&oacute;n Prestamo</h2>
-      <form>
+      <form method="post" action="@routes.Application.insertarTransaccionPrestamo()">
         <div class="form-group">
           <label>Cuenta</label>
           <select class="form-control" id="cuentas" name="cuentas">
             @for(c<-cuentas){
-              <option>c.getId() - c.getMonto()</option>
+              <option value="@c.getId()">@c.getId() - @c.getMonto()</option>
             }
           </select>
         </div>
@@ -50,7 +50,7 @@
           <label class="sr-only">Monto</label>
           <div class="input-group">
             <div class="input-group-addon">$</div>
-            <input type="text" class="form-control" id="monto" placeholder="Monto">
+            <input type="number" class="form-control" id="monto" name="monto" placeholder="Monto">
             <div class="input-group-addon">.00</div>
           </div>
         </div>
