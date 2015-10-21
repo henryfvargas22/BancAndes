@@ -1,4 +1,4 @@
-@(cuentas: List[vos.Cuenta])
+@(cuentas: List[vos.Cuenta], exitoPago: Boolean)
 <html>
     <head>
         <meta charset="utf-8">
@@ -45,9 +45,11 @@
           </thead>
           <tbody>
               @for(c <-cuentas){
-              
-              <tr class="">
-
+                @if(!exitoPago){
+                  <tr class="danger">
+                }else{
+                  <tr class="success">
+                }
               @if(c.getTipo().equals("savings")){
                 <td>Ahorros</td>
                 }else{
