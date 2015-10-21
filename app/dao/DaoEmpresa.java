@@ -36,9 +36,9 @@ public class DaoEmpresa
 	 * nombre de la columna anyo en la tabla videos.
 	 */
 	private static final String idCuentaDestino = "id_cuentadestino";
-	
+
 	private static final String tipo="tipo";
-	
+
 	private static final String monto="monto";
 
 	//----------------------------------------------------
@@ -189,7 +189,7 @@ public class DaoEmpresa
 		}	
 		return existe;
 	}
-	
+
 	public HashMap<Long,Double> cuentasAPagarNomina(int idEmpleador) throws Exception
 	{
 		PreparedStatement prepStmt = null;
@@ -231,7 +231,7 @@ public class DaoEmpresa
 		}		
 		return cuentas;
 	}
-	
+
 	public void desasociarEmpleadosCuenta(long idOrigen) throws Exception
 	{
 		Connection conexion=null;
@@ -254,5 +254,35 @@ public class DaoEmpresa
 		{
 			ConsultaDAO.darInstancia().closeConnection(conexion);
 		}
+	}
+
+	public long darCuentaNomina(int idEmpleador) throws Exception 
+	{
+		PreparedStatement prepStmt = null;
+		Connection conexion=null;
+		long resp = 0;
+		try 
+		{
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(consultaEmpresaCuenta+idEmpleador);
+			ResultSet rs = prepStmt.executeQuery();
+			while(rs.next())
+			{
+				resp=rs.getLong(idCuentaOrigen);
+			}
+			conexion.commit();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+			System.out.println(consultaEmpresaCuenta);
+			conexion.rollback();
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}
+		finally 
+		{
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}
+		return resp;
 	}
 }

@@ -41,6 +41,7 @@ POST	/transaccion/prestamo/		controllers.Application.insertarTransaccionPrestamo
 GET		/nomina/agregar				controllers.Application.agregarCuentaEmpresa()
 POST	/nomina/agregar				controllers.Application.agregarCuentaNomina()
 GET		/consultas					controllers.Application.formConsultasBancandes()
+POST	/consultas					controllers.Application.filtrarBancandes()
 GET     /usuarios					controllers.Application.getUsuarios()
 GET     /clientes					controllers.Application.getClientes()
 GET		/empleados					controllers.Application.getEmpleados()

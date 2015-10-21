@@ -551,9 +551,10 @@ public class BancAndes
 		daoEmpresa.desasociarEmpleadosCuenta(idCuentaOrigen);
 	}
 
-	public HashMap<Long,Boolean> pagarNomina(int idEmpleador, long idCuentaPagos) throws Exception
+	public HashMap<Long,Boolean> pagarNomina(int idEmpleador) throws Exception
 	{
 		HashMap<Long,Double> cuentas=daoEmpresa.cuentasAPagarNomina(idEmpleador);
-		return daoCuentas.pagarNomina(idCuentaPagos, cuentas);
+		long idCuentaOrigen=daoEmpresa.darCuentaNomina(idEmpleador);
+		return daoCuentas.pagarNomina(idCuentaOrigen,cuentas);
 	}
 }

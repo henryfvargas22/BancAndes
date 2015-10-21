@@ -13,6 +13,7 @@ import play.*;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.*;
+import play.mvc.WebSocket.In;
 import views.html.administrador_bancandes;
 import vos.Cliente;
 import vos.Cuenta;
@@ -948,49 +949,120 @@ public class Application extends Controller {
 		}
 		return unauthorized("Error 401 - No autorizado");
 	}
-	
+
 	public Result formConsultasBancandes()
 	{
 		if(usuarioActual!=null)
 		{
 			List<Prestamo> prestamos;
+			List<Operacion> operaciones;
 			try 
 			{
 				prestamos=BancAndes.darInstancia().darPrestamosDefault();
+				operaciones=BancAndes.darInstancia().darOperacionesDefault();
 			} 
 			catch (Exception e) 
 			{
 				prestamos=new ArrayList<Prestamo>();
+				operaciones=new ArrayList<Operacion>();
 			}
 			boolean esGerente=BancAndes.darInstancia().esGerente(usuarioActual.getUsuario(), usuarioActual.getContrasenia());
-			return ok(
-					//busqueda_clientes.render(esGerente,clientes)
-					);
+			return ok(consultas_bancandes.render(esGerente,prestamos,operaciones));
 		}
 		return internalServerError();
 	}
-	
-	public Result filtrarPrestamos() throws Exception
-	{
-		DynamicForm dynamicForm=Form.form().bindFromRequest();
-		Logger.info("ahorros "+dynamicForm.field("ahorros").value());
-		Logger.info("corriente "+dynamicForm.field("corriente").value());
-		Logger.info("cdt "+dynamicForm.field("afc").value());
-		Logger.info("afc "+dynamicForm.field("cdt").value());
-		Logger.info("valorInicial "+dynamicForm.get("valorInicial"));
-		Logger.info("valorFinal "+dynamicForm.get("valorFinal"));
-		Logger.info("fechaUltimoMov "+dynamicForm.get("fechaUltimoMovimiento"));
 
-		List<Prestamo> prestamos=BancAndes.darInstancia().darPrestamosDefault();
-		return ok();
+	public Result filtrarBancandes() throws Exception
+	{
+		if(usuarioActual!=null)
+		{
+			DynamicForm dynamicForm=Form.form().bindFromRequest();
+
+			String montoMenorP=dynamicForm.get("montoMenor");
+			String montoMayorP=dynamicForm.get("montoMayor");
+			String valorCuotaMenor=dynamicForm.get("valorCuotaMenor");
+			String valorCuotaMayor=dynamicForm.get("valorCuotaMayor");
+			String cuotaMenor=dynamicForm.get("cuotaMenor");
+			String cuotaMayor=dynamicForm.get("cuotaMayor");
+			String diaPago=dynamicForm.get("dia");
+			List<Prestamo> prestamos=BancAndes.darInstancia().darPrestamosDefault();
+			if(!montoMenorP.equals(""))
+			{
+				double montoM=Double.parseDouble(montoMenorP);
+				prestamos=prestamos.stream().filter(p ->p.getMonto()>montoM).collect(Collectors.toList());
+			}
+			if(!montoMayorP.equals(""))
+			{
+				double montoM=Double.parseDouble(montoMayorP);
+				prestamos=prestamos.stream().filter(p ->p.getMonto()<montoM).collect(Collectors.toList());
+			}
+			if(!valorCuotaMayor.equals(""))
+			{
+				double cuotaM=Double.parseDouble(valorCuotaMayor);
+				prestamos=prestamos.stream().filter(p ->p.getCuotaMensual()<cuotaM).collect(Collectors.toList());
+			}
+			if(!valorCuotaMenor.equals(""))
+			{
+				double cuotaM=Double.parseDouble(valorCuotaMenor);
+				prestamos=prestamos.stream().filter(p ->p.getCuotaMensual()>cuotaM).collect(Collectors.toList());
+			}
+			if(!cuotaMayor.equals(""))
+			{
+				int cuotaNu=Integer.parseInt(cuotaMayor);
+				prestamos=prestamos.stream().filter(p ->p.getCuotas()<cuotaNu).collect(Collectors.toList());
+			}
+			if(!cuotaMenor.equals(""))
+			{
+				int cuotaNu=Integer.parseInt(cuotaMenor);
+				prestamos=prestamos.stream().filter(p ->p.getCuotas()>cuotaNu).collect(Collectors.toList());
+			}
+			if(!diaPago.equals(""))
+			{
+				int dia=Integer.parseInt(diaPago);
+				prestamos=prestamos.stream().filter(p ->p.getDiaPago()==dia).collect(Collectors.toList());
+			}
+
+			String fechaMenor=dynamicForm.get("fechaMenor");
+			String fechaMayor=dynamicForm.get("fechaMayor");
+			String valorMenor=dynamicForm.get("valorMenor");
+			String valorMayor=dynamicForm.get("valorMayor");
+
+			List<Operacion> operaciones=BancAndes.darInstancia().darOperacionesDefault();
+			if(!fechaMenor.equals(""))
+			{
+				SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+				Date fecha=format.parse(fechaMenor);
+				operaciones=operaciones.stream().filter(s ->(fecha.compareTo(s.getFecha())<0)).collect(Collectors.toList());
+			}
+			if(!fechaMayor.equals(""))
+			{
+				SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+				Date fecha=format.parse(fechaMayor);
+				operaciones=operaciones.stream().filter(s ->(fecha.compareTo(s.getFecha())>0)).collect(Collectors.toList());
+			}
+			if(!valorMenor.equals(""))
+			{
+				double valorM=Double.parseDouble(valorMenor);
+				operaciones=operaciones.stream().filter(o ->o.getMonto()>valorM).collect(Collectors.toList());
+			}
+			if(!valorMayor.equals(""))
+			{
+				double valorM=Double.parseDouble(valorMayor);
+				operaciones=operaciones.stream().filter(o ->o.getMonto()<valorM).collect(Collectors.toList());
+			}
+			boolean esGerente=BancAndes.darInstancia().esGerente(usuarioActual.getUsuario(), usuarioActual.getContrasenia());
+			return ok(consultas_bancandes.render(esGerente, prestamos, operaciones));
+		}
+		return internalServerError();
+
 	}
-	
+
 	public Result formTransaccionCuentas(long idCuentaOrigen)
 	{
 		idCuenta=idCuentaOrigen;
 		return ok(transaccion.render());
 	}
-	
+
 	public Result insertarTransaccionCuentas()
 	{
 		DynamicForm dynamicForm=Form.form().bindFromRequest();
@@ -1015,14 +1087,14 @@ public class Application extends Controller {
 			return redirect("/cliente");
 		}
 	}
-	
+
 	public Result formTransaccionPrestamo(int idPrestam)
 	{
 		idPrestamo=idPrestam;
 		ArrayList<Cuenta> cuentas=BancAndes.darInstancia().darCuentasCliente(usuarioActual.getCedula());
 		return ok(transaccion_prestamo.render(cuentas));
 	}
-	
+
 	public Result insertarTransaccionPrestamo()
 	{
 		DynamicForm dynamicForm=Form.form().bindFromRequest();
@@ -1033,7 +1105,7 @@ public class Application extends Controller {
 			String tipo=(pagarCuota==null?"PagarCuotaExtraordinaria":"PagarCuota");
 			double monto = 0;
 			if(pagarCuota==null)
-			monto=Double.parseDouble(dynamicForm.get("monto"));
+				monto=Double.parseDouble(dynamicForm.get("monto"));
 			BancAndes.darInstancia().insertarTransaccionPrestamo(cuenta, idPrestamo, monto, tipo);
 			mensaje="Se realizó correctamente el pago.";
 			return redirect("/cliente");
@@ -1051,13 +1123,13 @@ public class Application extends Controller {
 			return redirect("/cliente");
 		}
 	}
-	
+
 	public Result agregarCuentaEmpresa()
 	{
 		ArrayList<Cuenta> cuentas=BancAndes.darInstancia().darCuentasCliente(usuarioActual.getCedula());
 		return ok(agregar_cuentas.render(cuentas));
 	}
-	
+
 	public Result agregarCuentaNomina()
 	{
 		try

@@ -30,3 +30,5 @@ project/play-fork-run.sbt
 *.class
 
 *.class
+
+*.02
