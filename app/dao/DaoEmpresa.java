@@ -131,7 +131,7 @@ public class DaoEmpresa
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
 			conexion.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 			Statement st=conexion.createStatement();
-			if(existeCuentaAsociada(idEmpleador, idCuentaOrigen))
+			if(!existeCuentaAsociada(idEmpleador, idCuentaOrigen))
 			{
 				st.executeUpdate(ingresarEmpresa+"("+idEmpleador+","
 						+idEmpleado+","

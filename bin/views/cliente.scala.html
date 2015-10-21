@@ -24,7 +24,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand">BancAndes</a>
+          <a class="navbar-brand" href="@routes.Application.cliente()">BancAndes</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form class="navbar-form navbar-right" role="form" action="@routes.Application.index()">
@@ -55,7 +55,7 @@
     <div class="container">
       @if(esLegal){
         <h3>Opciones cliente jur&iacute;dico</h3>
-        <a class="btn btn-default" href="agregar_cuentas.html" role="button">Agregar cuentas</a>
+        <a class="btn btn-default" href="@routes.Application.agregarCuentaEmpresa()" role="button">Agregar cuentas</a>
         <a class="btn btn-default" href="pagar_nomina.html" role="button">Pagar nomina</a>
         <hr>
       }

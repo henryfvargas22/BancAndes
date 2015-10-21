@@ -1,4 +1,4 @@
-@(message: String,cuentas: List[vos.Cuenta],prestamos: List[vos.Prestamo],operaciones: List[vos.Operacion], esLegal: Boolean)
+@(cuentas: List[vos.Cuenta])
 <html>
     <head>
         <meta charset="utf-8">
@@ -35,10 +35,29 @@
     </nav>
     <div class="container">
       <h2>Agregar cuentas</h2>
-      <form>
+      <form method="post">
+      	<div class="form-group">
+          <label>Cuenta</label>
+          <select class="form-control" id="cuentas" name="cuentas">
+            @for(c<-cuentas){
+              <option value="@c.getId()">@c.getId() - @c.getMonto()</option>
+            }
+          </select>
+        </div>
         <div class="form-group">
           <label>Ingrese el n&uacute;mero de cuenta que desea agregar</label>
-          <input type="text" name="numeroCuenta" id="numeroCuenta" value="numeroCuenta" placeholder="Ingrese el N&uacute;mero">
+          <input type="number" name="numeroCuenta" id="numeroCuenta" placeholder="Ingrese el N&uacute;mero">
+        </div>
+        <div class="form-group">
+          <label>Ingrese el sueldo del empleado</label>
+          <input type="number" name="monto" id="monto" placeholder="Ingrese el monto">
+        </div>
+        <div class="form-group">
+          <label>Tipo de Pago</label>
+          <select class="form-control" id="tipo" name="tipo">
+              <option>Quincenal</option>
+              <option>Mensual</option>    
+          </select>
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-default">Agregar</button>

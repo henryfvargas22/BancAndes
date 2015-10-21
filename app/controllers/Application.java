@@ -1051,4 +1051,38 @@ public class Application extends Controller {
 			return redirect("/cliente");
 		}
 	}
+	
+	public Result agregarCuentaEmpresa()
+	{
+		ArrayList<Cuenta> cuentas=BancAndes.darInstancia().darCuentasCliente(usuarioActual.getCedula());
+		return ok(agregar_cuentas.render(cuentas));
+	}
+	
+	public Result agregarCuentaNomina()
+	{
+		try
+		{
+			DynamicForm dynamicForm=Form.form().bindFromRequest();
+			String tipo=dynamicForm.get("monto");
+			long idCuentaDestino=Long.parseLong(dynamicForm.get("numeroCuenta"));
+			double monto=Double.parseDouble(dynamicForm.get("monto"));
+			long idCuentaOrigen=Long.parseLong(dynamicForm.get("cuentas"));
+			int idEmpleado=BancAndes.darInstancia().darCuentaPorId(idCuentaDestino).getId_Cliente();
+			BancAndes.darInstancia().asociarEmpleadoEmpresa(usuarioActual.getCedula(), idEmpleado, idCuentaOrigen, idCuentaDestino, tipo, monto);
+			mensaje="Se agregó correctamente el empleado.";
+			return redirect("/cliente");
+		}
+		catch(Exception e)
+		{
+			if(!e.getMessage().startsWith("ERROR"))
+			{
+				mensaje=e.getMessage();
+			}
+			else
+			{
+				mensaje="No se pudo agregar el empleado. Revise los datos.";
+			}
+			return redirect("/cliente");
+		}
+	}
 }
