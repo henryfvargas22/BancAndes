@@ -33,32 +33,8 @@
         </div>
       </div>
     </nav>
-
-    <div class="jumbotron">
-      <div class="container">
-          <div class="row">
-              <div class="col-md-2">
-                  <img src="assets/images/client.png">
-              </div>
-              <div class="col-md-7">
-                    <h2>Cliente</h2>
-                     @if(message==null){
-                    <p>Bienvenido</p>
-                    }else{
-                    <p>@message</p>
-                    }
-              </div>
-          </div>
-      </div>
-    </div>
-
     <div class="container">
-      @if(esLegal){
-        <h3>Opciones cliente jur&iacute;dico</h3>
-        <a class="btn btn-default" href="agregar_cuentas.html" role="button">Agregar cuentas</a>
-        <a class="btn btn-default" href="pagar_nomina.html" role="button">Pagar nomina</a>
-        <hr>
-      }
+      <h2>Consultas</h2>
       <div class="row">
         <div class="col-md-3">
           <h4>Filtros cuentas</h4>
@@ -88,37 +64,37 @@
                 <input type="number" class="form-control" id="saldoMayor" placeholder="Ingrese el saldo mayor">
               </div>
             </div>
-            <h4>Filtros prestamos</h4>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Rango de montos</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="montoMenor" placeholder="Ingrese el monto menor">
-                <br>
-                <input type="text" class="form-control" id="montoMayor" placeholder="Ingrese el monto mayor">
-              </div>
+          <h4>Filtros prestamos</h4>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Rango de montos</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="montoMenor" placeholder="Ingrese el monto menor">
+              <br>
+              <input type="text" class="form-control" id="montoMayor" placeholder="Ingrese el monto mayor">
             </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Rango de valores de cuota</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="valorMenor" placeholder="Ingrese el valor menor">
-                <br>
-                <input type="text" class="form-control" id="valorMayor" placeholder="Ingrese el valor mayor">
-              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Rango de valores de cuota</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="valorCuotaMenor" placeholder="Ingrese el valor menor">
+              <br>
+              <input type="text" class="form-control" id="valorCuotaMayor" placeholder="Ingrese el valor mayor">
             </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Rango de n&uacute;mero de cuotas</label>
-              <div class="col-sm-10">
-                <input type="number" class="form-control" id="cuotaMenor" placeholder="Ingrese el n&uacute;mero menor">
-                <br>
-                <input type="number" class="form-control" id="cuotaMayor" placeholder="Ingrese el n&uacute;mero mayor">
-              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">Rango de n&uacute;mero de cuotas</label>
+            <div class="col-sm-10">
+              <input type="number" class="form-control" id="cuotaMenor" placeholder="Ingrese el n&uacute;mero menor">
+              <br>
+              <input type="number" class="form-control" id="cuotaMayor" placeholder="Ingrese el n&uacute;mero mayor">
             </div>
-            <div class="form-group">
-              <label class="col-sm-2 control-label">Rango de valores</label>
-              <div class="col-sm-10">
-                <input type="number" class="form-control" id="valorMenor" placeholder="Ingrese el valor menor">
-              </div>
+          </div>
+          <div class="form-group">
+            <label class="col-sm-2 control-label">D&iacute;a de pago</label>
+            <div class="col-sm-10">
+              <input type="number" class="form-control" id="dia" placeholder="Ingrese el d&iacute;a del mes de pago">
             </div>
+          </div>
             <h4>Filtros operaciones</h4>
             <div class="form-group">
               <label class="col-sm-2 control-label">Rango de fechas</label>
@@ -145,19 +121,8 @@
           </form>
         </div>
         <div class="col-md-9">
-          <h3>Informaci&oacute;n cliente</h3>
-          <table class="table table-hover" id="tablaCliente">
-            <thead>
-                <tr>
-                  <th>Tipo</th>
-                  <th>Nombre</th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <td>tipo</td>
-                  <td>nombre</td>
-              </tbody>
-            </table>
+            <h2>Sistema BancAndes</h2>
+            <br>
             <h3>Cuentas</h3>
             <table class="table table-hover" id="tablaCuentas">
               <thead>
@@ -165,7 +130,6 @@
                     <th>Tipo</th>
                     <th>N&uacute;mero</th>
                     <th>Saldo</th>
-                    <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -178,7 +142,6 @@
                       }
                       <td>@c.getId()</td>
                       <td>$@c.getMonto()</td>
-                      <td><a class="btn btn-default btn-xs" href="transaccion.html" role="button">Realizar transacci&oacute;n</a></td>
                     </tr>
                       }
                 </tbody>
@@ -194,7 +157,6 @@
                     <th>No. cuotas</th>
                     <th>Día de pago</th>
                     <th>Valor cuota</th>
-                    <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -205,7 +167,6 @@
                       <th>@p.getCuotas()</th>
                       <th>@p.getDiaPago()</th>
                       <th>@p.getCuotaMensual()</th>
-                      <td><a class="btn btn-default btn-xs" href="transaccion_prestamo.html" role="button">Realizar pago</a></td>
                     </tr>
                       }
                 </tbody>
@@ -243,7 +204,8 @@
       <footer>
         <p>&copy; BancAndes 2015</p>
       </footer>
-    </div> <!-- /container -->        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
+    </div> <!-- /container -->
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.js"></script>
         <script>window.jQuery || document.write('<script src="assets/javascripts/vendor/jquery-1.11.2.js"><\/script>')</script>
 
         <script src="assets/javascripts/vendor/bootstrap.min.js"></script>
