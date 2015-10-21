@@ -72,7 +72,8 @@ public class Application extends Controller {
 
 	public Result formCerrarCuenta()
 	{
-		return ok(cerrar_cuenta_form.render(new ArrayList<Cuenta>()));
+		boolean esLegal=(usuarioActual.getTipo().equals("legal")?true:false);
+		return ok(cerrar_cuenta_form.render(new ArrayList<Cuenta>(),esLegal));
 	}
 
 	public Result formCerrarPrestamo()
@@ -138,7 +139,8 @@ public class Application extends Controller {
 		Logger.info("Username is: " + dynamicForm.get("cliente"));
 		String user=dynamicForm.get("cliente");
 		ArrayList<Cuenta> cuentas=BancAndes.darInstancia().darCuentasCliente(Integer.parseInt(user));
-		return ok(cerrar_cuenta_form.render(cuentas));
+		boolean esLegal=(usuarioActual.getTipo().equals("legal")?true:false);
+		return ok(cerrar_cuenta_form.render(cuentas,esLegal));
 	}
 
 
@@ -280,8 +282,9 @@ public class Application extends Controller {
 		}
 		redirect("/cliente");
 		String msg=mensaje;
+		boolean esLegal=(usuarioActual.getTipo().equals("legal")?true:false);
 		mensaje=null;
-		return(ok(cliente.render(msg, cuentas, prestamos, operaciones)));
+		return(ok(cliente.render(msg, cuentas, prestamos, operaciones,esLegal)));
 	}
 
 	public Result formCrearEmpleado()
