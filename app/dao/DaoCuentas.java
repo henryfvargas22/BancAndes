@@ -312,23 +312,26 @@ public class DaoCuentas
 		conexion=ConsultaDAO.darInstancia().establecerConexion();
 		conexion.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE);
 		Savepoint point=null;
-		Iterator i=cuentas.entrySet().iterator();
+		Iterator<Entry<Long,Double>> i=cuentas.entrySet().iterator();
 		try
 		{
+			point=conexion.setSavepoint();
 			while(i.hasNext())
 			{
-				Statement st=conexion.createStatement();
-				Entry<Long,Double> cuentaActual=(Entry<Long, Double>) i.next();
+				Entry<Long,Double> cuentaActual=i.next();
 				Cuenta ori=darCuentaId(origen);
 				double temp=ori.getMonto()-cuentaActual.getValue();
+				System.out.println("casi");
 				if(temp>=0)
 				{
-					st.executeUpdate(actualizarMontoCuenta+(-1*cuentaActual.getValue())+" WHERE id="+origen);
-					st.executeUpdate(actualizarMontoCuenta+cuentaActual.getValue()+" WHERE id="+cuentaActual.getKey());
+					System.out.println("entra");
+					actualizarMonto(origen, (-1*cuentaActual.getValue()));
+					actualizarMonto(cuentaActual.getKey(), cuentaActual.getValue());
 					point=conexion.setSavepoint();
 					resp.put(cuentaActual.getKey(), true);
 				}
 			}
+			conexion.commit();
 		}
 		catch(SQLException e)
 		{

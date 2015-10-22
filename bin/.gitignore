@@ -1,14 +1,9 @@
-/.DS_Store
+/views/
 /application.conf
 /conexion.properties
+/logback.xml
+/routes
 /controllers/
 /dao/
 /fachada/
-/logback.xml
-/routes
-/views/
 /vos/
-/ApplicationTest.class
-/IntegrationTest$1.class
-/IntegrationTest.class
-/PersistanceTest.class

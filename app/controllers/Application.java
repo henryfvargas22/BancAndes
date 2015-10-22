@@ -4,7 +4,9 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import fachada.BancAndes;
@@ -13,11 +15,11 @@ import play.*;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.mvc.*;
-import play.mvc.WebSocket.In;
 import views.html.administrador_bancandes;
 import vos.Cliente;
 import vos.Cuenta;
 import vos.Empleado;
+import vos.Empresa;
 import vos.Oficina;
 import vos.Operacion;
 import vos.Prestamo;
@@ -607,6 +609,20 @@ public class Application extends Controller {
 			return internalServerError("Ups: "+e.getMessage());
 		}
 	}
+	
+	public Result getEmpresas()
+	{
+		try 
+		{
+			List<Empresa> empresas=BancAndes.darInstancia().darEmpresasDefault();
+			return ok(toJson(empresas));
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			return internalServerError("Ups: "+e.getMessage());
+		}
+	}
 
 	public Result closeCuenta()
 	{
@@ -1153,6 +1169,32 @@ public class Application extends Controller {
 			else
 			{
 				mensaje="No se pudo agregar el empleado. Revise los datos.";
+			}
+			return redirect("/cliente");
+		}
+	}
+	
+	public Result pagarNomina()
+	{
+		try 
+		{
+			List<Cuenta> cuentas=BancAndes.darInstancia().darCuentasNomina(usuarioActual.getCedula());
+			HashMap<Long,Boolean> resp=BancAndes.darInstancia().pagarNomina(usuarioActual.getCedula());
+			Logger.info(resp.toString());
+			Logger.info(cuentas.toString());
+			mensaje="Se pagó correctamente la nómina";
+			return ok(pagar_nomina.render(cuentas,resp));
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			if(!e.getMessage().startsWith("ERROR"))
+			{
+				mensaje=e.getMessage();
+			}
+			else
+			{
+				mensaje="No se pudo pagar la nómina";
 			}
 			return redirect("/cliente");
 		}

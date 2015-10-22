@@ -1,4 +1,4 @@
-@(cuentas: List[vos.Cuenta], exitoPago: Map[long,boolean])
+@(cuentas: List[vos.Cuenta], exitoPago: HashMap[Long,Boolean])
 <html>
     <head>
         <meta charset="utf-8">
@@ -24,7 +24,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          <a class="navbar-brand">BancAndes</a>
+          <a class="navbar-brand" href="@routes.Application.cliente()">BancAndes</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <form class="navbar-form navbar-right" role="form" action="@routes.Application.index()">
@@ -44,13 +44,14 @@
               </tr>
           </thead>
           <tbody>
-            @for((key, value) <- exitoPago) {
-              @if(value){
+            @for(key <- exitoPago.keySet()) {
+              @if(exitoPago.get(key)){
                 <tr class="success">
               }else{
                 <tr class="danger">
               }
             }
+            @for(c <- cuentas){
               @if(c.getTipo().equals("savings")){
                 <td>Ahorros</td>
                 }else{
@@ -59,14 +60,9 @@
                 <td>@c.getId()</td>
                 <td>$@c.getMonto()</td>
               </tr>
-                }
+              }
           </tbody>
         </table>
-      <form>
-        <div class="form-group">
-            <button type="submit" class="btn btn-default">Pagar nomina</button>
-        </div>
-      </form>
       <footer>
         <p>&copy; BancAndes 2015</p>
       </footer>

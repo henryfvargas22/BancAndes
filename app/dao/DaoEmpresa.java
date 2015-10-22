@@ -37,7 +37,7 @@ public class DaoEmpresa
 	 */
 	private static final String idCuentaDestino = "id_cuentadestino";
 
-	private static final String tipo="tipo";
+	private static final String tipo="tipo_pago";
 
 	private static final String monto="monto";
 

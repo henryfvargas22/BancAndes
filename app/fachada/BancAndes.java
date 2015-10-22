@@ -19,6 +19,7 @@ import dao.DaoUsuarios;
 import vos.Cliente;
 import vos.Cuenta;
 import vos.Empleado;
+import vos.Empresa;
 import vos.Oficina;
 import vos.Operacion;
 import vos.Prestamo;
@@ -136,6 +137,11 @@ public class BancAndes
 	{
 		return daoPuntosDeAtencion.darPunto_De_AtencionsDefault();
 	}
+	
+	public ArrayList<Empresa> darEmpresasDefault() throws Exception
+	{
+		return daoEmpresa.darEmpresasDefault();
+	}
 
 	public void insertarUsuario(String nombre,int cedula, String usuario, String contrasenia, int edad, String genero, String ciudad, String direccion, String tipo,String rol, boolean esEmpleado, int idOficina) throws Exception
 	{
@@ -205,7 +211,7 @@ public class BancAndes
 	{
 		Cuenta actual=daoCuentas.darCuentaId(id);
 		Cliente temp=daoClientes.darClientePorId(actual.getId_Cliente());
-		HashMap<Long,Boolean> resp=null;
+		HashMap<Long,Boolean> resp=new HashMap<Long,Boolean>();
 		if(temp.getTipo().equals("legal"))
 		{
 			HashMap<Long,Double> cuentas=daoEmpresa.cuentasAPagarNomina(temp.getCedula());
@@ -217,12 +223,12 @@ public class BancAndes
 			{
 				desasociarEmpleadosCuenta(id);
 				daoCuentas.cerrarCuenta(id);
-				Iterator i=cuentas.entrySet().iterator();
+				Iterator<Entry<Long,Double>> i=cuentas.entrySet().iterator();
 				try
 				{
 					while(i.hasNext())
 					{
-						Entry<Long,Double> temporal=(Entry<Long, Double>) i.next();
+						Entry<Long,Double> temporal=i.next();
 						Cuenta empleado=daoCuentas.darCuentaId(temporal.getKey());
 						int cedEmpleado=empleado.getId_Cliente();
 						asociarEmpleadoEmpresa(temp.getCedula(), cedEmpleado, idCuentaNueva, temporal.getKey(), "Quincenal", temporal.getValue());
@@ -556,5 +562,19 @@ public class BancAndes
 		HashMap<Long,Double> cuentas=daoEmpresa.cuentasAPagarNomina(idEmpleador);
 		long idCuentaOrigen=daoEmpresa.darCuentaNomina(idEmpleador);
 		return daoCuentas.pagarNomina(idCuentaOrigen,cuentas);
+	}
+	
+	public ArrayList<Cuenta> darCuentasNomina(int idEmpleador) throws Exception
+	{
+		HashMap<Long,Double> cuentas=daoEmpresa.cuentasAPagarNomina(idEmpleador);
+		ArrayList<Cuenta> resp=new ArrayList<Cuenta>();
+		Iterator<Long> i=cuentas.keySet().iterator();
+		while(i.hasNext())
+		{
+			long idCuenta=i.next();
+			Cuenta actual=darCuentaPorId(idCuenta);
+			resp.add(actual);
+		}
+		return resp;
 	}
 }
