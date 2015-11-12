@@ -1,4 +1,4 @@
-@(esGerente: Boolean,prestamos: List[vos.Prestamo],operaciones: List[vos.Operacion])
+@(esGerente: Boolean,prestamos: List[vos.Prestamo],operaciones: List[vos.Operacion], puntos: List[vos.PuntoDeAtencion], clientes: List[vos.Cliente])
 <html>
     <head>
         <meta charset="utf-8">
@@ -25,7 +25,7 @@
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <div class="navbar-header">
-          @if(esGerente){         
+          @if(esGerente){
           <a class="navbar-brand" href="@routes.Application.gerente()">BancAndes</a>
           }else{
           <a class="navbar-brand" href="@routes.Application.admin()">BancAndes</a>
@@ -41,9 +41,9 @@
     <div class="container">
       <h2>Consultas</h2>
       <div class="row">
-        <div class="col-md-3">
+        <div class="col-md-4">
         <form method="post" action="@routes.Application.filtrarBancandes()">
-          <h4>Filtros prestamos</h4>
+          <h4>Prestamos</h4>
           <div class="form-group">
             <label class="col-sm-2 control-label">Rango de montos</label>
             <div class="col-sm-10">
@@ -75,8 +75,7 @@
             </div>
           </div>
           <br>
-          <br>
-            <h4>Filtros operaciones</h4>
+            <h4>Operaciones</h4>
             <div class="form-group">
               <label class="col-sm-2 control-label">Rango de fechas</label>
               <div class="col-sm-10">
@@ -86,26 +85,81 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="col-sm-2 control-label">Rango de valores</label>
+              <label class="col-sm-2 control-label">Rango de montos</label>
               <div class="col-sm-10">
-                <input type="number" class="form-control" name="valorMenor" placeholder="Ingrese el valor menor">
+                <input type="number" class="form-control" name="montoMenor" placeholder="Ingrese el monto menor">
                 <br>
-                <input type="number" class="form-control" name="valorMayor" placeholder="Ingrese el valor mayor">
+                <input type="number" class="form-control" name="montoMayor" placeholder="Ingrese el monto mayor">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Tipo</label>
+              <div class="col-sm-10">
+                <select class="form-control" name="tipo">
+                  <option>Consignar</option>
+                  <option>Retirar</option>
+                  <option>Pagar cuota</option>
+                  <option>Pagar cuota extraordinaria</option>
+                </select>
+              </div>
+            </div>
+            <div class="radio">
+              <label>
+                <input type="radio" name="inversa" value="inversa"> Busqueda inversa
+              </label>
+            </div>
+            <br>
+            <h4>Consignaciones</h4>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Montos mayores a: </label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" name="monto" placeholder="Ingrese un valor">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Tipo de prestamo</label>
+              <div class="col-sm-10">
+                <select class="form-control" name="tipo">
+                  <option>Cerrado</option>
+                  <option>Abierto</option>
+                </select>
+              </div>
+            </div>
+            <br>
+            <h4>Puntos de atenci&oacute;n</h4>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Seleccione un punto</label>
+              <div class="col-sm-10">
+                <select class="form-control" name="puntoUno">
+                  @for(p <-puntos){
+                    <option>p.getTipo() - p.getId()</option>
+                  }
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="col-sm-2 control-label">Seleccione otro punto</label>
+              <div class="col-sm-10">
+                <select class="form-control" name="puntoDos">
+                  @for(p <-puntos){
+                    <option>p.getTipo() - p.getId()</option>
+                  }
+                </select>
               </div>
             </div>
             <hr>
             <div class="form-group">
               <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-default">Filtrar</button>
+                <button type="submit" class="btn btn-default">Consultar</button>
               </div>
             </div>
           </form>
         </div>
-        <div class="col-md-9">
+        <div class="col-md-8">
             <h2>Sistema BancAndes</h2>
             <br>
               <h3>Prestamos</h3>
-            <table class="sortable" id="tablaCuentas">
+            <table class="sortable" id="tablaPrestamos">
               <thead>
                   <tr>
                     <th>Monto</th>
@@ -153,6 +207,61 @@
                       }
                 </tbody>
               </table>
+              <hr>
+              <h3>Consignaciones</h3>
+              <table class="sortable" id="tablaConsigncaciones">
+                <thead>
+                    <tr>
+                      <th>Servicio</th>
+                      <th>Monto</th>
+                      <th>Fecha</th>
+                      <th>Tipo prestamo</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      @for(o <-operaciones){
+                      <tr>
+                      @if(o.getIdPrestamo()==(-1)){
+                        <td>@o.getIdCuenta()</td>
+                        }else{
+                        <td>@o.getIdPrestamo()</td>
+                        }
+                        <td>$ @o.getMonto()</td>
+                        <td>@o.getFecha()</td>
+                        <td>//PRESTAMO//</td>
+                      </tr>
+                        }
+                  </tbody>
+                </table>
+                <hr>
+                <h3>Clientes</h3>
+                <table class="sorttable" id="tablaClientes">
+                  <thead>
+                    <tr>
+                      <th>Cedula</th>
+                      <th>Nombre</th>
+                      <th>Edad</th>
+                      <th>Genero</th>
+                      <th>Usuario</th>
+                      <th>Tipo</th>
+                      <th>Ciudad</th>
+                      <th>Direccion</th>
+                    </tr>
+                  <thead>
+                  <tbody>
+                    @for (c <-clientes){
+                    <tr>
+                      <td>c.getCedula()</td>
+                      <td>c.getNombre()</td>
+                      <td>c.getEdad()</td>
+                      <td>c.getGenero()</td>
+                      <td>c.getUsuario()</td>
+                      <td>c.getTipo()</td>
+                      <td>c.getCiudad()</td>
+                      <td>c.getDireccion()</td>
+                    </tr>
+                    }
+
             <br>
         </div>
       </div>
