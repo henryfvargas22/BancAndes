@@ -193,6 +193,7 @@
                     </tr>
                 </thead>
                 <tbody>
+                @if(tipo.equals("")){
                     @for(o <-operaciones){
                     <tr>
                     @if(o.getIdPrestamo()==(-1)){
@@ -205,6 +206,7 @@
                       <td>@o.getFecha()</td>
                     </tr>
                       }
+                     }
                 </tbody>
               </table>
               <hr>
