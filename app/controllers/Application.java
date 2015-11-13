@@ -1049,6 +1049,8 @@ public class Application extends Controller {
 			if(!fechaMenor.equals("")||!fechaMayor.equals("")||!montoOp.equals(""))
 			{
 				SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+				Logger.info(fechaMenor);
+				Logger.info(fechaMayor);
 				Date fechaMe=null;
 				Date fechaMa=null;
 				double montoM=-1;

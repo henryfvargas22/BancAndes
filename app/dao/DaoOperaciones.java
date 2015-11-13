@@ -325,12 +325,12 @@ public class DaoOperaciones
 		ArrayList<Operacion> Operacions = new ArrayList<Operacion>();
 		Operacion OperacionValue = new Operacion();
 		Connection conexion=null;
+		String state=filtroOperaciones;
 
 		try
 		{
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
-			String state=filtroOperaciones;
-			SimpleDateFormat format=new SimpleDateFormat("DD/MM/YYYY");
+			SimpleDateFormat format=new SimpleDateFormat("dd/MM/yyyy");
 			if(fechaMenor!=null)
 			{
 				String formateada=format.format(fechaMenor);
@@ -433,7 +433,7 @@ public class DaoOperaciones
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println(consultaOperacionesDefault+idCliente);
+			System.out.println(state);
 			conexion.rollback();
 			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
 		}finally 

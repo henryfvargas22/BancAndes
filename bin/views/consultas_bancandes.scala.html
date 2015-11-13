@@ -41,33 +41,38 @@
     <div class="container">
       <h2>Consultas</h2>
       <div class="row">
-        <div class="col-md-4">
+      <div class="col-md-6">
         <form method="post" action="@routes.Application.filtrarBancandes()">
           <h4>Prestamos</h4>
           <div class="form-group">
             <label class="col-sm-2 control-label">Rango de montos</label>
             <div class="col-sm-10">
               <input type="number" class="form-control" name="montoMenor" placeholder="Ingrese el monto menor">
-              <br>
+
               <input type="number" class="form-control" name="montoMayor" placeholder="Ingrese el monto mayor">
             </div>
           </div>
+          <br>
           <div class="form-group">
             <label class="col-sm-2 control-label">Rango de valores de cuota</label>
             <div class="col-sm-10">
               <input type="number" class="form-control" name="valorCuotaMenor" placeholder="Ingrese el valor menor">
-              <br>
+
               <input type="number" class="form-control" name="valorCuotaMayor" placeholder="Ingrese el valor mayor">
             </div>
           </div>
+          <br>
+          <br>
           <div class="form-group">
             <label class="col-sm-2 control-label">Rango de n&uacute;mero de cuotas</label>
             <div class="col-sm-10">
               <input type="number" class="form-control" name="cuotaMenor" placeholder="Ingrese el n&uacute;mero menor">
-              <br>
+
               <input type="number" class="form-control" name="cuotaMayor" placeholder="Ingrese el n&uacute;mero mayor">
             </div>
           </div>
+          <br>
+          <br>
           <div class="form-group">
             <label class="col-sm-2 control-label">D&iacute;a de pago</label>
             <div class="col-sm-10">
@@ -75,21 +80,27 @@
             </div>
           </div>
           <br>
+          <br>
+          <br>
             <h4>Operaciones</h4>
             <div class="form-group">
               <label class="col-sm-2 control-label">Rango de fechas</label>
               <div class="col-sm-10">
                 <input type="date" class="form-control" name="fechaMenor">
-                <br>
+
                 <input type="date" class="form-control" name="fechaMayor">
               </div>
             </div>
+            <br>
+            <br>
             <div class="form-group">
-              <label class="col-sm-2 control-label">Rango de montos</label>
+              <label class="col-sm-2 control-label">Monto</label>
               <div class="col-sm-10">
                 <input type="number" class="form-control" name="montoOp" placeholder="Ingrese el monto">
               </div>
             </div>
+            <br>
+            <br>
             <div class="form-group">
               <label class="col-sm-2 control-label">Tipo</label>
               <div class="col-sm-10">
@@ -101,11 +112,13 @@
                 </select>
               </div>
             </div>
+            <br>
             <div class="radio">
               <label>
                 <input type="radio" name="inversa" value="inversa"> Busqueda inversa
               </label>
             </div>
+            <br>
             <br>
             <h4>Consignaciones</h4>
             <div class="form-group">
@@ -114,6 +127,8 @@
                 <input type="text" class="form-control" name="monto" placeholder="Ingrese un valor">
               </div>
             </div>
+            <br>
+            <br>
             <div class="form-group">
               <label class="col-sm-2 control-label">Tipo de prestamo</label>
               <div class="col-sm-10">
@@ -123,6 +138,8 @@
                 </select>
               </div>
             </div>
+            <br>
+            <br>
             <br>
             <h4>Puntos de atenci&oacute;n</h4>
             <div class="form-group">
@@ -135,6 +152,8 @@
                 </select>
               </div>
             </div>
+            <br>
+            <br>
             <div class="form-group">
               <label class="col-sm-2 control-label">Seleccione otro punto</label>
               <div class="col-sm-10">
@@ -153,7 +172,7 @@
             </div>
           </form>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-6">
             <h2>Sistema BancAndes</h2>
             <br>
               <h3>Prestamos</h3>
