@@ -613,7 +613,7 @@ public class Application extends Controller {
 			return internalServerError("Ups: "+e.getMessage());
 		}
 	}
-	
+
 	public Result getEmpresas()
 	{
 		try 
@@ -976,18 +976,16 @@ public class Application extends Controller {
 		{
 			List<Prestamo> prestamos;
 			List<Operacion> operaciones;
-			try 
-			{
-				prestamos=BancAndes.darInstancia().darPrestamosDefault();
-				operaciones=BancAndes.darInstancia().darOperacionesDefault();
-			} 
-			catch (Exception e) 
-			{
-				prestamos=new ArrayList<Prestamo>();
-				operaciones=new ArrayList<Operacion>();
-			}
+			List<PuntoDeAtencion> puntos;
+			List<Cliente> clientes;
+
+			prestamos=new ArrayList<Prestamo>();
+			operaciones=new ArrayList<Operacion>();
+			puntos=new ArrayList<PuntoDeAtencion>();
+			clientes=new ArrayList<Cliente>();
+
 			boolean esGerente=BancAndes.darInstancia().esGerente(usuarioActual.getUsuario(), usuarioActual.getContrasenia());
-			return ok(consultas_bancandes.render(esGerente,prestamos,operaciones));
+			return ok(consultas_bancandes.render(esGerente,prestamos,operaciones,puntos,clientes,""));
 		}
 		return internalServerError();
 	}
@@ -1044,10 +1042,11 @@ public class Application extends Controller {
 
 			String fechaMenor=dynamicForm.get("fechaMenor");
 			String fechaMayor=dynamicForm.get("fechaMayor");
-			String valorMenor=dynamicForm.get("valorMenor");
-			String valorMayor=dynamicForm.get("valorMayor");
-
-			List<Operacion> operaciones=BancAndes.darInstancia().darOperacionesDefault();
+			List<Operacion> operaciones=new ArrayList<Operacion>();
+			if(!fechaMenor.equals("")||!fechaMayor.equals(""))
+			{
+				operaciones=BancAndes.darInstancia().darOperacionesDefault();
+			}
 			if(!fechaMenor.equals(""))
 			{
 				SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
@@ -1060,18 +1059,21 @@ public class Application extends Controller {
 				Date fecha=format.parse(fechaMayor);
 				operaciones=operaciones.stream().filter(s ->(fecha.compareTo(s.getFecha())>0)).collect(Collectors.toList());
 			}
-			if(!valorMenor.equals(""))
+
+			String monto=dynamicForm.get("monto");
+			String tipo="";
+			if(!monto.equals(""))
 			{
-				double valorM=Double.parseDouble(valorMenor);
-				operaciones=operaciones.stream().filter(o ->o.getMonto()>valorM).collect(Collectors.toList());
+				tipo=dynamicForm.get("tipoPrestamo");
+				operaciones=new ArrayList<Operacion>();
+				boolean abierto=(tipo.equals("Abierto")?true:false);
+				double montoMin=Double.parseDouble(monto);
+				operaciones=BancAndes.darInstancia().consignaciones(montoMin, abierto);
 			}
-			if(!valorMayor.equals(""))
-			{
-				double valorM=Double.parseDouble(valorMayor);
-				operaciones=operaciones.stream().filter(o ->o.getMonto()<valorM).collect(Collectors.toList());
-			}
+			ArrayList<PuntoDeAtencion> puntos=new ArrayList<PuntoDeAtencion>();
+			ArrayList<Cliente> clientes=new ArrayList<Cliente>();
 			boolean esGerente=BancAndes.darInstancia().esGerente(usuarioActual.getUsuario(), usuarioActual.getContrasenia());
-			return ok(consultas_bancandes.render(esGerente, prestamos, operaciones));
+			return ok(consultas_bancandes.render(esGerente, prestamos, operaciones,puntos,clientes,tipo));
 		}
 		return internalServerError();
 
@@ -1177,7 +1179,7 @@ public class Application extends Controller {
 			return redirect("/cliente");
 		}
 	}
-	
+
 	public Result pagarNomina()
 	{
 		try 
@@ -1203,7 +1205,7 @@ public class Application extends Controller {
 			return redirect("/cliente");
 		}
 	}
-	
+
 	public Result poblarOperaciones()
 	{
 		try

@@ -48,7 +48,8 @@ public class DaoOperaciones
 	private static final String ingresarOperacion="INSERT INTO "+tablaOperacion+" VALUES";
 	
 	private static final String consultaOperacionesCliente="SELECT * FROM "+tablaOperacion+" WHERE id_cliente=";
-
+	
+	private static final String consultaConsignaciones="SELECT * FROM (operacion left join cliente on id_cliente=id_usuario) left join prestamo on prestamo.id_cliente=id_usuario where operacion.tipo='Consignar' and operacion.monto>=";
 	// ---------------------------------------------------
 	// Métodos asociados a los casos de uso: Consulta
 	// ---------------------------------------------------
@@ -210,6 +211,72 @@ public class DaoOperaciones
 
 				OperacionValue.setFecha(fecha);
 				OperacionValue.setIdCliente(idCliente);
+				OperacionValue.setMonto(monto);
+				OperacionValue.setTipo(tipo);
+				if(idPrest>0)
+				{
+					OperacionValue.setIdPrestamo(idPrest);
+					OperacionValue.setIdCuenta(-1);
+				}
+				else
+				{
+					OperacionValue.setIdCuenta(idCuent);
+					OperacionValue.setIdPrestamo(-1);
+				}
+				Operacions.add(OperacionValue);
+				OperacionValue = new Operacion();
+
+			}
+			conexion.commit();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println(consultaOperacionesDefault+idCliente);
+			conexion.rollback();
+			throw new Exception("ERROR = ConsultaDAO: loadRowsBy(..) Agregando parametros y executando el statement!!!");
+		}finally 
+		{
+			if (prepStmt != null) 
+			{
+				try {
+					prepStmt.close();
+				} catch (SQLException exception) {
+
+					throw new Exception("ERROR: ConsultaDAO: loadRow() =  cerrando una conexión.");
+				}
+			}
+			ConsultaDAO.darInstancia().closeConnection(conexion);
+		}		
+		return Operacions;
+	}
+	
+	public ArrayList<Operacion> darConsignaciones(double montoMin, boolean abierto) throws Exception
+	{
+		PreparedStatement prepStmt = null;
+
+		ArrayList<Operacion> Operacions = new ArrayList<Operacion>();
+		Operacion OperacionValue = new Operacion();
+		Connection conexion=null;
+
+		try
+		{
+			int resp=(abierto?0:1);
+			conexion=ConsultaDAO.darInstancia().establecerConexion();
+			prepStmt = conexion.prepareStatement(consultaConsignaciones+montoMin+" and cerrado="+resp);
+
+			ResultSet rs = prepStmt.executeQuery();
+
+			while(rs.next())
+			{
+				long idPrest = rs.getLong(idPrestamo);
+				int idClien = rs.getInt(idCliente);
+				long monto=rs.getLong(montoOperacion);
+				long idCuent=rs.getLong(idCuenta);
+				String tipo = rs.getString(tipoOperacion);
+				Date fecha=rs.getDate(fechaOperacion);
+
+				OperacionValue.setFecha(fecha);
+				OperacionValue.setIdCliente(idClien);
 				OperacionValue.setMonto(monto);
 				OperacionValue.setTipo(tipo);
 				if(idPrest>0)

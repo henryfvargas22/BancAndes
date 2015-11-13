@@ -614,4 +614,9 @@ public class BancAndes
 			}
 		}
 	}
+	
+	public ArrayList<Operacion> consignaciones(double monto, boolean abierto) throws Exception
+	{
+		return daoOperaciones.darConsignaciones(monto, abierto);
+	}
 }
