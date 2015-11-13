@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
-
 import dao.DaoClientes;
 import dao.DaoCuentas;
 import dao.DaoEmpleados;
@@ -137,7 +136,7 @@ public class BancAndes
 	{
 		return daoPuntosDeAtencion.darPunto_De_AtencionsDefault();
 	}
-	
+
 	public ArrayList<Empresa> darEmpresasDefault() throws Exception
 	{
 		return daoEmpresa.darEmpresasDefault();
@@ -563,7 +562,7 @@ public class BancAndes
 		long idCuentaOrigen=daoEmpresa.darCuentaNomina(idEmpleador);
 		return daoCuentas.pagarNomina(idCuentaOrigen,cuentas);
 	}
-	
+
 	public ArrayList<Cuenta> darCuentasNomina(int idEmpleador) throws Exception
 	{
 		HashMap<Long,Double> cuentas=daoEmpresa.cuentasAPagarNomina(idEmpleador);
@@ -576,5 +575,43 @@ public class BancAndes
 			resp.add(actual);
 		}
 		return resp;
+	}
+
+	public void poblarOperaciones() throws Exception
+	{
+		ArrayList<Cliente> clientes=darClientesDefault();
+		for(int i=0;i<clientes.size();i++)
+		{
+			ArrayList<Cuenta> cuentas=darCuentasCliente(clientes.get(i).getCedula());
+			ArrayList<Prestamo> prestamos=darPrestamosCliente(clientes.get(i).getCedula());
+			for(int j=0;j<cuentas.size();j++)
+			{
+				for(int m=0;m<=10000;m++)
+				{
+					try
+					{
+						daoOperaciones.registrarOperacionCuenta(clientes.get(i).getCedula(), Math.random()*100000, "Consignar", cuentas.get(j).getId());
+					}
+					catch(Exception e)
+					{
+						
+					}
+				}
+			}
+			for(int k=0;k<prestamos.size();k++)
+			{
+				for(int m=0;m<=10000;m++)
+				{
+					try
+					{
+						daoOperaciones.registrarOperacionPrestamo(clientes.get(i).getCedula(), Math.random()*100000,"PagarCuotaExtraordinaria", prestamos.get(k).getId());
+					}
+					catch(Exception e)
+					{
+						
+					}
+				}
+			}
+		}
 	}
 }

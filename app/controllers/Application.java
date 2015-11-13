@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import fachada.BancAndes;
@@ -277,7 +276,12 @@ public class Application extends Controller {
 		{
 			cuentas=BancAndes.darInstancia().darCuentasCliente(usuarioActual.getCedula());
 			prestamos=BancAndes.darInstancia().darPrestamosCliente(usuarioActual.getCedula());
-			operaciones=BancAndes.darInstancia().darOperacionesCliente(usuarioActual.getCedula());
+			ArrayList<Operacion> ops=BancAndes.darInstancia().darOperacionesCliente(usuarioActual.getCedula());
+			operaciones=new ArrayList<Operacion>();
+			for(int i=0;i<10;i++)
+			{
+				operaciones.add(ops.get(i));
+			}
 		}
 		catch(Exception e)
 		{
@@ -1197,6 +1201,20 @@ public class Application extends Controller {
 				mensaje="No se pudo pagar la nómina";
 			}
 			return redirect("/cliente");
+		}
+	}
+	
+	public Result poblarOperaciones()
+	{
+		try
+		{
+			BancAndes.darInstancia().poblarOperaciones();
+			return ok("Poblada");
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return ok("No se pudo poblar");
 		}
 	}
 }

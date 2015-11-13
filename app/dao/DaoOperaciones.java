@@ -195,7 +195,7 @@ public class DaoOperaciones
 
 		try {
 			conexion=ConsultaDAO.darInstancia().establecerConexion();
-			prepStmt = conexion.prepareStatement(consultaOperacionesCliente+idCliente);
+			prepStmt = conexion.prepareStatement(consultaOperacionesCliente+idCliente+" ORDER BY "+fechaOperacion+" DESC");
 
 			ResultSet rs = prepStmt.executeQuery();
 

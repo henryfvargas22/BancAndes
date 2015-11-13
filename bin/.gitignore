@@ -1,8 +1,4 @@
-/views/
-/application.conf
-/conexion.properties
-/logback.xml
-/routes
+/.DS_Store
 /controllers/
 /dao/
 /fachada/
