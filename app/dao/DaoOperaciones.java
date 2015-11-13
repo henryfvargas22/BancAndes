@@ -318,7 +318,7 @@ public class DaoOperaciones
 		return Operacions;
 	}
 
-	public ArrayList<Operacion> filtrarOperaciones(Date fechaMenor,Date fechaMayor, double monto, boolean inversa) throws Exception
+	public ArrayList<Operacion> filtrarOperaciones(Date fechaMenor,Date fechaMayor, double monto,String tipo, boolean inversa) throws Exception
 	{
 		PreparedStatement prepStmt = null;
 
@@ -352,7 +352,7 @@ public class DaoOperaciones
 			{
 				if(!state.contains("fecha"))
 				{
-					if(inversa)
+					if(!inversa)
 					{
 						state+="monto="+monto;
 					}
@@ -363,13 +363,38 @@ public class DaoOperaciones
 				}
 				else
 				{
-					if(inversa)
+					if(!inversa)
 					{
 						state+="and monto="+monto;
 					}
 					else
 					{
 						state+="and monto!="+monto;
+					}
+				}
+			}
+			if(tipo!=null)
+			{
+				if(!state.contains("fecha") && !state.contains("monto"))
+				{
+					if(!inversa)
+					{
+						state+="tipo='"+tipo+"' ";
+					}
+					else
+					{
+						state+="tipo!='"+tipo+"' ";
+					}
+				}
+				else
+				{
+					if(!inversa)
+					{
+						state+="and tipo='"+tipo+"' ";
+					}
+					else
+					{
+						state+="and tipo!='"+tipo+"' ";
 					}
 				}
 			}
@@ -383,13 +408,13 @@ public class DaoOperaciones
 				int idClien = rs.getInt(idCliente);
 				long montol=rs.getLong(montoOperacion);
 				long idCuent=rs.getLong(idCuenta);
-				String tipo = rs.getString(tipoOperacion);
+				String tipol = rs.getString(tipoOperacion);
 				Date fecha=rs.getDate(fechaOperacion);
 
 				OperacionValue.setFecha(fecha);
 				OperacionValue.setIdCliente(idClien);
 				OperacionValue.setMonto(montol);
-				OperacionValue.setTipo(tipo);
+				OperacionValue.setTipo(tipol);
 				if(idPrest>0)
 				{
 					OperacionValue.setIdPrestamo(idPrest);

@@ -1061,7 +1061,7 @@ public class Application extends Controller {
 				if(!montoOp.equals(""))
 					montoM=Double.parseDouble(montoOp);
 				inv=(inversa!=null?true:false);
-				operaciones=BancAndes.darInstancia().filtrarOperaciones(fechaMe, fechaMa, montoM, inv);
+				operaciones=BancAndes.darInstancia().filtrarOperaciones(fechaMe, fechaMa, montoM,tipoOp, inv);
 
 			}
 

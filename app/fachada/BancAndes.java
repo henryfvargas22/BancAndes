@@ -621,8 +621,8 @@ public class BancAndes
 		return daoOperaciones.darConsignaciones(monto, abierto);
 	}
 	
-	public ArrayList<Operacion> filtrarOperaciones(Date fechaMenor,Date fechaMayor, double monto, boolean inversa) throws Exception
+	public ArrayList<Operacion> filtrarOperaciones(Date fechaMenor,Date fechaMayor, double monto,String tipo, boolean inversa) throws Exception
 	{
-		return daoOperaciones.filtrarOperaciones(fechaMenor, fechaMayor, monto, inversa);
+		return daoOperaciones.filtrarOperaciones(fechaMenor, fechaMayor, monto,tipo, inversa);
 	}
 }
