@@ -2,6 +2,7 @@ package fachada;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
@@ -618,5 +619,10 @@ public class BancAndes
 	public ArrayList<Operacion> consignaciones(double monto, boolean abierto) throws Exception
 	{
 		return daoOperaciones.darConsignaciones(monto, abierto);
+	}
+	
+	public ArrayList<Operacion> filtrarOperaciones(Date fechaMenor,Date fechaMayor, double monto, boolean inversa) throws Exception
+	{
+		return daoOperaciones.filtrarOperaciones(fechaMenor, fechaMayor, monto, inversa);
 	}
 }

@@ -1042,22 +1042,27 @@ public class Application extends Controller {
 
 			String fechaMenor=dynamicForm.get("fechaMenor");
 			String fechaMayor=dynamicForm.get("fechaMayor");
+			String montoOp=dynamicForm.get("montoOp");
+			String tipoOp=dynamicForm.get("tipo");
+			String inversa=dynamicForm.field("inversa").value();
 			List<Operacion> operaciones=new ArrayList<Operacion>();
-			if(!fechaMenor.equals("")||!fechaMayor.equals(""))
-			{
-				operaciones=BancAndes.darInstancia().darOperacionesDefault();
-			}
-			if(!fechaMenor.equals(""))
+			if(!fechaMenor.equals("")||!fechaMayor.equals("")||!montoOp.equals(""))
 			{
 				SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-				Date fecha=format.parse(fechaMenor);
-				operaciones=operaciones.stream().filter(s ->(fecha.compareTo(s.getFecha())<0)).collect(Collectors.toList());
-			}
-			if(!fechaMayor.equals(""))
-			{
-				SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-				Date fecha=format.parse(fechaMayor);
-				operaciones=operaciones.stream().filter(s ->(fecha.compareTo(s.getFecha())>0)).collect(Collectors.toList());
+				Date fechaMe=null;
+				Date fechaMa=null;
+				double montoM=-1;
+				boolean inv=false;
+
+				if(!fechaMenor.equals(""))
+					fechaMe=format.parse(fechaMenor);
+				if(!fechaMayor.equals(""))
+					fechaMa=format.parse(fechaMayor);
+				if(!montoOp.equals(""))
+					montoM=Double.parseDouble(montoOp);
+				inv=(inversa!=null?true:false);
+				operaciones=BancAndes.darInstancia().filtrarOperaciones(fechaMe, fechaMa, montoM, inv);
+
 			}
 
 			String monto=dynamicForm.get("monto");
