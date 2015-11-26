@@ -40,6 +40,8 @@ public class ConsultaDAO
 		 */
 		private String cadenaConexion;
 		
+		private static Conector conector;
+		
 		private static ConsultaDAO instancia;
 		
 		/**
@@ -50,6 +52,13 @@ public class ConsultaDAO
 			if( instancia == null )
 	        {
 	            instancia = new ConsultaDAO( );
+	            try {
+					conector=Conector.getInstance();
+					conector.run();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 	            instancia.inicializar();
 	        }
 	        return instancia;

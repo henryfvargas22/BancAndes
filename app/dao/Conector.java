@@ -45,7 +45,7 @@ public class Conector extends Thread {
 	/**
 	 * La direccion del servidor
 	 */
-	public final static String HOST = "172.24.99.232";
+	public final static String HOST = "127.0.0.1";
 
 	/**
 	 * El puerto a la conexion de pregunta
@@ -283,60 +283,10 @@ public class Conector extends Thread {
 
 					String par = params[0];
 
-					JsonParser jsonParser;
-					jsonParser = new JsonParser();
-					JsonObject fullJson;
-					fullJson = jsonParser.parse(par).getAsJsonObject();
-
-					String tipo = fullJson.get("method").getAsString();
-
-
-
-					if(tipo.equals("Top20"))
+					if(par.equals("PeticionOperaciones"))
 					{
-						System.out.println("Entre a "+tipo);
-						//this.retornarTop20(fullJson.get("inicial").getAsString(), fullJson.get("fin").getAsString());
+						System.out.println("Entre a "+par);
 					}
-					else if(tipo.equals("darValores"))
-					{
-
-						System.out.println("Entre a "+ tipo);
-						//this.darConsultaMovimientos(fullJson.get("inicio").getAsString(), fullJson.get("fin").getAsString(),
-						//	fullJson.get("start").getAsInt(),fullJson.get("length").getAsInt()  , fullJson.get("columnName").getAsString(),
-						//	fullJson.get("tipo").getAsString(), fullJson.get("search").getAsString());
-					}
-					else if (tipo.equals("darIntermediarios"))
-					{
-						System.out.println("Entre a "+ tipo);
-						//this.darIntermediarios();
-					}
-					else if(tipo.equals("retirar"))
-					{
-						System.out.println("Entre a "+ tipo);
-						//boolean b =	this.eliminarIntermediario(fullJson.get("id").getAsString());
-
-						JsonObject json = new JsonObject();
-
-
-						//json.addProperty("resultado", b);
-
-
-						Gson gson = new GsonBuilder().create();
-
-						String j = gson.toJson(json);
-
-
-						//this.enviarRespuesta(j);
-					}
-					else if(tipo.equals("compraVenta"))
-					{
-						System.out.println("Entre a "+ tipo);
-						int num = fullJson.get("cantidad").getAsInt();
-
-						//this.comprarVender( fullJson.get("id").getAsString(),num);
-					}
-
-
 				}
 				closeConnectionPregunta();
 
